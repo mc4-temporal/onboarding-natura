@@ -1,0 +1,68 @@
+<mc4-page-layout mode="card">
+
+  <mc4-page-layout-header>
+    <mc4-breadcrumbs [crumbs]="['Seguridad']" current="Recursos"></mc4-breadcrumbs>
+  </mc4-page-layout-header>
+
+  <mc4-page-layout-content>
+    <mc4-list name="Recursos" (filterChange)="filterDataTable($event)">
+      <div fxLayout="row wrap">
+        <div fxFlex="100">
+          <mat-table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="checkbox">
+              <mat-header-cell *matHeaderCellDef class="check-cell"></mat-header-cell>
+              <mat-cell *matCellDef="let row" class="check-cell">
+                <mat-checkbox color="primary"
+                              [disabled]="true"
+                              [checked]="row.checked"
+                              (click)="$event.stopPropagation()"></mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container *ngFor="let column of columns">
+              <ng-container *ngIf="column.isModelProperty" [matColumnDef]="column.property">
+                <mat-header-cell *matHeaderCellDef>{{ column.name }}</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row[column.property] }}</mat-cell>
+              </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="rowActions" matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef class="actions-cell"></mat-header-cell>
+              <mat-cell *matCellDef="let row" class="actions-cell">
+                <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu1" (click)="$event.stopPropagation()">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #actionsMenu1="matMenu" yPosition="below" xPosition="before">
+
+                  <button *ngFor="let action of rowActions"
+                          mat-menu-item
+                          (click)="rowOptionClick(row, action.actionCode)">
+                    <mat-icon color="primary" *ngIf="action.icon">{{action.icon}}</mat-icon>{{action.action}}
+                  </button>
+                </mat-menu>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="visibleColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: visibleColumns;"></mat-row>
+
+            <ng-container matColumnDef="groupHeader">
+              <mat-cell *matCellDef="let group">
+                <strong>{{group.name}}</strong>
+              </mat-cell>
+            </ng-container>
+
+            <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroupItem"> </mat-row>
+
+          </mat-table>
+<!--          <mc4-grouped-table [rowActions]="buildRowActions()"-->
+<!--                             [columns]="columns"-->
+<!--                             [eventManager]="tableEvents"-->
+<!--                             [isGroupFn]="isGroupItem"-->
+<!--                             [dataSource]="dataSource"></mc4-grouped-table>-->
+        </div>
+      </div>
+    </mc4-list>
+  </mc4-page-layout-content>
+</mc4-page-layout>

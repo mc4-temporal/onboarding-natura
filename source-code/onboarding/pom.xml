@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>bo.com.mc4.onboarding</groupId>
+    <artifactId>onboarding</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>onboarding</name>
+    <description>Sistema de onboarding para consultoras natura</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.maven.plugin>3.0.0</version.maven.plugin>
+        <java.version>11</java.version>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <!--versiones de dependencias -->
+        <project.axis.version>1.4</project.axis.version>
+        <project.lombok.version>1.18.24</project.lombok.version>
+<!--        <slf4j.version>2.0.3</slf4j.version>-->
+        <slf4j.version>1.7.25</slf4j.version>
+        <project.lambdaj.version>2.3.3</project.lambdaj.version>
+        <docker.image.prefix>springio</docker.image.prefix>
+        <poi.version>4.1.0</poi.version>
+        <!-- fin versiones -->
+        <maven.compiler.debug>false</maven.compiler.debug>
+        <maven.compiler.optimize>true</maven.compiler.optimize>
+    </properties>
+
+    <profiles>
+
+    <profile>
+        <id>default</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <modules>
+            <module>backoffice-api</module>
+            <module>landing-api</module>
+        </modules>
+    </profile>
+
+    <profile>
+        <id>dev</id>
+        <activation>
+            <!-- this profile is active by default -->
+            <activeByDefault>false</activeByDefault>
+            <!-- activate if system properties 'env=dev' -->
+            <property>
+                <name>env</name>
+                <value>dev</value>
+            </property>
+        </activation>
+        <modules>
+            <module>backoffice-web</module>
+            <module>backoffice-api</module>
+            <module>landing-api</module>
+        </modules>
+    </profile>
+    <profile>
+        <id>cert</id>
+        <activation>
+            <!-- this profile is active by default -->
+            <activeByDefault>false</activeByDefault>
+            <!-- activate if system properties 'env=dev' -->
+            <property>
+                <name>env</name>
+                <value>cert</value>
+            </property>
+
+        </activation>
+        <modules>
+            <module>backoffice-web</module>
+            <module>backoffice-api</module>
+            <module>landing-api</module>
+        </modules>
+    </profile>
+    <profile>
+        <id>prod</id>
+        <activation>
+            <!-- activate if system properties 'env=prod' -->
+            <property>
+                <name>env</name>
+                <value>prod</value>
+            </property>
+        </activation>
+        <properties>
+            <maven.compiler.debug>false</maven.compiler.debug>
+            <maven.compiler.optimize>true</maven.compiler.optimize>
+        </properties>
+
+        <modules>
+            <module>backoffice-web</module>
+            <module>backoffice-api</module>
+            <module>landing-api</module>
+        </modules>
+    </profile>
+    </profiles>
+    
+    <modules>
+        <module>integrations</module>
+        <module>model</module>
+        <module>core</module>
+    </modules>
+
+    <dependencies>
+        <!--LOGS-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <!--BOILERPLATE-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${project.lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

@@ -1,0 +1,33 @@
+<mc4-card-header>
+  <mc4-card-header-heading>
+    <div fxLayout="row wrap">
+      <div fxFlex="90">
+        <h3 *ngIf="!textToView" class="text-primary">{{data.job.jobName}} - Historial de ejecuciones</h3>
+        <h3 *ngIf="textToView" class="text-primary">Mensaje</h3>
+      </div>
+      <div fxFlex="10" fxLayoutAlign="end center">
+        <button mat-icon-button
+                color="warn"
+                matTooltip="Cerrar"
+                type="button"
+                (click)="bottomSheetRef.dismiss()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mc4-card-header-heading>
+</mc4-card-header>
+<mat-divider class="mb20"></mat-divider>
+<mc4-card-content>
+  <mc4-server-paging-table [style.display]="!textToView ? 'block' : 'none'"
+                           [dataSource]="dataSource"
+                           [columns]="columns"
+                           [requestPaginatedData]="requestHistoryListFn"
+                           [itemFormatterFn]="historyItemFormat"
+                           [eventManager]="tableEvents"></mc4-server-paging-table>
+
+  <mc4-xml-viewer *ngIf="textToView"
+                  [@fadeInUp]
+                  [xmlStr]="textToView"
+                  [backBtnFn]="backEvent"></mc4-xml-viewer>
+</mc4-card-content>

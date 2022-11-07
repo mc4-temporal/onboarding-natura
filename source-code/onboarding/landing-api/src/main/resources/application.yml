@@ -1,0 +1,51 @@
+spring:
+  profiles.actives: development
+  application:
+    name: landing-api
+  freemarker:
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        formatSql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: false
+    hibernate:
+      ddlAuto: update
+      naming:
+        implicitStrategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+    open-in-view: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/onboarding
+    username: onboarding
+    password: onboarding
+    testOnBorrow: true
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1
+    max-active: 15
+    max-idle: 10
+    max-wait: 8000
+    driverClassName: org.postgresql.Driver
+  main:
+    allow-bean-definition-overriding: true
+  sql:
+    init:
+      platform: postgres
+      mode: always
+server:
+  port: 8082
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true
+
+build:
+  version: @project.version@
+

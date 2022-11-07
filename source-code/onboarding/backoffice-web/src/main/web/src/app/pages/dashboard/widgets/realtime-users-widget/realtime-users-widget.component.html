@@ -1,0 +1,25 @@
+<mc4-card class="realtime-users-widget">
+  <mc4-card-header class="header" fxLayout="column">
+    <mc4-card-header-heading>Active Users right now</mc4-card-header-heading>
+
+    <div class="value">{{ currentUsers }}</div>
+  </mc4-card-header>
+
+  <mc4-card-content>
+    <div class="section">
+      <div class="heading">Page views per minute</div>
+      <div class="canvas-content">
+        <canvas #canvas></canvas>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="heading">Top Active Pages</div>
+      <mc4-scrollbar class="pages">
+        <div class="page" *ngFor="let page of pages$ | async">
+          {{ page.page }}
+        </div>
+      </mc4-scrollbar>
+    </div>
+  </mc4-card-content>
+</mc4-card>

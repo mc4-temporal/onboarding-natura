@@ -1,0 +1,42 @@
+<mc4-page-layout mode="card">
+  <mc4-page-layout-header>
+    <mc4-breadcrumbs [crumbs]="['Seguridad']" current="Roles"></mc4-breadcrumbs>
+  </mc4-page-layout-header>
+  <mc4-page-layout-content>
+    <mc4-list name="Roles" (filterChange)="filterData($event)">
+      <div class="actions">
+        <button class="mc4-column-filter"
+                type="button"
+                mat-icon-button
+                [matMenuTriggerFor]="optionMenu">
+          <mat-icon>apps</mat-icon>
+        </button>
+      </div>
+      <div fxLayout="row wrap">
+        <div fxFlex="100">
+          <mc4-server-paging-table [dataSource]="dataSource"
+                                   [columns]="columns"
+                                   [requestPaginatedData]="requestRoleListFn"
+                                   [rowActions]="rowActions"
+                                   [eventManager]="tableEvents"></mc4-server-paging-table>
+        </div>
+      </div>
+    </mc4-list>
+  </mc4-page-layout-content>
+</mc4-page-layout>
+<mat-menu #optionMenu="matMenu" yPosition="below" xPosition="after">
+  <button *ngIf="userActions.createAction"
+          mat-menu-item
+          (click)="createUpdateRole()">
+    <mat-icon color="primary" class="mr5">add_circle</mat-icon>Crear Rol
+  </button>
+  <button *ngIf="userActions.toExcelAction"
+          mat-menu-item
+          fxLayoutAlign="center center">
+    <img src="/assets/icons/excel.png"
+         width="24px"
+         height="24px"
+         alt="xlsx"
+         class="mr5">Exportar Datos
+  </button>
+</mat-menu>

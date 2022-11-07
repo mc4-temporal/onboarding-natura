@@ -1,0 +1,20 @@
+<div *ngIf="modelsReady">
+  <video #videoElement
+         [style.width]="width+'px'"
+         [style.height]="height+'px'"
+         (loadedmetadata)="loadedMetaData()"
+         (play)="listenerPlay()"
+         *ngIf="stream"
+         [srcObject]="stream">
+  </video>
+</div>
+<div *ngIf="!modelsReady">
+  Cargando modelos......
+</div>
+
+
+<!--- ******************* ZONE FILTERS ***************** -->
+<div class="filters">
+  <div class="filter-eye">
+  </div>
+</div>

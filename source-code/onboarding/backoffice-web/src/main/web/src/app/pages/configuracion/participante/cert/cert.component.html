@@ -1,0 +1,39 @@
+<mc4-card-header>
+  <mc4-card-header-heading>
+    <div fxLayout="row wrap">
+      <div fxFlex="90">
+        <h3 class="text-primary">Lista de Certificados</h3>
+      </div>
+      <div fxFlex="10" fxLayoutAlign="end center">
+        <button type="button"
+                mat-icon-button
+                matTooltip="Opciones"
+                [matMenuTriggerFor]="optionMenuCert">
+          <mat-icon>apps</mat-icon>
+        </button>
+        <button mat-icon-button
+                color="warn"
+                matTooltip="Cerrar"
+                type="button"
+                (click)="bottomSheetRef.dismiss()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mc4-card-header-heading>
+</mc4-card-header>
+<mat-divider class="mb20"></mat-divider>
+<mc4-card-content>
+  <mc4-server-paging-table [dataSource]="dataSource"
+                           [columns]="columns"
+                           [requestPaginatedData]="requestCertListFn"
+                           [rowActions]="rowActions"
+                           [itemFormatterFn]="certItemFormat"
+                           [eventManager]="tableEvents"></mc4-server-paging-table>
+</mc4-card-content>
+<mat-menu #optionMenuCert="matMenu" yPosition="below" xPosition="after">
+  <button mat-menu-item
+          (click)="addCert()">
+    <mat-icon color="primary" class="mr5">add_circle</mat-icon>Agregar certificado
+  </button>
+</mat-menu>

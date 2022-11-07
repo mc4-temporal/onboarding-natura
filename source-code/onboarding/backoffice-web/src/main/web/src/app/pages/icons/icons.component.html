@@ -1,0 +1,37 @@
+<div class="padding" fxLayout="column">
+
+  <mc4-breadcrumbs [@fadeInRight] current="Material Icons"></mc4-breadcrumbs>
+
+  <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="24px">
+    <div [@fadeInRight] fxFlex="auto" fxFlex.gt-md="250px">
+      Icons are a neat way to add some image to text-only lists.
+      <br>
+      <br>MC4 comes with a great variety of icons from the official Material Icons font and using them can't be
+      simpler.
+    </div>
+
+    <mc4-card [@fadeInUp] fxFlex="auto">
+      <mc4-card-header>
+        <mc4-card-header-heading>Icon Preview</mc4-card-header-heading>
+        <mc4-card-header-subheading>Hundreds of icons ready to be used.</mc4-card-header-subheading>
+      </mc4-card-header>
+
+      <mc4-card-content fxLayout="column">
+        <mat-form-field floatLabel="never" fxFlex="noshrink">
+          <mat-label>Search&hellip;</mat-label>
+          <input matInput [formControl]="iconCtrl">
+        </mat-form-field>
+
+        <mc4-scrollbar class="icon-list" fxFlex="grow">
+          <div class="icon" *ngFor="let icon of filteredIcons$ | async">
+            <mat-icon>{{ icon }}</mat-icon>
+            <div class="icon-name">{{ icon }}</div>
+          </div>
+        </mc4-scrollbar>
+      </mc4-card-content>
+
+    </mc4-card>
+  </div>
+
+
+</div>

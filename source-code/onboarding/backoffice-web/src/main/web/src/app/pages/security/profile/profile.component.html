@@ -1,0 +1,36 @@
+<mc4-page-layout mode="card">
+  <mc4-page-layout-content class="m-t-10">
+    <div fxLayout="row wrap">
+      <div fxFlex="30" fxFlex.lt-sm="100">
+        <mat-card>
+          <mat-card-header>
+            <button mat-card-avatar mat-mini-fab color="primary">{{userInfo.initials}}</button>
+            <mat-card-title>{{userInfo?.fullName}}</mat-card-title>
+            <mat-card-subtitle>{{userInfo?.username}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- some info -->
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button
+                    color="primary"
+                    matTooltip="Cambiar Contraseña"
+                    (click)="changePassword()">
+              <mat-icon>security</mat-icon>
+              Cambiar Contraseña
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div fxFlex="100" class="m-t-10">
+        <h3>Historial de sesiones:</h3>
+      </div>
+      <div fxFlex="100">
+        <mc4-server-paging-table [dataSource]="dataSource"
+                                 [columns]="columns"
+                                 [itemFormatterFn]="itemFormatter"
+                                 [requestPaginatedData]="requestLogListFn"></mc4-server-paging-table>
+      </div>
+    </div>
+  </mc4-page-layout-content>
+</mc4-page-layout>

@@ -1,0 +1,60 @@
+<mc4-card fxFlex="auto">
+  <mc4-card-header>
+    <mc4-card-header-heading>
+      {{ options.title }}
+    </mc4-card-header-heading>
+    <mc4-card-header-subheading>
+      {{ options.subTitle }}
+    </mc4-card-header-subheading>
+
+    <mc4-card-header-actions>
+      <button mat-icon-button (click)="reload()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mc4-card-header-actions>
+  </mc4-card-header>
+
+  <mc4-card-content>
+    <div class="content">
+      <canvas *ngIf="data"
+              [datasets]="data.datasets"
+              [labels]="data.labels"
+              [legend]="false"
+              [options]="chartOptions"
+              baseChart
+              chartType="pie">
+      </canvas>
+    </div>
+  </mc4-card-content>
+
+  <mc4-card-actions class="footer" fxLayout="row" fxLayoutAlign="start center">
+    <div class="section" fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
+      <div class="value">1096</div>
+      <div class="label">Total Sales</div>
+    </div>
+    <div class="section" fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
+      <div class="value">598</div>
+      <div class="label">Top Categories</div>
+    </div>
+  </mc4-card-actions>
+
+  <mc4-loading-overlay [isLoading]="isLoading"></mc4-loading-overlay>
+</mc4-card>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon> settings</mat-icon>
+    <span> Settings </span>
+  </button>
+  <button mat-menu-item disabled>
+    <mat-icon> more</mat-icon>
+    <span> More Info </span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon> remove_circle</mat-icon>
+    <span> Remove Widget </span>
+  </button>
+</mat-menu>

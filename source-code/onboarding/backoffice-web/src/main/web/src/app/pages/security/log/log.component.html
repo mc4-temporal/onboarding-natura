@@ -1,0 +1,78 @@
+<mc4-page-layout mode="card">
+  <mc4-page-layout-header>
+    <mc4-breadcrumbs [crumbs]="['Seguridad']" current="Log"></mc4-breadcrumbs>
+  </mc4-page-layout-header>
+  <mc4-page-layout-content>
+    <mc4-list name="Logs" [withFilter]="false">
+      <form [formGroup]="form" (submit)="applyFilter()">
+        <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
+          <div fxFlex="25" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Rango de fecha</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate formControlName="from" placeholder="Inicio">
+                <input matEndDate formControlName="to" placeholder="Fin">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+              <mat-error *ngIf="form.controls.from.hasError('matStartDateInvalid')">Fecha de inicio inválida</mat-error>
+              <mat-error *ngIf="form.controls.to.hasError('matEndDateInvalid')">Fecha de fin inválida</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="20" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Tipo de proceso</mat-label>
+              <mat-select formControlName="process">
+                <mat-option [value]="''">Seleccionar todo</mat-option>
+                <mat-option *ngFor="let option of processList"
+                            [value]="option.codigo">
+                  {{option.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px">
+            <div fxFlex="80" fxFlex.xs="100">
+              <mat-form-field>
+                <mat-label>Valor de búsqueda</mat-label>
+                <input matInput
+                       type="text"
+                       maxlength="50"
+                       formControlName="q">
+              </mat-form-field>
+            </div>
+
+            <div fxFlex="10" fxFlex.xs="100" class="mt10">
+              <button mat-flat-button
+                      color="accent"
+                      type="submit">
+                <mat-icon>search</mat-icon>Buscar
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+      <div fxLayout="row wrap">
+        <div fxFlex="100" class="table-scroll" *ngIf="showDataTable">
+          <mc4-server-paging-table [dataSource]="dataSource"
+                                   [columns]="columns"
+                                   [requestPaginatedData]="requestLogListFn"
+                                   [itemFormatterFn]="itemLogFormatterFn"
+                                   [rowActions]="rowActions"
+                                   [eventManager]="tableEvents"></mc4-server-paging-table>
+        </div>
+      </div>
+    </mc4-list>
+  </mc4-page-layout-content>
+</mc4-page-layout>
+<mat-menu #optionMenu="matMenu" yPosition="below" xPosition="after">
+  <button mat-menu-item
+          fxLayoutAlign="center center">
+    <img src="/assets/icons/excel.png"
+         width="24px"
+         height="24px"
+         alt="xlsx"
+         class="mr5">Exportar Datos
+  </button>
+</mat-menu>

@@ -1,0 +1,57 @@
+<mc4-page-layout mode="card">
+  <mc4-page-layout-header>
+    <mc4-breadcrumbs [crumbs]="['Seguridad']" current="Parametros"></mc4-breadcrumbs>
+  </mc4-page-layout-header>
+
+  <mc4-page-layout-content>
+    <mc4-card class="mat-card-custom">
+      <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="m5">
+        <div fxFlex="23" fxFlex.xs="100">
+          <mat-form-field>
+            <mat-label>Seleccione un grupo de parametros</mat-label>
+            <mat-select [formControl]="groupParameterControl" (selectionChange)="groupParameterSelected()">
+              <mat-option *ngFor="let option of parameterGroups"
+                          [value]="option.id">
+                {{option.groupName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <mc4-list name="Parametros" (filterChange)="filterData($event)">
+        <div class="actions">
+          <button class="mc4-column-filter"
+                  type="button"
+                  mat-icon-button
+                  [matMenuTriggerFor]="optionMenu">
+            <mat-icon>apps</mat-icon>
+          </button>
+        </div>
+        <div fxLayout="row wrap">
+          <div fxFlex="100">
+            <mc4-server-paging-table [dataSource]="dataSource"
+                                     [columns]="columns"
+                                     [requestPaginatedData]="requestRoleListFn"
+                                     [rowActions]="rowActions"
+                                     [itemFormatterFn]="itemParameterFormatter"
+                                     [eventManager]="tableEvents" >
+
+            </mc4-server-paging-table>
+          </div>
+        </div>
+      </mc4-list>
+    </mc4-card>
+
+  </mc4-page-layout-content>
+</mc4-page-layout>
+<mat-menu #optionMenu="matMenu" yPosition="below" xPosition="after">
+  <button *ngIf="parameterActions.toExcelAction"
+          mat-menu-item
+          fxLayoutAlign="center center">
+    <img src="/assets/icons/excel.png"
+         width="24px"
+         height="24px"
+         alt="xlsx"
+         class="mr5">Exportar Datos
+  </button>
+</mat-menu>

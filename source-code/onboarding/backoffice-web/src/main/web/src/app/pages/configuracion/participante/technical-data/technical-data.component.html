@@ -1,0 +1,206 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <mc4-card-header>
+    <mc4-card-header-heading>
+      <div fxLayout="row wrap">
+        <div fxFlex="90">
+          <h3 class="text-primary">Datos Técnicos</h3>
+        </div>
+        <div fxFlex="10" fxLayoutAlign="end center">
+          <button mat-icon-button
+                  color="warn"
+                  matTooltip="Cancelar"
+                  type="button"
+                  (click)="dialogRef.close()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mc4-card-header-heading>
+  </mc4-card-header>
+  <mat-divider></mat-divider>
+  <mc4-card-content class="mt10" fxLayout="column">
+    <div class="result" fxLayout="column">
+      <div fxLayout="row wrap">
+        <div fxFlex="100">
+          <mat-form-field class="mc4-flex-form-field">
+            <mat-label>URL</mat-label>
+            <input matInput
+                   type="text"
+                   maxlength="500"
+                   formControlName="url">
+            <mat-error
+              *ngIf="form.controls['url'].hasError('required') && form.controls['url'].touched"
+              class="font-11">URL es requerido</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50" class="pr5">
+          <mat-form-field class="mc4-flex-form-field">
+            <mat-label>Connect Timeout</mat-label>
+            <input matInput
+                   type="number"
+                   formControlName="connectTimeout">
+            <mat-error
+              *ngIf="form.controls['connectTimeout'].hasError('required') && form.controls['connectTimeout'].touched"
+              class="font-11">Timeout requerido</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50" class="pl5">
+          <mat-form-field class="mc4-flex-form-field">
+            <mat-label>Read Timeout</mat-label>
+            <input matInput
+                   type="number"
+                   formControlName="readTimeout">
+            <mat-error
+              *ngIf="form.controls['readTimeout'].hasError('required') && form.controls['readTimeout'].touched"
+              class="font-11">Timeout requerido</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" class="service-container">
+          <h4 class="mb-0">Método Receptor</h4>
+          <div fxLayout="row wrap">
+            <div fxFlex="100">
+              <mat-form-field class="mc4-flex-form-field">
+                <mat-label>Receptor Part Name</mat-label>
+                <input matInput
+                       type="text"
+                       maxlength="100"
+                       formControlName="receptorResponsePartName">
+                <mat-error
+                  *ngIf="form.controls['receptorResponsePartName'].hasError('required') && form.controls['receptorResponsePartName'].touched"
+                  class="font-11">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100">
+              <mat-form-field class="mc4-flex-form-field">
+                <mat-label>Body Request</mat-label>
+                <textarea matInput
+                          type="text"
+                          maxlength="1000"
+                          formControlName="receptorRequestBody"></textarea>
+                <mat-error
+                  *ngIf="form.controls['receptorRequestBody'].hasError('required') && form.controls['receptorRequestBody'].touched"
+                  class="font-11">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxFlex="100" class="service-container">
+          <h4 class="mb-0">Método Receptor Procesadas</h4>
+          <div fxLayout="row wrap">
+            <div fxFlex="100">
+              <mat-form-field class="mc4-flex-form-field">
+                <mat-label>Receptor Part Name</mat-label>
+                <input matInput
+                       type="text"
+                       maxlength="100"
+                       formControlName="responseProcesadasResponsePartName">
+                <mat-error
+                  *ngIf="form.controls['responseProcesadasResponsePartName'].hasError('required') && form.controls['responseProcesadasResponsePartName'].touched"
+                  class="font-11">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100">
+              <mat-form-field class="mc4-flex-form-field">
+                <mat-label>Body Request</mat-label>
+                <textarea matInput
+                          type="text"
+                          maxlength="1000"
+                          formControlName="receptoProcesadasBody"></textarea>
+                <mat-error
+                  *ngIf="form.controls['receptoProcesadasBody'].hasError('required') && form.controls['receptoProcesadasBody'].touched"
+                  class="font-11">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxFlex="100" class="service-container">
+          <h4 class="mb-0">Método Receptor Express</h4>
+          <div fxLayout="row wrap">
+            <div fxFlex="100">
+              <mat-form-field class="mc4-flex-form-field">
+                <mat-label>Receptor Part Name</mat-label>
+                <input matInput
+                       type="text"
+                       maxlength="100"
+                       formControlName="receptorExpressResponsePartName">
+                <mat-error
+                  *ngIf="form.controls['receptorExpressResponsePartName'].hasError('required') && form.controls['receptorExpressResponsePartName'].touched"
+                  class="font-11">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100">
+              <mat-form-field class="mc4-flex-form-field">
+                <mat-label>Body Request</mat-label>
+                <textarea matInput
+                          type="text"
+                          maxlength="1000"
+                          formControlName="receptorExpressBody"></textarea>
+                <mat-error
+                  *ngIf="form.controls['receptorExpressBody'].hasError('required') && form.controls['receptorExpressBody'].touched"
+                  class="font-11">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxFlex="100" class="service-container">
+          <h4 class="mb-0">Método Test</h4>
+          <div fxLayout="row wrap">
+            <div fxFlex="100">
+              <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex="80">
+                  <mat-form-field class="mc4-flex-form-field">
+                    <mat-label>Receptor Part Name</mat-label>
+                    <input matInput
+                           type="text"
+                           maxlength="100"
+                           formControlName="testResponsePartName">
+                    <mat-error
+                      *ngIf="form.controls['testResponsePartName'].hasError('required') && form.controls['testResponsePartName'].touched"
+                      class="font-11">Campo requerido</mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="20">
+                  <button mat-button
+                          color="accent"
+                          [disabled]="form.controls['testResponsePartName'].invalid && form.controls['testBody'].invalid"
+                          type="button"
+                          (click)="testMethod()">
+                    <mat-icon>check_circle</mat-icon>Test
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="100">
+              <mat-form-field class="mc4-flex-form-field">
+                <mat-label>Body Request</mat-label>
+                <textarea matInput
+                          type="text"
+                          maxlength="1000"
+                          formControlName="testBody"></textarea>
+                <mat-error
+                  *ngIf="form.controls['testBody'].hasError('required') && form.controls['testBody'].touched"
+                  class="font-11">Campo requerido</mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100"
+                 class="test-response-container"
+                 *ngIf="testResponse">
+              <mat-label>Test Response</mat-label>
+              <mat-form-field class="mc4-flex-form-field">
+                <textarea matInput
+                          [value]="testResponse"
+                          type="text"
+                          readonly="true"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mc4-card-content>
+  <mc4-card-actions fxLayoutAlign="center center">
+    <button mat-flat-button
+            color="primary"
+            type="submit" [disabled]="form.invalid">Guardar</button>
+  </mc4-card-actions>
+</form>

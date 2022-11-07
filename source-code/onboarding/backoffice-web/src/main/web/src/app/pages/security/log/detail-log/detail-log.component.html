@@ -1,0 +1,69 @@
+<mc4-card-header>
+  <mc4-card-header-heading>
+    <div fxLayout="row wrap">
+      <div fxFlex="90">
+        <h3 class="text-primary">Detalle de Log</h3>
+      </div>
+      <div fxFlex="10" fxLayoutAlign="end center">
+        <button mat-icon-button
+                color="warn"
+                matTooltip="Cancelar"
+                type="button"
+                (click)="bottomSheetRef.dismiss()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mc4-card-header-heading>
+</mc4-card-header>
+<mc4-card-content>
+  <div fxLayout="row wrap">
+  <div fxFlex="100" class="detail-container">
+    <div fxLayout="row wrap">
+      <div fxFlex="30" fxFlex.lt-md="100">
+        <p><span class="bolder">Fecha de Registro: </span>{{data.createdDateStr}}</p>
+        <p><span class="bolder">Tipo de proceso: </span>{{data.processType}}</p>
+        <p>
+          <span class="bolder">Tipo de Log: </span>
+          <span
+            [ngClass]="{ 'info_log': this.data.logType === 'INFO', 'warning_log' : this.data.logType === 'WARNING' , 'error_log' : this.data.logType === 'ERROR', 'debug_log' : this.data.logType === 'DEBUG'}">
+            {{data.logType}}
+        </span>
+        </p>
+      </div>
+      <div fxFlex="30" fxFlex.lt-md="100">
+        <p><span class="bolder">Usuario: </span>{{data.username}}</p>
+        <p><span class="bolder">Pagina: </span>{{data.pagina}}</p>
+      </div>
+    </div>
+  </div>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div [style.display]="data.log ? 'block' : 'none'" fxLayout="row wrap">
+    <div fxFlex="100" fxLayoutAlign="start center">
+      <button mat-icon-button
+              *ngIf="data.log"
+              color="accent"
+              matTooltip="Copiar"
+              (click)="copyToClipboard()">
+        <mat-icon>file_copy</mat-icon>
+      </button>
+      <button mat-icon-button
+              *ngIf="data.log"
+              color="accent"
+              matTooltip="Descargar Archivo"
+              (click)="downloadFileMessage(data.log)">
+        <mat-icon>download</mat-icon>
+      </button>
+    </div>
+    <div fxFlex="100" class="tareacontent" *ngIf="data.log">
+      <textarea class="tareaxml"
+                id="xml-request"
+                name="xml-request"
+                cols="30"
+                rows="15"
+                [readonly]="true">{{data.log}}</textarea>
+    </div>
+  </div>
+</mc4-card-content>

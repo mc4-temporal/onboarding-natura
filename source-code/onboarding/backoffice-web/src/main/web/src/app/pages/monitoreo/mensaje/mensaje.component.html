@@ -1,0 +1,82 @@
+<mc4-page-layout mode="card">
+  <mc4-page-layout-header>
+    <mc4-breadcrumbs [crumbs]="['Monitoreo']" current="Mensaje"></mc4-breadcrumbs>
+  </mc4-page-layout-header>
+  <mc4-page-layout-content>
+    <mc4-list name="Mensajes" [withFilter]="false">
+      <form [formGroup]="form" (submit)="applyFilter()">
+        <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
+          <div fxFlex="25" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Rango de fecha</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate formControlName="fechaInicio" placeholder="Inicio">
+                <input matEndDate formControlName="fechaFin" placeholder="Fin">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+              <mat-error *ngIf="form.controls.fechaInicio.hasError('matStartDateInvalid')">Fecha de inicio inválida
+              </mat-error>
+              <mat-error *ngIf="form.controls.fechaFin.hasError('matEndDateInvalid')">Fecha de fin inválida</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="20" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Etapa de mensaje</mat-label>
+              <mat-select formControlName="etapaMensaje">
+                <mat-option [value]="''">Seleccionar todo</mat-option>
+                <mat-option *ngFor="let option of etapaMensajeList"
+                            [value]="option.codigo">
+                  {{option.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="20" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Tipo de mensaje</mat-label>
+              <mat-select formControlName="tipoMensaje">
+                <mat-option [value]="''">Seleccionar todo</mat-option>
+                <mat-option *ngFor="let option of tipoMensajeList"
+                            [value]="option.codigo">
+                  {{option.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="10" fxFlex.xs="100" class="mt10">
+            <button mat-flat-button
+                    color="accent"
+                    type="submit">
+              <mat-icon>search</mat-icon>
+              Buscar
+            </button>
+          </div>
+        </div>
+      </form>
+      <div fxLayout="row wrap">
+        <div fxFlex="100"
+             class="table-scroll"
+             *ngIf="showDataTable">
+          <mc4-server-paging-table [dataSource]="dataSource"
+                                   [columns]="columns"
+                                   [requestPaginatedData]="requestMensajeListFn"
+                                   [itemFormatterFn]="itemMensajeFormatterFn"
+                                   [eventManager]="tableEvents"></mc4-server-paging-table>
+        </div>
+      </div>
+    </mc4-list>
+    <mc4-card *ngIf="xmlStr"
+              class="mt20">
+      <mc4-card-content>
+        <div fxFlex="100">
+          <mc4-xml-viewer [xmlStr]="xmlStr"
+                          iconClose="cancel"
+                          colorIconClose="warn"
+                          tooltipClose="Cerrar"
+                          [backBtnFn]="backEvent"></mc4-xml-viewer>
+        </div>
+      </mc4-card-content>
+    </mc4-card>
+  </mc4-page-layout-content>
+</mc4-page-layout>

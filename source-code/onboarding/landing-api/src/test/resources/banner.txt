@@ -1,0 +1,6 @@
+**********************************************************************
+************************** ONBOARDING API ****************************
+**********************************************************************
+${AnsiColor.BRIGHT_BLUE}:: ONBOARDING API ${build.version}     :: Running Spring Boot ${spring-boot.version}
+:: https://www.mc4.com.bo   ::${AnsiColor.DEFAULT}
+

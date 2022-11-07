@@ -1,0 +1,29 @@
+<mat-dialog-content class="p0" >
+  <form (ngSubmit)="submitData()">
+    <mc4-card-header fxLayoutAlign="center center">
+      <mc4-card-header-heading>Configurar Privilegios</mc4-card-header-heading>
+      <mc4-card-header-actions>
+        <button mat-icon-button
+                type="button"
+                (click)="dialogRef.close()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mc4-card-header-actions>
+    </mc4-card-header>
+    <mc4-card-content>
+      <div fxLayout="row wrap">
+        <div fxFlex="50"
+             class="privilege-content"
+             *ngFor="let item of data.actionList">
+          <mat-slide-toggle [checked]="isActionChecked(item)"
+                            (change)="toggleActionChange($event.checked, item)">{{item.action}}</mat-slide-toggle>
+        </div>
+      </div>
+    </mc4-card-content>
+    <mc4-card-actions align="end">
+      <button mat-raised-button
+              color="primary"
+              type="submit">Guardar</button>
+    </mc4-card-actions>
+  </form>
+</mat-dialog-content>

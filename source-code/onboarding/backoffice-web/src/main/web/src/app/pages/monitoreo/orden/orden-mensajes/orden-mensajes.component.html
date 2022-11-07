@@ -1,0 +1,53 @@
+<mc4-card-header>
+  <ng-container *ngIf="!xmlMensaje">
+    <mc4-card-header-heading>
+      <div fxLayout="row wrap">
+        <div fxFlex="90">
+          <h3 class="text-primary">Lista de Mensajes</h3>
+        </div>
+        <div fxFlex="10" fxLayoutAlign="end center">
+          <button mat-icon-button
+                  color="warn"
+                  matTooltip="Cancelar"
+                  type="button"
+                  (click)="bottomSheetRef.dismiss()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mc4-card-header-heading>
+  </ng-container>
+  <ng-container *ngIf="xmlMensaje">
+    <div fxFlex="100" class="detail-container">
+      <div fxLayout="row wrap">
+        <div fxFlex="30" fxFlex.lt-md="100">
+          <p><span class="bold font-15">Orden:</span></p>
+          <p><span class="bolder">Nro. orden originante: </span>{{data.orden.numeroOrdenOriginante}}</p>
+          <p><span class="bolder">Nro. orden destinatario: </span>{{data.orden.numeroOrdenDestinatario}}</p>
+          <p><span class="bolder">Nro. orden cámara: </span>{{data.orden.numeroOrdenCamara}}</p>
+          <p><span class="bolder">Monto: </span>{{data.orden.monto | number : '.2'}} {{data.orden.moneda}}</p>
+        </div>
+        <mat-divider fxShow.lt-md="false" [vertical]="true" class="m5"></mat-divider>
+        <div fxFlex="30" fxFlex.lt-md="100">
+          <p><span class="bold font-15">Mensaje:</span></p>
+          <p><span class="bolder">Tipo mensaje: </span>{{selectedItem.tipoMensaje}}</p>
+          <p><span class="bolder">Fecha procesamiento: </span>{{selectedItem.fechaProcesamiento || 'dd/MM/yyyy hh:mm:ss'}}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</mc4-card-header>
+<mat-divider></mat-divider>
+<mc4-card-content>
+  <mc4-simple-table [style.display]="!xmlMensaje ? 'block' : 'none'"
+                    [dataSource]="dataSource"
+                    [columns]="columns"
+                    [withPaginator]="false"
+                    [rowActions]="rowActions"
+                    [eventManager]="tableEvents"></mc4-simple-table>
+
+  <mc4-xml-viewer *ngIf="xmlMensaje"
+                  [@fadeInUp]
+                  [xmlStr]="xmlMensaje"
+                  [backBtnFn]="backEvent"></mc4-xml-viewer>
+</mc4-card-content>
