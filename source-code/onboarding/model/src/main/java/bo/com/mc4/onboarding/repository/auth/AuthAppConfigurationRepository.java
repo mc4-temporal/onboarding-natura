@@ -18,4 +18,6 @@ public interface AuthAppConfigurationRepository extends JpaRepository<AuthAppCon
             "AND aac.applicationType = :type ")
     Optional<AuthAppConfiguration> findByUserAndType(@Param("userId") AuthUser authUser,
                                                      @Param("type") ApplicationType applicationType);
+
+
 }
