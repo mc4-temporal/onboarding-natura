@@ -23,7 +23,7 @@ import java.util.Date;
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
-    @Value("${spring.profiles.actives}")
+    @Value("${spring.profiles.active}")
     private String activeProfile;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(CorsFilter.class);

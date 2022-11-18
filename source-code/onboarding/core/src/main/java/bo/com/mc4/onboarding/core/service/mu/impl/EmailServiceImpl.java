@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service("emailService")
 public class EmailServiceImpl implements EmailService {
     private static final String BANNER_PNG = "imagenes/footer_unilink.jpeg";
-    @Value("${spring.profiles.actives}")
+    @Value("${spring.profiles.active}")
     private String activeProfile;
 
 

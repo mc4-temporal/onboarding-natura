@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    @Value("${spring.profiles.actives}")
+    @Value("${spring.profiles.active}")
     private String activeProfile;
 
     @Override
