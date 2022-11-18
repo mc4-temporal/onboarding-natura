@@ -30,7 +30,7 @@ public class DataInitializer implements CommandLineRunner {
     private final AuthPrivilegeRepository authPrivilegeRepository;
     private final AuthResourceActionRepository authResourceActionRepository;
 
-    @Value("${spring.profiles.actives}")
+    @Value("${spring.profiles.active}")
     private String activeProfile;
 
     public DataInitializer(AuthRoleRepository authRoleRepository,

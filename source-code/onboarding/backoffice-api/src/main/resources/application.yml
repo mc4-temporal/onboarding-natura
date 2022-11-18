@@ -1,5 +1,6 @@
 spring:
-  profiles.actives: development
+  profiles:
+    active: dev
   application:
     name: backoffice-api
   freemarker:
