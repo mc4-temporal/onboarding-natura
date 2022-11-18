@@ -10,4 +10,4 @@ services:
       POSTGRES_PASSWORD: onboarding
       POSTGRES_DB: onboarding
     volumes:
-       - ./data:/var/lib/postgresql/data
+       - ./pg-data:/var/lib/postgresql/data
