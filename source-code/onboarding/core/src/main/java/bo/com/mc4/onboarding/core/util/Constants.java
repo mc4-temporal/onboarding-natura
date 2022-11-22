@@ -4,6 +4,7 @@ public interface Constants {
 
     String CURRENT_USER_SESSION = "CURRENT_USER_SESSION";
     String DEFAULT_GROUP = "CLIENT-CAMARA";
+    String DEFAULT_CANAL_ONBOARDING = "ONBOARDING";
 
     interface Params {
         String URL_SISTEMA = "URL_SISTEMA";

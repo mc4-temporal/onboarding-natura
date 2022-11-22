@@ -4,6 +4,7 @@ import {MatStepper} from '@angular/material/stepper';
 import {FormUtil} from '../../commons/utils/form.util';
 import {LandingService} from '../../commons/services/landing.service';
 import * as Notiflix from 'notiflix';
+import {OnboardingUtil} from './onboarding.util';
 
 @Component({
   selector: 'mc4-onboarding',
@@ -15,7 +16,7 @@ export class OnboardingComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
   tipoDocumentoList: any[] = [
     {codigo: 'CI', descripcion: 'Doc. de identidad'},
-    {codigo: 'CI-EX', descripcion: 'Doc. de identidad extranjero'},
+    {codigo: 'CI-EXRANJERO', descripcion: 'Doc. de identidad extranjero'},
     {codigo: 'PASAPORTE', descripcion: 'Pasaporte'},
   ];
   expedicionList: any[] = [
@@ -63,8 +64,9 @@ export class OnboardingComponent implements OnInit {
 
   submitInfoForm() {
     if (FormUtil.isValidFormGroup(this.pInfoForm)) {
+      const body = this.pInfoForm.value;
       Notiflix.Loading.pulse();
-      this.service.requestSaveOnboardingInfo('INFORMACION_PERSONAL', this.pInfoForm.value)
+      this.service.requestSaveOnboardingInfo(OnboardingUtil.estadoFlujoEnum.formDatosPersonales, body)
         .subscribe({next: this.successSaveInfo});
     }
   }

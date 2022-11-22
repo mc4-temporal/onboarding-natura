@@ -1,5 +1,6 @@
 spring:
-  profiles.actives: development
+  profiles:
+    active: development
   application:
     name: landing-api
   freemarker:

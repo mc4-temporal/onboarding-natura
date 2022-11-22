@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   googleMapsApiKey: '',
   storageSecretKey: 'secret-for-storage',
-  api: 'http://localhost:8081',
+  api: 'http://localhost:8082',
   apiClient: 'http://localhost:8081',
   appLogProccess: 'APLICACION_WEB',
   backend: {

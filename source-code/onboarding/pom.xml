@@ -63,6 +63,7 @@
             <module>backoffice-web</module>
             <module>backoffice-api</module>
             <module>landing-api</module>
+            <module>landing-page</module>
         </modules>
     </profile>
     <profile>
@@ -81,6 +82,7 @@
             <module>backoffice-web</module>
             <module>backoffice-api</module>
             <module>landing-api</module>
+            <module>landing-page</module>
         </modules>
     </profile>
     <profile>
@@ -101,6 +103,7 @@
             <module>backoffice-web</module>
             <module>backoffice-api</module>
             <module>landing-api</module>
+            <module>landing-page</module>
         </modules>
     </profile>
     </profiles>
