@@ -1,0 +1,61 @@
+<div (mc4ClickOutside)="onClickOutside()" class="toolbar-notifications"
+     fxFlex="grow" fxLayout="row" fxLayoutAlign="start center">
+  <button (click)="toggleDropdown()" [class.open]="isOpen" class="button"
+          fxFlex="grow" mat-button type="button">
+    <mat-icon [matBadgeHidden]="notifications.length === 0" [matBadge]="notifications.length" class="icon">
+      notifications_active
+    </mat-icon>
+  </button>
+
+  <div [class.open]="isOpen" class="dropdown">
+    <mc4-card>
+      <mc4-card-header class="dropdown-header">
+        <mc4-card-header-heading>
+          Notifications
+        </mc4-card-header-heading>
+        <mc4-card-header-subheading>
+          You have {{ notifications.length }} new notifications.
+        </mc4-card-header-subheading>
+
+        <mc4-card-header-actions>
+          <button mat-icon-button type="button">
+            <mat-icon class="icon">settings</mat-icon>
+          </button>
+        </mc4-card-header-actions>
+      </mc4-card-header>
+
+      <mc4-card-content class="dropdown-card-content">
+        <mc4-scrollbar class="dropdown-content">
+          <div fxLayout="column">
+            <ng-container *ngFor="let notification of notifications; let last = last">
+              <div (click)="markAsRead(notification)"
+                   [@listFade]
+                   [class.read]="notification.read" [ngClass]="notification.colorClass"
+                   class="notification" fxLayout="row"
+                   fxLayoutAlign="start center" matRipple>
+                <mat-icon class="icon">{{ notification.icon }}</mat-icon>
+                <div class="label" fxLayout="column">
+                  <div class="name">{{ notification.name }}</div>
+                  <div class="time">{{ notification.time }}</div>
+                </div>
+                <span fxFlex></span>
+                <button (click)="dismiss(notification, $event)" mat-icon-button type="button">
+                  <mat-icon class="close">close</mat-icon>
+                </button>
+              </div>
+              <mat-divider *ngIf="!last"></mat-divider>
+            </ng-container>
+          </div>
+          <div *ngIf="notifications.length === 0" [@listFade] class="empty">
+            All fine! No notifications right now.
+          </div>
+        </mc4-scrollbar>
+      </mc4-card-content>
+
+
+      <mc4-card-actions (click)="markAllAsRead()" class="dropdown-footer" matRipple>
+        Mark all as read
+      </mc4-card-actions>
+    </mc4-card>
+  </div>
+</div>

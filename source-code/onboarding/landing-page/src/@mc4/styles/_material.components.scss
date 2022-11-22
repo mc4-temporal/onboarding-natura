@@ -1,0 +1,51 @@
+// =====================
+// # Button Customize
+// =====================
+.mat-raised-button {
+  border-radius: 1.5625rem !important;
+  height: 39px !important;
+  min-width: 134.4px !important;
+}
+
+.mat-stroked-button {
+  border-radius: 1.5625rem !important;
+  height: 39px !important;
+  min-width: 134.4px !important;
+}
+
+.mat-flat-button {
+  border-radius: 1.5625rem !important;
+  height: 39px !important;
+  min-width: 134.4px !important;
+}
+
+// =====================
+// # Mat Form Field Customize
+// =====================
+mat-form-field {
+  width: 100%;
+  mat-error {
+    margin-top: 12px !important;
+  }
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0!important;
+}
+
+
+element.style {
+  transform: translateY(0%);
+}
+
+.mat-bottom-sheet-container {
+  min-height: 70vh !important;
+  max-height: 70vh !important;
+}
+
+@media (min-width: 769px) {
+  .mat-bottom-sheet-container {
+    min-width: 80vw !important;
+    max-width: 80vw !important;
+  }
+}

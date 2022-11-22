@@ -1,0 +1,7 @@
+<div *ngIf="visible$ | async" class="footer" fxLayout="row">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="24px" fxFlex="grow">
+    <div fxFlex="100" class="name text-center" fxHide fxShow.gt-sm>
+      © {{year}} UNILINK {{version}}
+    </div>
+  </div>
+</div>
