@@ -4,6 +4,8 @@ import bo.com.mc4.onboarding.core.util.ApiConstants;
 import bo.com.mc4.onboarding.core.util.ApiUtil;
 import bo.com.mc4.onboarding.core.util.exception.ApiResponseException;
 import bo.com.mc4.onboarding.core.util.exception.OperationException;
+import bo.com.mc4.onboarding.integrations.gera.IGeraClient;
+import bo.com.mc4.onboarding.integrations.gera.dto.output.ResponseAuthApiGeraDto;
 import bo.com.mc4.onboarding.model.commons.dto.EnumDto;
 import bo.com.mc4.onboarding.model.commons.dto.api.ResponseBody;
 import bo.com.mc4.onboarding.model.commons.enums.ProcessType;
@@ -13,16 +15,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -31,7 +29,50 @@ import static org.springframework.http.ResponseEntity.ok;
 @Tag(name = "utils", description = "API de utileria")
 @RestController
 @RequestMapping("/api/v1/utils")
+@RequiredArgsConstructor
 public class UtilController {
+
+    private final IGeraClient geraClient;
+
+    @PostMapping("/test-gera-auth")
+    public ResponseEntity<ResponseBody<ResponseAuthApiGeraDto>> testRetrieveAuthPermissionGera(){
+        try {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("client_id","EscritorioVirtual");
+            params.put("client_secret","9244B35CFF3243E5A29C5ADDD7A514E63D3F3D42");
+            params.put("grant_type","password");
+            params.put("username","136241");
+            params.put("password","Cn2022");
+            params.put("url", "https://hmlapiauthnaturabo.geravd.com.br/api");
+            return ok(ApiUtil.buildResponseWithDefaults(geraClient.retrieveAuthToken(params)));
+        } catch (OperationException e) {
+            log.error("Error: Se produjo un error controlado al ejecutar el servicio, Mensaje: {}", e.getMessage());
+            throw ApiResponseException.badRequest(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error: Se produjo un error genérico al ejecutar el servicio: ", e);
+            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/test-search-people-gera")
+    public ResponseEntity<ResponseBody<List<Map<String, Object>>>> testSearchPeopleApiGera(){
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("access_token", "2e6VUbUYej7EGtLK3jFg5xLPptVmXIojY-1_tm-EZgVsltmnUVadJlU3-IW4DlwHhgOVY_WXnhBdbK7Qs-JRqNBhnEUiLZOhZGjPUbO4lxSxFJ16XtR-F83oEqIPmG74S6hrWptRSxiF72M9e5t4TTd2rTT0yqlBVx-0OiVOrvQqEx7d5gq1VaTxlq45Wp3-ziAh3zdpBjL4RXGSWOCcYO7tLXiMUMSlnBK3Gi0j468ClKMkIAjsEqQIwZE-zXeMg972QFfsB-fnpHbFhpjRI-SqMsEx3z1HB4ltQxWpnkQeNWqGBTnpEOTfmEQ-YctpUYZhR_5hz12agB-DcuOeyuNiOmeMvgUDLXqwTRJeLvmVJzPRqH7bDGuC77Xud5dOYojIxp7iNXjDTSkAfjX1QgNmicwf53aHZbY47dvot3ci45GfwLjrBUbnkudUMgvk_2ehYbGUOefkPdtA_LZ9dUKlCFsgtIRAku8xhycLAJ6b4K3JOo5AeaW97nJDbuKDVnxMWiXwHmTyodIzFXlS4m4dhLo");
+            params.put("url", "https://hmlapinaturabo.geravd.com.br/api");
+
+            params.put("document","5391842");
+            params.put("includeOptions", Arrays.asList("telephones", "emails"));
+
+            return ok(ApiUtil.buildResponseWithDefaults(geraClient.searchPeople(params)));
+        } catch (OperationException e) {
+            log.error("Error: Se produjo un error controlado al ejecutar el servicio, Mensaje: {}", e.getMessage());
+            throw ApiResponseException.badRequest(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error: Se produjo un error genérico al ejecutar el servicio: ", e);
+            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/enum-as-list")
     @Operation(summary = "",
