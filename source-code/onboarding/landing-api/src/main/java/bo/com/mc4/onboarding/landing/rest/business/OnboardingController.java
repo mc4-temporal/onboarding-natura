@@ -6,6 +6,7 @@ import bo.com.mc4.onboarding.core.util.ApiUtil;
 import bo.com.mc4.onboarding.core.util.exception.ApiResponseException;
 import bo.com.mc4.onboarding.core.util.exception.OperationException;
 import bo.com.mc4.onboarding.model.business.dto.FrmDatosPersonalesDto;
+import bo.com.mc4.onboarding.model.business.dto.FrmDireccionDto;
 import bo.com.mc4.onboarding.model.business.dto.FrmResponseDto;
 import bo.com.mc4.onboarding.model.commons.dto.api.ResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,8 +35,32 @@ public class OnboardingController {
         this.onboardingService = onboardingService;
     }
 
-    @PostMapping(value = "/save-info", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Guarda informacion de onboarding",
+    @PostMapping(value = "/info-personal", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Guarda informacion personal del prospecto",
+            description = "",
+            responses = {
+                    @ApiResponse(description = "Operación satisfactorio", responseCode = "200", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(description = "Registro creado", responseCode = "201", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Fallo de autentificación", content = @Content(schema = @Schema(hidden = true))),
+                    @ApiResponse(responseCode = "403", description = "Acceso Denegado", content = @Content(schema = @Schema(hidden = true))),
+            }, security = @SecurityRequirement(name = "bearerToken"))
+    public ResponseEntity<ResponseBody<FrmResponseDto>> infoPersonal(@Nullable @RequestParam("canalOnb") String canalOnboarding,
+                                                                     @RequestBody FrmDatosPersonalesDto frmDatosPersonalesDto) {
+        try {
+            return ok(ApiUtil.buildResponseWithDefaults(
+                    onboardingService.saveFrmDatosPersonales(canalOnboarding, frmDatosPersonalesDto)));
+        } catch (OperationException e) {
+            log.error("Error al ejecutar el servicio, Mensaje: {}", e.getMessage());
+            throw ApiResponseException.badRequest(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error al ejecutar el servicio", e);
+            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/address", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Guarda informacion de direccion del prospecto",
             description = "Recibe el codigo de formulario actual y la data correspondiente al mismo.",
             responses = {
                     @ApiResponse(description = "Operación satisfactorio", responseCode = "200", content = @Content(mediaType = "application/json")),
@@ -44,16 +69,16 @@ public class OnboardingController {
                     @ApiResponse(responseCode = "401", description = "Fallo de autentificación", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "403", description = "Acceso Denegado", content = @Content(schema = @Schema(hidden = true))),
             }, security = @SecurityRequirement(name = "bearerToken"))
-    public ResponseEntity<ResponseBody<FrmResponseDto>> findAppTheme(@Nullable @RequestParam("canalOnb") String canalOnboarding,
-                                                                     @RequestBody FrmDatosPersonalesDto frmDatosPersonalesDto) {
+    public ResponseEntity<ResponseBody<FrmResponseDto>> address(@RequestParam("prospectoId") Long prospectoId,
+                                                                @RequestBody FrmDireccionDto frmDireccionDto) {
         try {
             return ok(ApiUtil.buildResponseWithDefaults(
-                    onboardingService.saveFrmDatosPersonales(canalOnboarding, frmDatosPersonalesDto)));
+                    onboardingService.saveFrmDireccion(prospectoId, frmDireccionDto)));
         } catch (OperationException e) {
-            log.error("Error: Se produjo un error controlado al ejecutar el servicio, Mensaje: {}", e.getMessage());
+            log.error("Error al ejecutar el servicio, Mensaje: {}", e.getMessage());
             throw ApiResponseException.badRequest(e.getMessage());
         } catch (Exception e) {
-            log.error("Error: Se produjo un error genérico al ejecutar el servicio: ", e);
+            log.error("Error al ejecutar el servicio", e);
             throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
         }
     }

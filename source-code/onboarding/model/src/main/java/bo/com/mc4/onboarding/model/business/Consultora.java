@@ -87,7 +87,11 @@ public class Consultora extends AuditableEntity implements Serializable {
     @Column(name = "TEMRINOS_CONDICIONES")
     private Boolean terminosCondiciones;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_CANAL_ONBOARDING", nullable = false)
     private CanalOnboarding idCanalOnboarding;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_MUNICIPIO")
+    private Municipio idMunicipio;
 }

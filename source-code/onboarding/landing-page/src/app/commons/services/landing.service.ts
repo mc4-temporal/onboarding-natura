@@ -27,9 +27,15 @@ export class LandingService {
       .pipe(map((resp) => mapResponseApi<string>(url, resp)));
   }
 
-  requestSaveOnboardingInfo(step: string, body: any): Observable<any> {
-    const params: HttpParams = new HttpParams().appendAll({step: step});
-    const url = environment.api + environment.backend.onboardingApi + '/save-info';
+  requestSaveOnboardingInfo(body: any): Observable<any> {
+    const url = environment.api + environment.backend.onboardingApi + '/info-personal';
+    return this.http.post<ApiResponse<any>>(url, body)
+      .pipe(map((resp) => mapResponseApi<any>(url, resp)));
+  }
+
+  requestSaveOnboardingAddress(prospectoId: number, body: any): Observable<any> {
+    const params = new HttpParams().appendAll({prospectoId});
+    const url = environment.api + environment.backend.onboardingApi + '/address';
     return this.http.post<ApiResponse<any>>(url, body, {params})
       .pipe(map((resp) => mapResponseApi<any>(url, resp)));
   }

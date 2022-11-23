@@ -1,13 +1,21 @@
 <div fxLayout="row wrap">
   <div fxFlex="100">
-    <mat-stepper #stepper>
+    <mat-stepper #stepper orientation="vertical">
       <mat-step [stepControl]="pInfoForm">
         <form [formGroup]="pInfoForm" (ngSubmit)="submitInfoForm()">
-          <ng-template matStepLabel>Información personal</ng-template>
+          <ng-template matStepLabel>Datos personales</ng-template>
           <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex="100" fxLayoutAlign="center center">
+              <h3 class="stepper-title">Mis datos personales</h3>
+            </div>
             <div fxFlex="50" class="p3">
-              <mat-form-field>
-                <mat-label>Nombres</mat-label>
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese en este campo únicamente sus nombres sin apellidos">help</mat-icon>
+                  Nombres
+                </mat-label>
                 <mat-icon matSuffix fontSet="material-icons-outlined">person</mat-icon>
                 <input matInput
                        required
@@ -23,8 +31,13 @@
               </mat-form-field>
             </div>
             <div fxFlex="50" class="p3">
-              <mat-form-field>
-                <mat-label>Apellidos</mat-label>
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese en este campo únicamente sus apellidos">help</mat-icon>
+                  Apellidos
+                </mat-label>
                 <mat-icon matSuffix fontSet="material-icons-outlined">person</mat-icon>
                 <input matInput
                        required
@@ -40,10 +53,16 @@
               </mat-form-field>
             </div>
             <div fxFlex="50" class="p3">
-              <mat-form-field>
-                <mat-label>Tipo de documento</mat-label>
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Seleccione su tipo de documento CI, CI Extranjero o Pasaporte">help</mat-icon>
+                  Tipo de documento
+                </mat-label>
                 <mat-select required
-                            formControlName="tipoDocumento">
+                            formControlName="tipoDocumento"
+                            placeholder="Seleccione una opción">
                   <mat-option *ngFor="let item of tipoDocumentoList"
                               [value]="item.codigo">{{item.descripcion}}</mat-option>
                 </mat-select>
@@ -55,8 +74,13 @@
             <div fxFlex="50" class="p3">
               <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                 <div fxFlex="69">
-                  <mat-form-field>
-                    <mat-label>Nro. Documento</mat-label>
+                  <mat-form-field floatLabel="always">
+                    <mat-label>
+                      <mat-icon fontSet="material-icons-outlined"
+                                class="icon-help"
+                                matTooltip="Ingrese en este campo su número de documento CI, CI Extranjero o Pasaporte">help</mat-icon>
+                      Nro. Documento
+                    </mat-label>
                     <mat-icon matSuffix fontSet="material-icons-outlined">badge</mat-icon>
                     <input matInput
                            required
@@ -71,12 +95,18 @@
                   </mat-form-field>
                 </div>
                 <div fxFlex="29">
-                  <mat-form-field>
-                    <mat-label>Complemento</mat-label>
+                  <mat-form-field floatLabel="always">
+                    <mat-label>
+                      <mat-icon fontSet="material-icons-outlined"
+                                class="icon-help"
+                                matTooltip="Ingrese el complemento de su documento, únicamente para CI duplicados.">help</mat-icon>
+                      Complemento
+                    </mat-label>
                     <input matInput
                            mc4Restrictions="alphanumeric"
                            type="text"
                            formControlName="complemento"
+                           placeholder="Ejm. 1A"
                            maxlength="2"
                            autocomplete="off">
                   </mat-form-field>
@@ -84,16 +114,22 @@
               </div>
             </div>
             <div fxFlex="50" class="p3">
-              <mat-form-field>
-                <mat-label>Lugar de expidición</mat-label>
-                <mat-select formControlName="expedicion">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Seleccione la ciudad donde obtuvo su CI.">help</mat-icon>
+                  Lugar de expidición
+                </mat-label>
+                <mat-select formControlName="expedicion"
+                            placeholder="Seleccione una opción">
                   <mat-option *ngFor="let item of expedicionList"
                               [value]="item.codigo">{{item.descripcion}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
             <div fxFlex="50" class="p3">
-              <mat-form-field>
+              <mat-form-field floatLabel="always">
                 <mat-label>Fecha de nacimiento</mat-label>
                 <input matInput
                        required
@@ -106,14 +142,22 @@
                 <mat-error *ngIf="isErrorVisible('pInfoForm', 'fechaNacimiento', 'required')">
                   Por favor ingrese su fecha de nacimiento.
                 </mat-error>
-                <mat-error *ngIf="isErrorVisible('pInfoForm', 'fechaNacimiento', 'matDatepickerParse')">
-                  El formato de fecha es dd/mm/aaaa.
+                <mat-error *ngIf="isErrorVisible('pInfoForm', 'fechaNacimiento', 'personaMayorEdad')">
+                  Debe ser mayor de edad para continuar.
                 </mat-error>
+<!--                <mat-error *ngIf="isErrorVisible('pInfoForm', 'fechaNacimiento', 'matDatepickerParse')">-->
+<!--                  El formato de fecha es dd/mm/aaaa.-->
+<!--                </mat-error>-->
               </mat-form-field>
             </div>
             <div fxFlex="50" class="p3">
-              <mat-form-field>
-                <mat-label>Nro. de celular</mat-label>
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese su número de celular, recuerde que debe ser un número mediante el cual podamos comunicarnos con usted.">help</mat-icon>
+                  Nro. de celular
+                </mat-label>
                 <mat-icon matSuffix fontSet="material-icons-outlined">call</mat-icon>
                 <input matInput
                        required
@@ -128,8 +172,13 @@
               </mat-form-field>
             </div>
             <div fxFlex="50" class="p3">
-              <mat-form-field>
-                <mat-label>Correo electrónico</mat-label>
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese su correo electrónico, recuerde que debe ser un correo válido en el que pueda recibir mensajes.">help</mat-icon>
+                  Correo electrónico
+                </mat-label>
                 <mat-icon matSuffix fontSet="material-icons-outlined">alternate_email</mat-icon>
                 <input matInput
                        required
@@ -148,7 +197,7 @@
             </div>
           </div>
           <div fxLayout="row wrap" class="mt10">
-            <div fxFlex="100" fxLayoutAlign="center center">
+            <div fxFlex="100">
               <button mat-flat-button
                       type="submit"
                       color="primary"
@@ -159,12 +208,257 @@
       </mat-step>
       <mat-step [stepControl]="addressForm">
         <form [formGroup]="addressForm" (ngSubmit)="submitAddressForm()">
-          <ng-template matStepLabel>Dirección</ng-template>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem consequuntur doloribus ducimus earum eum fugit incidunt maxime provident repellendus velit? Adipisci, amet aut inventore laudantium maiores quasi ratione repellat sequi!</p>
-          <button mat-flat-button
-                  matStepperPrevious
-                  type="button"
-                  color="primary">Atras</button>
+          <ng-template matStepLabel>Direcciones</ng-template>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex="100" fxLayoutAlign="center center">
+              <h3 class="stepper-title">Dirección de mi domicilio</h3>
+            </div>
+            <div fxFlex="50" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  ¿En qué departamento vives?
+                </mat-label>
+                <mat-select required
+                            formControlName="departamentoId"
+                            placeholder="Seleccione una opción">
+                  <mat-option *ngFor="let item of departamentoList"
+                              [value]="item.id">{{item.nombre}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="isErrorVisible('addressForm', 'departamentoId', 'required')">
+                  Por favor seleccione tu departamento.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  Selecciona tu ciudad/localidad
+                </mat-label>
+                <mat-select required
+                            formControlName="localidadId"
+                            placeholder="Seleccione una opción">
+                  <mat-option *ngFor="let item of localidadList"
+                              [value]="item.id">{{item.nombre}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="isErrorVisible('addressForm', 'localidadId', 'required')">
+                  Por favor seleccione tu ciudad/localidad.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese la zona/barrio donde vive.">help</mat-icon>
+                  Barrio/Zona
+                </mat-label>
+                <mat-icon matSuffix fontSet="material-icons-outlined">house</mat-icon>
+                <input matInput
+                       required
+                       type="text"
+                       placeholder="Ejm. 6to anillo/el carmen"
+                       formControlName="barrioZona"
+                       maxlength="100"
+                       autocomplete="off">
+                <mat-error *ngIf="isErrorVisible('addressForm', 'barrioZona', 'required')">
+                  Por favor ingrese la zona/barrio donde vive.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="70" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese la avenida y calle donde vive.">help</mat-icon>
+                  Avenida/Calle
+                </mat-label>
+                <mat-icon matSuffix fontSet="material-icons-outlined">edit_road</mat-icon>
+                <input matInput
+                       required
+                       type="text"
+                       placeholder="Ejm. Av. 1ero de Mayo/Calle 1"
+                       formControlName="avenidaCalle"
+                       maxlength="100"
+                       autocomplete="off">
+                <mat-error *ngIf="isErrorVisible('addressForm', 'avenidaCalle', 'required')">
+                  Por favor ingrese la avenida/calle donde vive.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="30" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese el número de su casa.">help</mat-icon>
+                  Nro.
+                </mat-label>
+                <mat-icon matSuffix fontSet="material-icons-outlined">tag</mat-icon>
+                <input matInput
+                       type="text"
+                       mc4Restrictions="numbers"
+                       placeholder="Ejm. 122"
+                       formControlName="nroCasa"
+                       maxlength="5"
+                       autocomplete="off">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Describa la referencia para encontrar su domicilio con almenos 50 caracteres.">help</mat-icon>
+                  Referencia
+                </mat-label>
+                <textarea matInput
+                          type="text"
+                          mc4Restrictions="alphanumeric"
+                          formControlName="referencia"
+                          maxlength="200"
+                          autocomplete="off"></textarea>
+                <mat-hint align="start">{{addressForm.controls['referencia'].value ? addressForm.controls['referencia'].value.length : 0}} / 200</mat-hint>
+                <mat-error *ngIf="isErrorVisible('addressForm', 'referencia', 'required')">
+                  Por favor ingrese la referencia de su domicilio.
+                </mat-error>
+                <mat-error *ngIf="isErrorVisible('addressForm', 'referencia', 'minlength')">
+                  Describa la referencia con almenos 50 caracteres.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" class="p3">
+              <mat-slide-toggle formControlName="mismaDireccionEntrega"
+                                color="primary"
+                                [checked]="addressForm.controls['mismaDireccionEntrega'].value">
+                {{addressForm.controls['mismaDireccionEntrega'].value ? 'Usar la misma dirección como dirección de entrega' : 'Usar otra dirección como dirección de entrega'}}
+              </mat-slide-toggle>
+            </div>
+          </div>
+          <div fxLayout="row wrap"
+               fxLayoutAlign="space-between center"
+               *ngIf="!addressForm.controls['mismaDireccionEntrega'].value">
+            <div fxFlex="100" fxLayoutAlign="center center">
+              <h3 class="stepper-title">Dirección de entrega</h3>
+            </div>
+            <div fxFlex="100" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese la zona/barrio de entrega.">help</mat-icon>
+                  Barrio/Zona
+                </mat-label>
+                <mat-icon matSuffix fontSet="material-icons-outlined">house</mat-icon>
+                <input matInput
+                       required
+                       type="text"
+                       placeholder="Ejm. 6to anillo/el carmen"
+                       formControlName="barrioZonaEntrega"
+                       maxlength="100"
+                       autocomplete="off">
+                <mat-error *ngIf="isErrorVisible('addressForm', 'barrioZonaEntrega', 'required')">
+                  Por favor ingrese la zona/barrio de entrega.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="70" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese la avenida y calle de entrega.">help</mat-icon>
+                  Avenida/Calle
+                </mat-label>
+                <mat-icon matSuffix fontSet="material-icons-outlined">edit_road</mat-icon>
+                <input matInput
+                       required
+                       type="text"
+                       placeholder="Ejm. Av. 1ero de Mayo/Calle 1"
+                       formControlName="avenidaCalleEntrega"
+                       maxlength="100"
+                       autocomplete="off">
+                <mat-error *ngIf="isErrorVisible('addressForm', 'avenidaCalleEntrega', 'required')">
+                  Por favor ingrese la avenida/calle de entrega.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="30" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Ingrese el número de casa para entrega.">help</mat-icon>
+                  Nro.
+                </mat-label>
+                <mat-icon matSuffix fontSet="material-icons-outlined">tag</mat-icon>
+                <input matInput
+                       type="text"
+                       mc4Restrictions="numbers"
+                       placeholder="Ejm. 122"
+                       formControlName="nroCasaEntrega"
+                       maxlength="5"
+                       autocomplete="off">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" class="p3">
+              <mat-form-field floatLabel="always">
+                <mat-label>
+                  <mat-icon fontSet="material-icons-outlined"
+                            class="icon-help"
+                            matTooltip="Describa la referencia para encontrar el lugar de entrega con almenos 50 caracteres.">help</mat-icon>
+                  Referencia
+                </mat-label>
+                <textarea matInput
+                          type="text"
+                          mc4Restrictions="alphanumeric"
+                          formControlName="referenciaEntrega"
+                          maxlength="200"
+                          autocomplete="off"></textarea>
+                <mat-hint align="start">{{addressForm.controls['referenciaEntrega'].value ? addressForm.controls['referenciaEntrega'].value.length : 0}} / 200</mat-hint>
+                <mat-error *ngIf="isErrorVisible('addressForm', 'referenciaEntrega', 'required')">
+                  Por favor ingrese la referencia para la entrega.
+                </mat-error>
+                <mat-error *ngIf="isErrorVisible('addressForm', 'referenciaEntrega', 'minlength')">
+                  Describa la referencia con almenos 50 caracteres.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" class="mt10">
+            <div fxFlex="100" fxLayoutGap="3px">
+              <button mat-flat-button
+                      matStepperPrevious
+                      type="button"
+                      color="warn">Atrás</button>
+              <button mat-flat-button
+                      type="submit"
+                      color="primary"
+                      [disabled]="addressForm.invalid">Siguiente</button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="directoraForm">
+        <form [formGroup]="directoraForm" (ngSubmit)="submitDirectoraForm()">
+          <ng-template matStepLabel>Directora</ng-template>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div fxFlex="50" class="p3">
+            </div>
+          </div>
+          <div fxLayout="row wrap" class="mt10">
+            <div fxFlex="100" fxLayoutGap="3px">
+              <button mat-flat-button
+                      matStepperPrevious
+                      type="button"
+                      color="warn">Atrás</button>
+              <button mat-flat-button
+                      type="submit"
+                      color="primary"
+                      [disabled]="directoraForm.invalid">Siguiente</button>
+            </div>
+          </div>
         </form>
       </mat-step>
     </mat-stepper>

@@ -12,6 +12,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {DirectivePipesModule} from '../../../@mc4/directive-pipes/directive-pipes.module';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   imports: [
@@ -26,7 +29,10 @@ import {DirectivePipesModule} from '../../../@mc4/directive-pipes/directive-pipe
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    DirectivePipesModule
+    DirectivePipesModule,
+    MatTooltipModule,
+    MatSlideToggleModule,
+    MatDividerModule
   ],
   declarations: [
     OnboardingComponent,
