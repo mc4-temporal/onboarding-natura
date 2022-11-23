@@ -2,10 +2,12 @@ package bo.com.mc4.onboarding.backoffice;
 
 import bo.com.mc4.onboarding.core.service.commons.ParameterService;
 import bo.com.mc4.onboarding.core.util.ResourceActionUtil;
+import bo.com.mc4.onboarding.model.Service;
 import bo.com.mc4.onboarding.model.auth.*;
 import bo.com.mc4.onboarding.model.auth.enums.ResourceType;
 import bo.com.mc4.onboarding.model.auth.enums.UserStatus;
 import bo.com.mc4.onboarding.model.commons.enums.EntityState;
+import bo.com.mc4.onboarding.repository.ServiceRepository;
 import bo.com.mc4.onboarding.repository.auth.*;
 import bo.com.mc4.onboarding.repository.commons.ParameterGroupRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,8 @@ public class DataInitializer implements CommandLineRunner {
     private final AuthPrivilegeRepository authPrivilegeRepository;
     private final AuthResourceActionRepository authResourceActionRepository;
 
+    private final ServiceRepository serviceRepository;
+
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
@@ -42,7 +46,7 @@ public class DataInitializer implements CommandLineRunner {
                            AuthRoleResourceRepository authRoleResourceRepository,
                            AuthActionRepository authActionRepository,
                            AuthPrivilegeRepository authPrivilegeRepository,
-                           AuthResourceActionRepository authResourceActionRepository) {
+                           AuthResourceActionRepository authResourceActionRepository, ServiceRepository serviceRepository) {
         this.authRoleRepository = authRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
@@ -53,14 +57,15 @@ public class DataInitializer implements CommandLineRunner {
         this.authActionRepository = authActionRepository;
         this.authPrivilegeRepository = authPrivilegeRepository;
         this.authResourceActionRepository = authResourceActionRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        if (activeProfile.contains("development")) {
+        if (activeProfile.contains("dev")) {
             AuthRole root;
             Optional<AuthRole> authRoleOptional = authRoleRepository.findByName("ROLE_ROOT");
-            if(!authRoleOptional.isPresent()){
+            if (!authRoleOptional.isPresent()) {
                 root = AuthRole.builder()
                         .name("ROLE_ROOT")
                         .description("Rol para usuarios de mantenimiento")
@@ -68,7 +73,7 @@ public class DataInitializer implements CommandLineRunner {
                         .baseRole(true)
                         .build();
                 this.authRoleRepository.save(root);
-            }else{
+            } else {
                 root = authRoleOptional.get();
             }
 
@@ -89,8 +94,37 @@ public class DataInitializer implements CommandLineRunner {
             addDomains();
             addActions();
             buildDefaultMenu();
+            buildSeeders();
             addData();
         }
+    }
+
+    private void buildSeeders() {
+        createOrUpdateService("API Gera Authentication",  "/api", "https://hmlapiauthnaturabo.geravd.com.br", "external-api", -1, -1);
+        createOrUpdateService("API Gera",  "/api", "https://hmlapinaturabo.geravd.com.br", "external-api", -1, -1);
+    }
+
+    private void createOrUpdateService(String name, String api, String url, String type, int connectionTimeout, int requestTimeout) {
+        Service serviceFind = this.serviceRepository.findByName(name)
+                .orElse(null);
+        if (serviceFind == null) {
+            serviceFind = Service.builder()
+                    .name(name)
+                    .url(url)
+                    .api(api)
+                    .type(type)
+                    .connectionTimeout(connectionTimeout)
+                    .requestTimeout(requestTimeout)
+                    .build();
+        } else {
+            serviceFind.setName(name);
+            serviceFind.setUrl(url);
+            serviceFind.setApi(api);
+            serviceFind.setType(type);
+            serviceFind.setConnectionTimeout(connectionTimeout);
+            serviceFind.setRequestTimeout(requestTimeout);
+        }
+        serviceRepository.save(serviceFind);
     }
 
 
@@ -98,13 +132,17 @@ public class DataInitializer implements CommandLineRunner {
         AuthRole root = this.authRoleRepository.findRolByName("ROLE_ROOT");
         AuthResource recPadreSeguridad = createOrUpdateResource("Seguridad", "Módulo de seguridad", "security", 1, "security", ResourceType.item, null, null, null, null, null, null, root);
 
+        // Seeeders
         createOrUpdateResource("Roles", "Interfaz para administración de roles", recPadreSeguridad.getUrl().concat("/roles"), 1, "insert_link", ResourceType.item, null, null, null, "PAGE_ROLES", recPadreSeguridad, ResourceActionUtil.roleActionsCode, root);
         createOrUpdateResource("Usuarios", "Interfaz para administración de usuarios", recPadreSeguridad.getUrl().concat("/users"), 2, "insert_link", ResourceType.item, null, null, null, "PAGE_USUARIOS", recPadreSeguridad, ResourceActionUtil.userActionsCode, root);
         createOrUpdateResource("Recursos", "Interfaz para administración de recursos del sistema", recPadreSeguridad.getUrl().concat("/resources"), 3, "insert_link", ResourceType.item, null, null, null, "PAGE_RECURSOS", recPadreSeguridad, ResourceActionUtil.resourceActionsCode, root);
         createOrUpdateResource("Accesos", "Interfaz para configuración de accesos a roles", recPadreSeguridad.getUrl().concat("/access"), 4, "insert_link", ResourceType.item, null, null, null, "PAGE_ACCESOS", recPadreSeguridad, ResourceActionUtil.accessActionsCode, root);
         createOrUpdateResource("Bitácora", "Interfaz para administración de logs del sistema", recPadreSeguridad.getUrl().concat("/log"), 6, "insert_link", ResourceType.item, null, null, null, "PAGE_BITACORA", recPadreSeguridad, ResourceActionUtil.logActionsCode, root);
         createOrUpdateResource("Parámetros", "Interfaz para administración de parametros", recPadreSeguridad.getUrl().concat("/parameters"), 7, "insert_link", ResourceType.item, null, null, null, "PAGE_PARAMETROS", recPadreSeguridad, ResourceActionUtil.parameterActionsCode, root);
+
+
     }
+
     private AuthResource createOrUpdateResource(String nombre,
                                                 String descripcion,
                                                 String url,
