@@ -1,0 +1,202 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+    <div fxFlex="100" fxLayoutAlign="center center">
+      <h3 class="stepper-title">Mis datos personales</h3>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          <mat-icon fontSet="material-icons-outlined"
+                    class="icon-help"
+                    matTooltip="Ingrese en este campo únicamente sus nombres sin apellidos">help</mat-icon>
+          Nombres
+        </mat-label>
+        <mat-icon matSuffix fontSet="material-icons-outlined">person</mat-icon>
+        <input matInput
+               required
+               mc4Restrictions="letters"
+               type="text"
+               placeholder="Ingrese únicamente su nombre"
+               formControlName="nombres"
+               maxlength="100"
+               autocomplete="off">
+        <mat-error *ngIf="isErrorVisible('nombres', 'required')">
+          Por favor ingrese su nombre completo.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          <mat-icon fontSet="material-icons-outlined"
+                    class="icon-help"
+                    matTooltip="Ingrese en este campo únicamente sus apellidos">help</mat-icon>
+          Apellidos
+        </mat-label>
+        <mat-icon matSuffix fontSet="material-icons-outlined">person</mat-icon>
+        <input matInput
+               required
+               mc4Restrictions="letters"
+               type="text"
+               placeholder="Ingrese sus apellidos"
+               formControlName="apellidos"
+               maxlength="100"
+               autocomplete="off">
+        <mat-error *ngIf="isErrorVisible('apellidos', 'required')">
+          Por favor ingrese sus apellidos.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          <mat-icon fontSet="material-icons-outlined"
+                    class="icon-help"
+                    matTooltip="Seleccione su tipo de documento CI, CI Extranjero o Pasaporte">help</mat-icon>
+          Tipo de documento
+        </mat-label>
+        <mat-select required
+                    formControlName="tipoDocumento"
+                    placeholder="Seleccione una opción">
+          <mat-option *ngFor="let item of tipoDocumentoList"
+                      [value]="item.codigo">{{item.descripcion}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="isErrorVisible('tipoDocumento', 'required')">
+          Por favor seleccione su tipo de documento.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" class="p3">
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+        <div fxFlex="69">
+          <mat-form-field floatLabel="always">
+            <mat-label>
+              <mat-icon fontSet="material-icons-outlined"
+                        class="icon-help"
+                        matTooltip="Ingrese en este campo su número de documento CI, CI Extranjero o Pasaporte">help</mat-icon>
+              Nro. Documento
+            </mat-label>
+            <mat-icon matSuffix fontSet="material-icons-outlined">badge</mat-icon>
+            <input matInput
+                   required
+                   type="text"
+                   placeholder="Nro. de documento de identidad"
+                   formControlName="nroDocumento"
+                   maxlength="30"
+                   autocomplete="off">
+            <mat-error *ngIf="isErrorVisible('nroDocumento', 'required')">
+              Por favor ingrese su número de documento.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="29">
+          <mat-form-field floatLabel="always">
+            <mat-label>
+              <mat-icon fontSet="material-icons-outlined"
+                        class="icon-help"
+                        matTooltip="Ingrese el complemento de su documento, únicamente para CI duplicados.">help</mat-icon>
+              Complemento
+            </mat-label>
+            <input matInput
+                   mc4Restrictions="alphanumeric"
+                   type="text"
+                   formControlName="complemento"
+                   placeholder="Ejm. 1A"
+                   maxlength="2"
+                   autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          <mat-icon fontSet="material-icons-outlined"
+                    class="icon-help"
+                    matTooltip="Seleccione la ciudad donde obtuvo su CI.">help</mat-icon>
+          Lugar de expidición
+        </mat-label>
+        <mat-select formControlName="expedicion"
+                    placeholder="Seleccione una opción">
+          <mat-option *ngFor="let item of expedicionList"
+                      [value]="item.codigo">{{item.descripcion}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input matInput
+               required
+               placeholder="dd/mm/aaaa"
+               formControlName="fechaNacimiento"
+               autocomplete="off"
+               [matDatepicker]="fechaNacimiento">
+        <mat-datepicker-toggle matSuffix [for]="fechaNacimiento"></mat-datepicker-toggle>
+        <mat-datepicker #fechaNacimiento></mat-datepicker>
+        <mat-error *ngIf="isErrorVisible('fechaNacimiento', 'required')">
+          Por favor ingrese su fecha de nacimiento.
+        </mat-error>
+        <mat-error *ngIf="isErrorVisible('fechaNacimiento', 'personaMayorEdad')">
+          Debe ser mayor de edad para continuar.
+        </mat-error>
+        <!--                <mat-error *ngIf="'fechaNacimiento', 'matDatepickerParse')">-->
+        <!--                  El formato de fecha es dd/mm/aaaa.-->
+        <!--                </mat-error>-->
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          <mat-icon fontSet="material-icons-outlined"
+                    class="icon-help"
+                    matTooltip="Ingrese su número de celular, recuerde que debe ser un número mediante el cual podamos comunicarnos con usted.">help</mat-icon>
+          Nro. de celular
+        </mat-label>
+        <mat-icon matSuffix fontSet="material-icons-outlined">call</mat-icon>
+        <input matInput
+               required
+               type="text"
+               placeholder="Ejm. 7777777"
+               formControlName="telefono"
+               maxlength="15"
+               autocomplete="off">
+        <mat-error *ngIf="isErrorVisible('telefono', 'required')">
+          Por favor ingrese su número de celular.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          <mat-icon fontSet="material-icons-outlined"
+                    class="icon-help"
+                    matTooltip="Ingrese su correo electrónico, recuerde que debe ser un correo válido en el que pueda recibir mensajes.">help</mat-icon>
+          Correo electrónico
+        </mat-label>
+        <mat-icon matSuffix fontSet="material-icons-outlined">alternate_email</mat-icon>
+        <input matInput
+               required
+               type="text"
+               placeholder="usuario@ejemplo.com"
+               formControlName="correo"
+               maxlength="50"
+               autocomplete="off">
+        <mat-error *ngIf="isErrorVisible('correo', 'required')">
+          Por favor ingrese su correo electrónico.
+        </mat-error>
+        <mat-error *ngIf="isErrorVisible('correo', 'email')">
+          Formato de correo incorrecto.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row wrap" class="mt10">
+    <div fxFlex="100">
+      <button mat-flat-button
+              type="submit"
+              color="primary"
+              [disabled]="form.invalid">Siguiente</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,33 @@
+<div class="toolbar-user" (mc4ClickOutside)="onClickOutside()" fxFlex="grow">
+    <button class="button" mat-button (click)="toggleDropdown()" [class.open]="isOpen" fxFlex="grow">
+    <span fxLayout="row" fxLayoutAlign="start center">
+<!--      <img class="avatar" src="assets/img/avatars/default.jpg">-->
+      <button mat-mini-fab color="primary" [matTooltip]="userInfo.fullName">{{userInfo.initials}}</button>
+      <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
+    </span>
+  </button>
+
+  <div class="dropdown" [class.open]="isOpen">
+    <div class="content">
+      <div class="list">
+        <div class="list-item" matRipple (click)="toProfile()">
+          <mat-icon class="list-item-icon">account_circle</mat-icon>
+          <span>Perfil</span>
+        </div>
+        <div class="list-item" matRipple (click)="configPanel.emit()">
+          <mat-icon class="list-item-icon">settings</mat-icon>
+          <span>Configuración</span>
+        </div>
+        <div class="list-item" matRipple>
+          <mat-icon class="list-item-icon">help</mat-icon>
+          <span>Ayuda</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="list-item" matRipple (click)="cerrarSesion()">
+          <mat-icon class="list-item-icon">exit_to_app</mat-icon>
+          <span>Salir</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
