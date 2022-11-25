@@ -4,8 +4,9 @@ import {MatStepper} from '@angular/material/stepper';
 import {FormUtil} from '../../commons/utils/form.util';
 import {LandingService} from '../../commons/services/landing.service';
 import * as Notiflix from 'notiflix';
-import {OnboardingUtil} from './onboarding.util';
+import {IOnbEvents, noopOnbEvent} from './onboarding.util';
 import * as moment from 'moment';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'mc4-onboarding',
@@ -15,39 +16,28 @@ import * as moment from 'moment';
 
 export class OnboardingComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
-  tipoDocumentoList: any[] = [
-    {codigo: 'CI', descripcion: 'Doc. de identidad'},
-    {codigo: 'CI-EXRANJERO', descripcion: 'Doc. de identidad extranjero'},
-    {codigo: 'PASAPORTE', descripcion: 'Pasaporte'}
-  ];
-  expedicionList: any[] = [
-    {codigo: 'Ninguno', descripcion: 'Ninguno'},
-    {codigo: 'SC', descripcion: 'SC'},
-    {codigo: 'CBBA', descripcion: 'CBBA'},
-    {codigo: 'LPZ', descripcion: 'LPZ'},
-  ];
-  departamentoList: any[] = [{id: 1, nombre: 'Santa Cruz'}];
-  localidadList: any[] = [{id: 1, nombre: 'Santa Cruz de la Sierra'}];
-
   pInfoForm: FormGroup;
   addressForm: FormGroup;
   directoraForm: FormGroup;
   responseInfo: any;
-  constructor(private service: LandingService) {
+
+  eventManager = new BehaviorSubject<IOnbEvents>(noopOnbEvent());
+  constructor(private landingService: LandingService) {
   }
 
   ngOnInit() {
+    this.eventManager.subscribe(this.onbActionManager);
     this.initializeForms();
   }
-
-  isErrorVisible(formType: 'pInfoForm' | 'addressForm', formControlName: string, validation: string): boolean {
-    switch (formType) {
-      case 'pInfoForm':
-        return this.pInfoForm.controls[formControlName].hasError(validation) && this.pInfoForm.controls[formControlName].touched;
-      case 'addressForm':
-        return this.addressForm.controls[formControlName].hasError(validation) && this.addressForm.controls[formControlName].touched;
-      default:
-        return false;
+  protected onbActionManager = (event: IOnbEvents) => {
+    if (event.event === 'SUBMIT_INFO_PERSONAL') {
+      this.submitInfoForm();
+    }
+    if (event.event === 'SUBMIT_DIRECCIONES') {
+      this.submitAddressForm();
+    }
+    if (event.event === 'SUBMIT_DIRECTORA_CONSULTORA') {
+      this.submitDirectoraForm();
     }
   }
 
@@ -65,8 +55,8 @@ export class OnboardingComponent implements OnInit {
       terminosCondiciones: new FormControl(null),
     });
     this.addressForm = new FormGroup({
-      departamentoId: new FormControl(1, Validators.compose([Validators.required])),
-      localidadId: new FormControl(1, Validators.compose([Validators.required])),
+      departamentoId: new FormControl(null, Validators.compose([Validators.required])),
+      localidadId: new FormControl(null, Validators.compose([Validators.required])),
       barrioZona: new FormControl('Barrio/Zona', Validators.compose([Validators.required])),
       avenidaCalle: new FormControl('Avenida/Calle', Validators.compose([Validators.required])),
       nroCasa: new FormControl('120'),
@@ -77,25 +67,26 @@ export class OnboardingComponent implements OnInit {
       referenciaEntrega: new FormControl('Referencia de direccion Referencia de direccion Referencia de direccion', Validators.compose([Validators.required, Validators.minLength(50)])),
       mismaDireccionEntrega: new FormControl(true),
     });
-    this.directoraForm = new FormGroup({});
+    this.directoraForm = new FormGroup({
+      directoraId: new FormControl(null, Validators.compose([Validators.required])),
+      consultoraId: new FormControl(null, Validators.compose([Validators.required])),
+    });
   }
 
   submitInfoForm() {
     if (FormUtil.isValidFormGroup(this.pInfoForm)) {
       Notiflix.Loading.pulse();
-      this.service.requestSaveOnboardingInfo(this.pInfoForm.value)
+      this.landingService.requestSaveOnboardingInfo(this.pInfoForm.value)
         .subscribe({next: this.successSaveInfo});
-      // this.stepper.next();
     }
   }
 
   submitAddressForm() {
     if (FormUtil.isValidFormGroup(this.addressForm)) {
       Notiflix.Loading.pulse();
-      this.service.requestSaveOnboardingAddress(this.responseInfo.consultoraId, this.addressForm.value)
+      this.landingService.requestSaveOnboardingAddress(this.responseInfo.consultoraId, this.addressForm.value)
         .subscribe({next: this.successSaveAddress});
     }
-    // this.stepper.next();
   }
 
   submitDirectoraForm() {
@@ -111,6 +102,7 @@ export class OnboardingComponent implements OnInit {
   }
 
   protected successSaveAddress = (body: any) => {
+    this.eventManager.next({event: 'RECUPERAR_DIRECTORA_CONSULTORA', data: this.responseInfo.consultoraId});
     Notiflix.Loading.remove();
     this.stepper.next();
   }

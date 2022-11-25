@@ -64,7 +64,7 @@ public class Consultora extends AuditableEntity implements Serializable {
     private String telefonoReferencia;
 
     @Column(name = "CODIGO_CONSULTORA", length = 30)
-    private String codigoCOsultora;
+    private String codigoConsultora;
 
     @Column(name = "FECHA_OBTENCION_CODIGO")
     @Temporal(TemporalType.TIMESTAMP)

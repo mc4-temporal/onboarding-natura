@@ -1,0 +1,48 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          ¿Conoces una directora Natura?
+        </mat-label>
+        <mat-select required
+                    formControlName="directoraId"
+                    placeholder="Seleccione una opción">
+          <mat-option *ngFor="let item of directoraList"
+                      [value]="item.id">{{item.codigoDirectora}} - {{item.nombre}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="isErrorVisible('directoraId', 'required')">
+          Por favor seleccione una opción.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          ¿Alguien te recomendó ser promotor/ra?
+        </mat-label>
+        <mat-select required
+                    formControlName="consultoraId"
+                    placeholder="Seleccione una opción">
+          <mat-option *ngFor="let item of consultoraList"
+                      [value]="item.id">{{item.codigoConsultora}} - {{item.nombre}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="isErrorVisible('consultoraId', 'required')">
+          Por favor seleccione una opción.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row wrap" class="mt10">
+    <div fxFlex="100" fxLayoutGap="3px">
+      <button mat-flat-button
+              matStepperPrevious
+              type="button"
+              color="warn">Atrás</button>
+      <button mat-flat-button
+              type="submit"
+              color="primary"
+              [disabled]="form.invalid">Siguiente</button>
+    </div>
+  </div>
+</form>

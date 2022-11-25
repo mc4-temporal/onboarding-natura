@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Provincia extends AuditableEntity implements Serializable {
     @Id
     @Column(name = "CODIGO_GERA", nullable = false)
-    private Long id;
+    private Integer codigoGera;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;
@@ -30,5 +30,5 @@ public class Provincia extends AuditableEntity implements Serializable {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_DEPARTAMENTO", nullable = false)
-    private Departamento departamento;
+    private Departamento idDepartamento;
 }

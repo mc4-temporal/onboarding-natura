@@ -23,8 +23,7 @@ public class GeraClient implements IGeraClient {
 
     // two service methods {auth, searchPerson} -> REST API Endpoint
     // Parametizer data URL
-    @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
     private static final String ENDPOINT_POST_RETRIEVE_TOKEN_AUTH = "/token";
     private static final String ENDPOINT_GET_SEARCH_PEOPLE = "/people";
 

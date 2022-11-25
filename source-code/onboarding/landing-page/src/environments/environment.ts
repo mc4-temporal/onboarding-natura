@@ -12,6 +12,8 @@ export const environment = {
   appLogProccess: 'APLICACION_WEB',
   backend: {
     onboardingApi: '/api/onboarding',
+    estructuraGeoApi: '/api/estructura-geografica',
+    estructuraComApi: '/api/estructura-comercial',
     logApi: '/api/v1/log',
 
     apiLogin: '/auth/signin',

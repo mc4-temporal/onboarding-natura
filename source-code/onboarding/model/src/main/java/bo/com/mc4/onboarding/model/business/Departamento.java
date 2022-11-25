@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class Departamento extends AuditableEntity implements Serializable {
     @Id
     @Column(name = "CODIGO_GERA", nullable = false)
-    private Long id;
+    private Integer codigoGera;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;

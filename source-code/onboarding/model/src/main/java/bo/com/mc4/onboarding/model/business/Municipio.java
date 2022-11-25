@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Municipio extends AuditableEntity implements Serializable {
     @Id
     @Column(name = "CODIGO_GERA", nullable = false)
-    private Long id;
+    private Integer codigoGera;
 
     @Column(name = "NOMBRE", nullable = false)
     private String nombre;

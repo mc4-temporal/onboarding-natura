@@ -7,10 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ProvinciaRepository extends JpaRepository<Provincia, Long> {
+public interface ProvinciaRepository extends JpaRepository<Provincia, Integer> {
     @Query( "select c " +
             "from Provincia c " +
             "where c.deleted = false " +
-            "and c.id = :codigoGera ")
-    Optional<Provincia> findById(@Param("codigoGera") Long codigoGera);
+            "and c.codigoGera = :codigoGera ")
+    Optional<Provincia> findById(@Param("codigoGera") Integer codigoGera);
 }

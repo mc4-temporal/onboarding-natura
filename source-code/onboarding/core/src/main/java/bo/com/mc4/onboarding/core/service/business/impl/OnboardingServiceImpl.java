@@ -90,8 +90,8 @@ public class OnboardingServiceImpl implements OnboardingService {
     @Transactional(rollbackFor = {OperationException.class, Exception.class})
     public FrmResponseDto saveFrmDireccion(Long prospectoId, FrmDireccionDto frmDireccionDto) {
         frmDireccionDto.validateFields();
-        Consultora prospecto = consultoraRepository.findById(prospectoId).orElseThrow(throwFindFail(prospectoId, "Prospecto"));
-        Municipio municipio = municipioRepository.findById(frmDireccionDto.getLocalidadId()).orElseThrow(throwFindFail(frmDireccionDto.getLocalidadId(), "Municipio"));
+        Consultora prospecto = consultoraRepository.findById(prospectoId).orElseThrow(throwFindFail(prospectoId.toString(), "Prospecto"));
+        Municipio municipio = municipioRepository.findById(frmDireccionDto.getLocalidadId()).orElseThrow(throwFindFail(frmDireccionDto.getLocalidadId().toString(), "Municipio"));
 
         direccionRepository.deleteDireccionesExistentes(prospecto);
 
@@ -119,7 +119,7 @@ public class OnboardingServiceImpl implements OnboardingService {
                 .build();
     }
 
-    private Supplier<OperationException> throwFindFail(Long entityId, String objeto) {
+    private Supplier<OperationException> throwFindFail(String entityId, String objeto) {
         return () -> new OperationException(FormatUtil.noRegistrado(objeto, entityId));
     }
 }

@@ -11,8 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FrmDireccionDto {
-    private Long departamentoId;
-    private Long localidadId;
+    private Integer departamentoId;
+    private Integer localidadId;
     private String barrioZona;
     private String avenidaCalle;
     private String nroCasa;
