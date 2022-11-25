@@ -4,7 +4,12 @@ import bo.com.mc4.onboarding.core.util.ApiConstants;
 import bo.com.mc4.onboarding.core.util.ApiUtil;
 import bo.com.mc4.onboarding.core.util.exception.ApiResponseException;
 import bo.com.mc4.onboarding.core.util.exception.OperationException;
+import bo.com.mc4.onboarding.integrations.gera.GeraClient;
 import bo.com.mc4.onboarding.integrations.gera.IGeraClient;
+import bo.com.mc4.onboarding.integrations.gera.dto.consultoras.response.ConsultaConsultorasResponseDto;
+import bo.com.mc4.onboarding.integrations.gera.dto.directoras.response.ConsultaDirectorasResponseDto;
+import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaConsultorasQpDTO;
+import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaDirectorasQpDTO;
 import bo.com.mc4.onboarding.integrations.gera.dto.output.ResponseAuthApiGeraDto;
 import bo.com.mc4.onboarding.model.commons.dto.EnumDto;
 import bo.com.mc4.onboarding.model.commons.dto.api.ResponseBody;
@@ -106,6 +111,49 @@ public class UtilController {
             throw ApiResponseException.badRequest(e.getMessage());
         } catch (Exception e) {
             log.error("Error: Se produjo un error genérico al ejecutar el servicio: ", e);
+            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/test-directoras")
+    public ResponseEntity<ResponseBody<List<ConsultaDirectorasResponseDto>>> testDirectoras(){
+        try {
+            GeraClient.Service dataConnection = new GeraClient.Service();
+            dataConnection.setUrl("https://hmlapinaturabo.geravd.com.br/api");
+            dataConnection.setToken("pAeZItBzfO8zLSgFRpvEzeZ_2Eect5joZ2I6Yhf9XeHg6AIVduQuA1evYsDdSS7sNlOF5-lXzuigvaye-M0ytawkoPg0Ek4UdpCivxGw8qS_7zTvJ76Thtj4KZMRXxry-EryvK3gZQzrU4FlVVjQrzmGhlZm5UdmMfySZVzbCFqpJ94sYwUxVbLG_wHFzvskOQn8m0MgzskmlkTpoJY2FLwElacBz-gPVFN4u4JPYvTmiy81c8DzwZ95AfEvwPY_qFcj9P1V5PCsXKawH_4ILVghDYzHFG1D8qG28WLFqo8FPNYAwzNABeTTpmAZJ_T0o92WteRPkARRjiHEgXhokljMPJVNmXh69pZUDM8xoXFzkxTmh05juIhPCl6pmw2DKf6CUjlRvKAeOLpvpPPNzV2tYoSijJXs9_mzsKYhXrnVR8Io96W_lEph7a_NH3HQm7ew9c0F719uZD_Qw0DfWbYVeT7d-IOKYy9YTPhMAws5eTUrBrYL8iUY572w5f0nLs5jNA");
+            dataConnection.setConnectTimeout(20000);
+            dataConnection.setReadTimeout(20000);
+
+            ConsultaDirectorasQpDTO dto = new ConsultaDirectorasQpDTO();
+
+            return ok(ApiUtil.buildResponseWithDefaults(geraClient.requestConsultaDirectoras(dto, "", null, null, dataConnection)));
+        } catch (OperationException e) {
+            log.error("Error: Se produjo un error controlado al ejecutar el servicio test-directoras, Mensaje: {}", e.getMessage());
+            throw ApiResponseException.badRequest(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error: Se produjo un error genérico al ejecutar el servicio test-directoras: ", e);
+            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/test-consultoras")
+    public ResponseEntity<ResponseBody<List<ConsultaConsultorasResponseDto>>> testConsultoras(){
+        try {
+            GeraClient.Service dataConnection = new GeraClient.Service();
+            dataConnection.setUrl("https://hmlapinaturabo.geravd.com.br/api");
+            dataConnection.setToken("pAeZItBzfO8zLSgFRpvEzeZ_2Eect5joZ2I6Yhf9XeHg6AIVduQuA1evYsDdSS7sNlOF5-lXzuigvaye-M0ytawkoPg0Ek4UdpCivxGw8qS_7zTvJ76Thtj4KZMRXxry-EryvK3gZQzrU4FlVVjQrzmGhlZm5UdmMfySZVzbCFqpJ94sYwUxVbLG_wHFzvskOQn8m0MgzskmlkTpoJY2FLwElacBz-gPVFN4u4JPYvTmiy81c8DzwZ95AfEvwPY_qFcj9P1V5PCsXKawH_4ILVghDYzHFG1D8qG28WLFqo8FPNYAwzNABeTTpmAZJ_T0o92WteRPkARRjiHEgXhokljMPJVNmXh69pZUDM8xoXFzkxTmh05juIhPCl6pmw2DKf6CUjlRvKAeOLpvpPPNzV2tYoSijJXs9_mzsKYhXrnVR8Io96W_lEph7a_NH3HQm7ew9c0F719uZD_Qw0DfWbYVeT7d-IOKYy9YTPhMAws5eTUrBrYL8iUY572w5f0nLs5jNA");
+            dataConnection.setConnectTimeout(20000);
+            dataConnection.setReadTimeout(20000);
+
+            ConsultaConsultorasQpDTO dto = new ConsultaConsultorasQpDTO();
+            dto.setFunctionCode(1);
+
+            return ok(ApiUtil.buildResponseWithDefaults(geraClient.requestConsultaConsultoras(dto, "", null, null, dataConnection)));
+        } catch (OperationException e) {
+            log.error("Error: Se produjo un error controlado al ejecutar el servicio test-directoras, Mensaje: {}", e.getMessage());
+            throw ApiResponseException.badRequest(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error: Se produjo un error genérico al ejecutar el servicio test-directoras: ", e);
             throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
         }
     }

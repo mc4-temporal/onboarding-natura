@@ -1,11 +1,18 @@
 package bo.com.mc4.onboarding.integrations.gera;
 
+import bo.com.mc4.onboarding.integrations.gera.dto.consultoras.response.ConsultaConsultorasResponseDto;
+import bo.com.mc4.onboarding.integrations.gera.dto.directoras.response.ConsultaDirectorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.input.AuthParamApiGeraDto;
+import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaConsultorasQpDTO;
+import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaDirectorasQpDTO;
 import bo.com.mc4.onboarding.integrations.gera.dto.output.ResponseAuthApiGeraDto;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -27,6 +34,9 @@ public class GeraClient implements IGeraClient {
     private RestTemplate restTemplate;
     private static final String ENDPOINT_POST_RETRIEVE_TOKEN_AUTH = "/token";
     private static final String ENDPOINT_GET_SEARCH_PEOPLE = "/people";
+
+    private static final String ENDPOINT_GET_DIRECTORAS = "/commercialStructures";
+    private static final String ENDPOINT_GET_CONSULTORAS = "/sellers";
 
     @Override
     public ResponseAuthApiGeraDto retrieveAuthToken(Map<String, String> params) {
@@ -76,5 +86,66 @@ public class GeraClient implements IGeraClient {
 
     }
 
+    @Override
+    public List<ConsultaDirectorasResponseDto> requestConsultaDirectoras(ConsultaDirectorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, Service dataConnection) {
 
+        String baseUrl = dataConnection.getUrl();
+        String finalUrlEndpoint = String.format("%s/%s", baseUrl, ENDPOINT_GET_DIRECTORAS);
+        String queryParams = MapperDtoQueryParam.convertDtoToQueryParams(queryParamsDto, sortOptions, page, size);
+        finalUrlEndpoint = queryParams.isEmpty() ? finalUrlEndpoint : finalUrlEndpoint + "?" + queryParams;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED.toString());
+        headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+        headers.add("Authorization", "Bearer " + dataConnection.getToken());
+
+        HttpEntity formEntity = new HttpEntity<>(headers);
+
+        restTemplate.setRequestFactory(getClientHttpRequestFactory(dataConnection.getConnectTimeout(), dataConnection.getReadTimeout()));
+
+        ResponseEntity<List<ConsultaDirectorasResponseDto>> response =
+                restTemplate.exchange(finalUrlEndpoint, HttpMethod.GET, formEntity, new ParameterizedTypeReference<>() {});
+
+        return response.getBody();
+    }
+
+    @Override
+    public List<ConsultaConsultorasResponseDto> requestConsultaConsultoras(ConsultaConsultorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, Service dataConnection) {
+
+        String baseUrl = dataConnection.getUrl();
+        String finalUrlEndpoint = String.format("%s/%s", baseUrl, ENDPOINT_GET_CONSULTORAS);
+        String queryParams = MapperDtoQueryParam.convertDtoToQueryParams(queryParamsDto, sortOptions, page, size);
+        finalUrlEndpoint = queryParams.isEmpty() ? finalUrlEndpoint : finalUrlEndpoint + "?" + queryParams;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED.toString());
+        headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+        headers.add("Authorization", "Bearer " + dataConnection.getToken());
+
+        HttpEntity formEntity = new HttpEntity<>(headers);
+
+        restTemplate.setRequestFactory(getClientHttpRequestFactory(dataConnection.getConnectTimeout(), dataConnection.getReadTimeout()));
+
+        ResponseEntity<List<ConsultaConsultorasResponseDto>> response =
+                restTemplate.exchange(finalUrlEndpoint, HttpMethod.GET, formEntity, new ParameterizedTypeReference<>() {});
+
+        return response.getBody();
+    }
+
+    private SimpleClientHttpRequestFactory getClientHttpRequestFactory(Integer connectTimeout, Integer readTimeout) {
+        SimpleClientHttpRequestFactory clientHttpRequestFactory = new SimpleClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(connectTimeout);
+        clientHttpRequestFactory.setReadTimeout(readTimeout);
+
+        return clientHttpRequestFactory;
+    }
+
+    @Getter
+    @Setter
+    public static class Service {
+        private String url;
+        private Integer connectTimeout;
+        private Integer readTimeout;
+        private String token;
+    }
 }
