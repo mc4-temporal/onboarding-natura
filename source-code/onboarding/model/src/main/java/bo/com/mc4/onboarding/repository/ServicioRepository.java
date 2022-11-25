@@ -1,6 +1,6 @@
 package bo.com.mc4.onboarding.repository;
 
-import bo.com.mc4.onboarding.model.Service;
+import bo.com.mc4.onboarding.model.Servicio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -12,8 +12,8 @@ import java.util.Optional;
  * Package       : bo.com.mc4.onboarding.repository
  **/
 
-public interface ServiceRepository extends JpaRepository<Service, Long> {
+public interface ServicioRepository extends JpaRepository<Servicio, Long> {
 
-    Optional<Service> findByName(String name);
+    Optional<Servicio> findByNombre(String nombre);
 
 }

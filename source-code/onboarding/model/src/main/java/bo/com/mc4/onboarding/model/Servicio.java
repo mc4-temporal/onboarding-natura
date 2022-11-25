@@ -20,20 +20,20 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "SERVICE")
+@Table(name = "SERVICIO")
 @Where(clause = "DELETED=false")
-public class Service extends AuditableEntity implements Serializable {
+public class Servicio extends AuditableEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "NAME", nullable = false, length = 50)
-    private String name;
+    @Column(name ="NOMBRE", nullable = false, length = 50)
+    private String nombre;
 
-    @Column(name = "type", nullable = false, length = 50)
-    private String type;
+    @Column(name = "TIPO", nullable = false, length = 50)
+    private String tipo;
 
     @Column(name = "REQUEST_TIMEOUT", nullable = false)
     private int requestTimeout;
