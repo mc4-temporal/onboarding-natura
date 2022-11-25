@@ -2,12 +2,12 @@ package bo.com.mc4.onboarding.backoffice;
 
 import bo.com.mc4.onboarding.core.service.commons.ParameterService;
 import bo.com.mc4.onboarding.core.util.ResourceActionUtil;
-import bo.com.mc4.onboarding.model.Service;
+import bo.com.mc4.onboarding.model.Servicio;
 import bo.com.mc4.onboarding.model.auth.*;
 import bo.com.mc4.onboarding.model.auth.enums.ResourceType;
 import bo.com.mc4.onboarding.model.auth.enums.UserStatus;
 import bo.com.mc4.onboarding.model.commons.enums.EntityState;
-import bo.com.mc4.onboarding.repository.ServiceRepository;
+import bo.com.mc4.onboarding.repository.ServicioRepository;
 import bo.com.mc4.onboarding.repository.auth.*;
 import bo.com.mc4.onboarding.repository.commons.ParameterGroupRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class DataInitializer implements CommandLineRunner {
     private final AuthPrivilegeRepository authPrivilegeRepository;
     private final AuthResourceActionRepository authResourceActionRepository;
 
-    private final ServiceRepository serviceRepository;
+    private final ServicioRepository servicioRepository;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -46,7 +46,7 @@ public class DataInitializer implements CommandLineRunner {
                            AuthRoleResourceRepository authRoleResourceRepository,
                            AuthActionRepository authActionRepository,
                            AuthPrivilegeRepository authPrivilegeRepository,
-                           AuthResourceActionRepository authResourceActionRepository, ServiceRepository serviceRepository) {
+                           AuthResourceActionRepository authResourceActionRepository, ServicioRepository servicioRepository) {
         this.authRoleRepository = authRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
@@ -57,7 +57,7 @@ public class DataInitializer implements CommandLineRunner {
         this.authActionRepository = authActionRepository;
         this.authPrivilegeRepository = authPrivilegeRepository;
         this.authResourceActionRepository = authResourceActionRepository;
-        this.serviceRepository = serviceRepository;
+        this.servicioRepository = servicioRepository;
     }
 
     @Override
@@ -104,27 +104,27 @@ public class DataInitializer implements CommandLineRunner {
         createOrUpdateService("API Gera",  "/api", "https://hmlapinaturabo.geravd.com.br", "external-api", -1, -1);
     }
 
-    private void createOrUpdateService(String name, String api, String url, String type, int connectionTimeout, int requestTimeout) {
-        Service serviceFind = this.serviceRepository.findByName(name)
+    private void createOrUpdateService(String nombreParam, String apiParam, String urlParam, String tipoParam, int connectionTimeoutParam, int requestTimeoutParam) {
+        Servicio servicioFind = this.servicioRepository.findByNombre(nombreParam)
                 .orElse(null);
-        if (serviceFind == null) {
-            serviceFind = Service.builder()
-                    .name(name)
-                    .url(url)
-                    .api(api)
-                    .type(type)
-                    .connectionTimeout(connectionTimeout)
-                    .requestTimeout(requestTimeout)
+        if (servicioFind == null) {
+            servicioFind = Servicio.builder()
+                    .nombre(nombreParam)
+                    .url(urlParam)
+                    .api(apiParam)
+                    .tipo(tipoParam)
+                    .connectionTimeout(connectionTimeoutParam)
+                    .requestTimeout(requestTimeoutParam)
                     .build();
         } else {
-            serviceFind.setName(name);
-            serviceFind.setUrl(url);
-            serviceFind.setApi(api);
-            serviceFind.setType(type);
-            serviceFind.setConnectionTimeout(connectionTimeout);
-            serviceFind.setRequestTimeout(requestTimeout);
+            servicioFind.setNombre(nombreParam);
+            servicioFind.setUrl(urlParam);
+            servicioFind.setApi(apiParam);
+            servicioFind.setTipo(tipoParam);
+            servicioFind.setConnectionTimeout(connectionTimeoutParam);
+            servicioFind.setRequestTimeout(requestTimeoutParam);
         }
-        serviceRepository.save(serviceFind);
+        servicioRepository.save(servicioFind);
     }
 
 
