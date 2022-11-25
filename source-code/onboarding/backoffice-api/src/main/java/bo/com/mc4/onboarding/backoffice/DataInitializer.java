@@ -3,7 +3,7 @@ package bo.com.mc4.onboarding.backoffice;
 import bo.com.mc4.onboarding.core.service.commons.ParameterService;
 import bo.com.mc4.onboarding.core.util.ResourceActionUtil;
 import bo.com.mc4.onboarding.core.util.exception.ExceptionUtil;
-import bo.com.mc4.onboarding.model.Servicio;
+import bo.com.mc4.onboarding.model.business.Servicio;
 import bo.com.mc4.onboarding.model.auth.*;
 import bo.com.mc4.onboarding.model.auth.enums.ResourceType;
 import bo.com.mc4.onboarding.model.auth.enums.UserStatus;
@@ -1057,7 +1057,7 @@ public class DataInitializer implements CommandLineRunner {
         Municipio warnesMunicipio = municipioRepository.findById(128).orElseThrow(ExceptionUtil.throwFindFail("128", "Municipio"));
         Municipio buenaVistaMunicipio = municipioRepository.findById(133).orElseThrow(ExceptionUtil.throwFindFail("133", "Municipio"));
 
-        RegionFm region1 = regionFmRepository.findByNombre("Region 1").orElse(RegionFm.builder()
+        Region region1 = regionFmRepository.findByNombre("Region 1").orElse(Region.builder()
                 .nombre("Region 1")
                 .build());
 
@@ -1077,7 +1077,7 @@ public class DataInitializer implements CommandLineRunner {
                     .idRegion(region1)
                     .build());
 
-            DirectoraFm directoraFm = DirectoraFm.builder()
+            Directora directora = Directora.builder()
                     .idRegion(region1)
                     .codigoDirectora("85637")
                     .nombre("ANAHI JOSSELINE CAMACHO MENDIZABAL")
@@ -1085,9 +1085,9 @@ public class DataInitializer implements CommandLineRunner {
                     .tokenInvitacion("1A85637")
                     .correo("acamacho@maturabo.net")
                     .build();
-            directoraFmRepository.save(directoraFm);
+            directoraFmRepository.save(directora);
 
-            DirectoraFm directoraFm1 = DirectoraFm.builder()
+            Directora directora1 = Directora.builder()
                     .idRegion(region1)
                     .codigoDirectora("116696")
                     .nombre("JUMEY ANDREA HERBAS BELMONTE")
@@ -1095,7 +1095,7 @@ public class DataInitializer implements CommandLineRunner {
                     .tokenInvitacion("1A116696")
                     .correo("jherbas@maturabo.net")
                     .build();
-            directoraFmRepository.save(directoraFm1);
+            directoraFmRepository.save(directora1);
         }
     }
 }

@@ -1,6 +1,5 @@
-package bo.com.mc4.onboarding.model;
+package bo.com.mc4.onboarding.model.business;
 
-import bo.com.mc4.onboarding.model.auth.AuthRole;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;

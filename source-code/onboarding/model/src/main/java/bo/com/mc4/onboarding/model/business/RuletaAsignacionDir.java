@@ -1,4 +1,4 @@
-package bo.com.mc4.onboarding.model;
+package bo.com.mc4.onboarding.model.business;
 
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
@@ -6,7 +6,8 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Blob;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by    : msaavedra
@@ -21,19 +22,24 @@ import java.sql.Blob;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "GERENCIA")
+@Table(name = "RULETE_ASIGNACION_DIR")
 @Where(clause = "DELETED=false")
-public class Gerencia extends AuditableEntity implements Serializable {
+public class RuletaAsignacionDir extends AuditableEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "NOMBRE", nullable = false, length = 50)
-    private String nombre;
+    @ManyToOne
+    @JoinColumn(name = "ID_DIRECTORIA", referencedColumnName = "id")
+    private Directora directora;
 
-    @Column(name = "OFICINA", nullable = false, length = 100)
-    private String oficina;
+    @ManyToOne
+    @JoinColumn(name = "ID_MUNICIPIO", referencedColumnName = "id")
+    private Municipio municipio;
+
+    @Column(name = "EN_TURNO", nullable = false)
+    private boolean enTurno;
 
 }

@@ -13,8 +13,8 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "DIRECTORA_FM")
-public class DirectoraFm extends AuditableEntity implements Serializable {
+@Table(name = "DIRECTORA")
+public class Directora extends AuditableEntity implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID")
@@ -37,5 +37,5 @@ public class DirectoraFm extends AuditableEntity implements Serializable {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_REGION", nullable = false)
-    private RegionFm idRegion;
+    private Region idRegion;
 }

@@ -1,4 +1,4 @@
-package bo.com.mc4.onboarding.model;
+package bo.com.mc4.onboarding.model.business;
 
 import bo.com.mc4.onboarding.model.auth.enums.EstadoTokenEmail;
 import bo.com.mc4.onboarding.model.auth.enums.TipoImagen;

@@ -13,8 +13,8 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "REGION_FM")
-public class RegionFm extends AuditableEntity implements Serializable {
+@Table(name = "REGION")
+public class Region extends AuditableEntity implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID")

@@ -1,6 +1,6 @@
 package bo.com.mc4.onboarding.repository;
 
-import bo.com.mc4.onboarding.model.Servicio;
+import bo.com.mc4.onboarding.model.business.Servicio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,13 +1,14 @@
-package bo.com.mc4.onboarding.model;
+package bo.com.mc4.onboarding.model.business;
 
-import bo.com.mc4.onboarding.model.auth.enums.EntidadExterna;
-import bo.com.mc4.onboarding.model.auth.enums.TipoImagen;
+import bo.com.mc4.onboarding.model.auth.enums.ResultadoObservacion;
+import bo.com.mc4.onboarding.model.auth.enums.TipoVerificacion;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by    : msaavedra
@@ -22,9 +23,9 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "PROCESO")
+@Table(name = "VERIFICACION")
 @Where(clause = "DELETED=false")
-public class Proceso extends AuditableEntity implements Serializable {
+public class Verificacion extends AuditableEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,14 +33,14 @@ public class Proceso extends AuditableEntity implements Serializable {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ENTIDAD_EXTERNA",nullable = false)
-    private EntidadExterna entidadExterna;
+    @Column(name = "TIPO_VERIFICACION",nullable = false)
+    private TipoVerificacion tipoVerificacion;
 
-    @Column(name = "NOMBRE", nullable = false)
-    private String nombre;
+    @Column(name = "RESULTADO", nullable = false)
+    private ResultadoObservacion resultado;
 
-    @Column(name = "DETALLE")
-    private String detalle;
+    @Column(name = "FECHA_VERIFICACION", nullable = false)
+    private Date fechaVerificacion;
 
     @Column(name = "RUTA_ARCHIVO")
     private String rutaArchivo;

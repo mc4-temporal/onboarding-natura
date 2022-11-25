@@ -1,4 +1,4 @@
-package bo.com.mc4.onboarding.model;
+package bo.com.mc4.onboarding.model.business;
 
 import bo.com.mc4.onboarding.model.auth.enums.EstadoObservacion;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
@@ -7,7 +7,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by    : msaavedra

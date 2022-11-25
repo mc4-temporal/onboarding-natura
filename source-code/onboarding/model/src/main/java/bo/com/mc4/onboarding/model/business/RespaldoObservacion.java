@@ -1,6 +1,5 @@
-package bo.com.mc4.onboarding.model;
+package bo.com.mc4.onboarding.model.business;
 
-import bo.com.mc4.onboarding.model.auth.enums.EstadoObservacion;
 import bo.com.mc4.onboarding.model.auth.enums.EstadoRespaldo;
 import bo.com.mc4.onboarding.model.auth.enums.TipoRespaldo;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
