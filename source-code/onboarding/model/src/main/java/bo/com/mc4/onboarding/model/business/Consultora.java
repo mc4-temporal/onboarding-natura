@@ -92,6 +92,6 @@ public class Consultora extends AuditableEntity implements Serializable {
     private CanalOnboarding idCanalOnboarding;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_MUNICIPIO")
+    @JoinColumn(name = "ID_MUNICIPIO", referencedColumnName = "CODIGO_GERA")
     private Municipio idMunicipio;
 }

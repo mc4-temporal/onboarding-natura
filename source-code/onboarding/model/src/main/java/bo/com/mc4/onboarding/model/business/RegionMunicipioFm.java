@@ -25,6 +25,6 @@ public class RegionMunicipioFm extends AuditableEntity implements Serializable {
     private Region idRegion;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_MUNICIPIO", nullable = false)
+    @JoinColumn(name = "ID_MUNICIPIO", nullable = false, referencedColumnName = "CODIGO_GERA")
     private Municipio idMunicipio;
 }

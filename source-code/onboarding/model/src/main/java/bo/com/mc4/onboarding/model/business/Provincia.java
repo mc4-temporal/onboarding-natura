@@ -29,6 +29,6 @@ public class Provincia extends AuditableEntity implements Serializable {
     private String longitud;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_DEPARTAMENTO", nullable = false)
+    @JoinColumn(name = "ID_DEPARTAMENTO", nullable = false, referencedColumnName = "CODIGO_GERA")
     private Departamento idDepartamento;
 }

@@ -29,6 +29,6 @@ public class Municipio extends AuditableEntity implements Serializable {
     private String longitud;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_PROVINCIA", nullable = false)
+    @JoinColumn(name = "ID_PROVINCIA", nullable = false, referencedColumnName = "CODIGO_GERA")
     private Provincia idProvincia;
 }

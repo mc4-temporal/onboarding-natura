@@ -36,7 +36,7 @@ public class RuletaAsignacionDir extends AuditableEntity implements Serializable
     private Directora directora;
 
     @ManyToOne
-    @JoinColumn(name = "ID_MUNICIPIO", referencedColumnName = "id")
+    @JoinColumn(name = "ID_MUNICIPIO", referencedColumnName = "CODIGO_GERA")
     private Municipio municipio;
 
     @Column(name = "EN_TURNO", nullable = false)
