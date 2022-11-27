@@ -97,6 +97,7 @@ public class DataInitializer implements CommandLineRunner {
     private void buildSeeders() {
         createOrUpdateService("API Gera Authentication",  "/api", "https://hmlapiauthnaturabo.geravd.com.br", "external-api", -1, -1);
         createOrUpdateService("API Gera",  "/api", "https://hmlapinaturabo.geravd.com.br", "external-api", -1, -1);
+
     }
 
     private void createOrUpdateService(String nombreParam, String apiParam, String urlParam, String tipoParam, int connectionTimeoutParam, int requestTimeoutParam) {
@@ -125,7 +126,9 @@ public class DataInitializer implements CommandLineRunner {
 
     private void buildDefaultMenu() {
         AuthRole root = this.authRoleRepository.findRolByName("ROLE_ROOT");
+
         AuthResource recPadreSeguridad = createOrUpdateResource("Seguridad", "Módulo de seguridad", "security", 1, "security", ResourceType.item, null, null, null, null, null, null, root);
+        AuthResource recPadrePanel = createOrUpdateResource("Paneles", "Módulo para paneles de usuarios", "panel", 2, "dashboard", ResourceType.item, null, null, null, null, null, null, root);
 
         // Seeeders
         createOrUpdateResource("Roles", "Interfaz para administración de roles", recPadreSeguridad.getUrl().concat("/roles"), 1, "insert_link", ResourceType.item, null, null, null, "PAGE_ROLES", recPadreSeguridad, ResourceActionUtil.roleActionsCode, root);
@@ -134,6 +137,12 @@ public class DataInitializer implements CommandLineRunner {
         createOrUpdateResource("Accesos", "Interfaz para configuración de accesos a roles", recPadreSeguridad.getUrl().concat("/access"), 4, "insert_link", ResourceType.item, null, null, null, "PAGE_ACCESOS", recPadreSeguridad, ResourceActionUtil.accessActionsCode, root);
         createOrUpdateResource("Bitácora", "Interfaz para administración de logs del sistema", recPadreSeguridad.getUrl().concat("/log"), 6, "insert_link", ResourceType.item, null, null, null, "PAGE_BITACORA", recPadreSeguridad, ResourceActionUtil.logActionsCode, root);
         createOrUpdateResource("Parámetros", "Interfaz para administración de parametros", recPadreSeguridad.getUrl().concat("/parameters"), 7, "insert_link", ResourceType.item, null, null, null, "PAGE_PARAMETROS", recPadreSeguridad, ResourceActionUtil.parameterActionsCode, root);
+
+
+        // UI: Directora View
+        createOrUpdateResource("Directora", "Interfaz para administracion de directoras", recPadrePanel.getUrl().concat("/director"), 1, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_DIRECTORA", recPadrePanel, ResourceActionUtil.directorPanelActionsCode, root);
+        createOrUpdateResource("Callcenter", "Interfaz para administración de callcenter", recPadrePanel.getUrl().concat("/callcenter"), 2, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_CALLCENTER", recPadrePanel, ResourceActionUtil.callCenterPanelActionsCode, root);
+        createOrUpdateResource("Colaborador", "Interfaz para administración de colaboradores", recPadrePanel.getUrl().concat("/collaborator"), 3, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_COLABORADOR", recPadrePanel, ResourceActionUtil.collaboratorPanelActionsCode, root);
 
 
     }
