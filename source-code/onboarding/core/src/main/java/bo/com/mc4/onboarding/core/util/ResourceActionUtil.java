@@ -172,5 +172,32 @@ public class ResourceActionUtil {
             TO_EXCEL_ACTION
     };
 
+    public static final String[] directorPanelActionsCode = {
+            LIST_ACTION_CODE,
+            RECORD_ACTION_CODE,
+            UPDATE_ACTION_CODE,
+            DELETE_ACTION_CODE,
+            ENABLE_DISABLE_ACTION,
+            TO_EXCEL_ACTION
+    };
+
+    public static final String[] callCenterPanelActionsCode = {
+            LIST_ACTION_CODE,
+            RECORD_ACTION_CODE,
+            UPDATE_ACTION_CODE,
+            DELETE_ACTION_CODE,
+            ENABLE_DISABLE_ACTION,
+            TO_EXCEL_ACTION
+    };
+
+    public static final String[] collaboratorPanelActionsCode = {
+            LIST_ACTION_CODE,
+            RECORD_ACTION_CODE,
+            UPDATE_ACTION_CODE,
+            DELETE_ACTION_CODE,
+            ENABLE_DISABLE_ACTION,
+            TO_EXCEL_ACTION
+    };
+
 
 }
