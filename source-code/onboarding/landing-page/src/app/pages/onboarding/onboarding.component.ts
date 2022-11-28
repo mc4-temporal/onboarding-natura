@@ -43,35 +43,35 @@ export class OnboardingComponent implements OnInit {
 
   protected initializeForms() {
     this.pInfoForm = new FormGroup({
-      nombres: new FormControl('Juan Fernando', Validators.compose([Validators.required])),
-      apellidos: new FormControl('Montero Figueroa', Validators.compose([Validators.required])),
-      tipoDocumento: new FormControl('CI', Validators.compose([Validators.required])),
-      nroDocumento: new FormControl('9796662', Validators.compose([Validators.required])),
+      nombres: new FormControl(null, Validators.compose([Validators.required])),
+      apellidos: new FormControl(null, Validators.compose([Validators.required])),
+      tipoDocumento: new FormControl(null, Validators.compose([Validators.required])),
+      nroDocumento: new FormControl(null, Validators.compose([Validators.required])),
       complemento: new FormControl(null),
-      expedicion: new FormControl('SC'),
-      fechaNacimiento: new FormControl(moment().subtract(22, 'y').toDate(), Validators.compose([Validators.required, FormUtil.personaMayorEdad()])),
-      telefono: new FormControl('69233208', Validators.compose([Validators.required])),
-      correo: new FormControl('fmontero@mc4.com.bo', Validators.compose([Validators.required, Validators.email])),
+      expedicion: new FormControl(null),
+      fechaNacimiento: new FormControl(null, Validators.compose([Validators.required, FormUtil.personaMayorEdad()])),
+      telefono: new FormControl(null, Validators.compose([Validators.required])),
+      correo: new FormControl(null, Validators.compose([Validators.required, Validators.email])),
       terminosCondiciones: new FormControl(null),
     });
     this.addressForm = new FormGroup({
       departamentoId: new FormControl(null, Validators.compose([Validators.required])),
       localidadId: new FormControl(null, Validators.compose([Validators.required])),
-      barrioZona: new FormControl('Barrio/Zona', Validators.compose([Validators.required])),
-      avenidaCalle: new FormControl('Avenida/Calle', Validators.compose([Validators.required])),
-      nroCasa: new FormControl('120'),
-      referencia: new FormControl('Referencia de direccion Referencia de direccion Referencia de direccion', Validators.compose([Validators.required, Validators.minLength(50)])),
-      barrioZonaEntrega: new FormControl('Barrio/Zona entrega', Validators.compose([Validators.required])),
-      avenidaCalleEntrega: new FormControl('Avenida/Calle entrega', Validators.compose([Validators.required])),
-      nroCasaEntrega: new FormControl('45'),
-      referenciaEntrega: new FormControl('Referencia de direccion Referencia de direccion Referencia de direccion', Validators.compose([Validators.required, Validators.minLength(50)])),
+      barrioZona: new FormControl(null, Validators.compose([Validators.required])),
+      avenidaCalle: new FormControl(null, Validators.compose([Validators.required])),
+      nroCasa: new FormControl(null),
+      referencia: new FormControl(null, Validators.compose([Validators.required, Validators.minLength(50)])),
+      barrioZonaEntrega: new FormControl(null, Validators.compose([Validators.required])),
+      avenidaCalleEntrega: new FormControl(null, Validators.compose([Validators.required])),
+      nroCasaEntrega: new FormControl(null),
+      referenciaEntrega: new FormControl(null, Validators.compose([Validators.required, Validators.minLength(50)])),
       mismaDireccionEntrega: new FormControl(true),
     });
     this.directoraForm = new FormGroup({
       directoraId: new FormControl(null, Validators.compose([Validators.required])),
       consultoraId: new FormControl(null, Validators.compose([Validators.required])),
-      correo: new FormControl('fmontero@mc4.com.bo', Validators.compose([Validators.required, Validators.email])),
-      codigoConfirmacion: new FormControl(123, Validators.compose([Validators.required])),
+      correo: new FormControl(null, Validators.compose([Validators.required, Validators.email])),
+      codigoConfirmacion: new FormControl(null, Validators.compose([Validators.required])),
     });
   }
 
