@@ -1,0 +1,168 @@
+<mc4-page-layout mode="card">
+  <mc4-page-layout-header>
+    <mc4-breadcrumbs
+      [crumbs]="['Paneles']"
+      current="Directoras"
+    ></mc4-breadcrumbs>
+  </mc4-page-layout-header>
+  <mc4-page-layout-content>
+    <mc4-list name="Directoras" (filterChange)="filterData($event)">
+      <div class="actions">
+        <button
+          class="mc4-column-filter"
+          type="button"
+          mat-icon-button
+          [matMenuTriggerFor]="optionMenu"
+        >
+          <mat-icon>apps</mat-icon>
+        </button>
+      </div>
+      <form [formGroup]="form" (submit)="applyFilter()">
+        <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
+          <div fxflex="50" style="width: 700px" fxLayout="row" fxFlex.xs="100">
+            <mat-form-field
+              #field
+              floatLabel="always"
+              appearance="outline"
+              class="full-width radio-container"
+            >
+              <mat-label>Visualizar</mat-label>
+              <input matInput style="display: none" required />
+              <mat-radio-group #group class="flex-wrap">
+                <mat-radio-button
+                  #buttons
+                  class="radio-button"
+                  *ngFor="let choice of choices"
+                  [value]="choice.code"
+                >
+                  <span class="wrap-label-text">
+                    {{ choice.tag }}
+                  </span>
+                </mat-radio-button>
+              </mat-radio-group>
+              <mat-hint>Choose something</mat-hint>
+              <mat-error>{{ getErrorMessage() }}</mat-error>
+            </mat-form-field>
+            <!--  <mat-form-field>
+              <mat-label>Visualizar</mat-label>
+              <mat-radio-group aria-label="Select an option">
+                <mat-radio-button value="1">Option 1</mat-radio-button>
+                <mat-radio-button value="2">Option 2</mat-radio-button>
+              </mat-radio-group>
+            </mat-form-field>
+ 
+            <mat-radio-group name="grpName">
+              <mat-radio-button [checked]="true" name="opList1"
+                >Option 1</mat-radio-button
+              >
+              <mat-radio-button value="opList2">Option 2</mat-radio-button>
+              <mat-radio-button value="opList3">Option 3</mat-radio-button>
+            </mat-radio-group>-->
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
+          <div fxFlex="25" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Rango de fecha</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input
+                  matStartDate
+                  formControlName="from"
+                  placeholder="Inicio"
+                />
+                <input matEndDate formControlName="to" placeholder="Fin" />
+              </mat-date-range-input>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+              <mat-error
+                *ngIf="form.controls.from.hasError('matStartDateInvalid')"
+                >Fecha de inicio inválida</mat-error
+              >
+              <mat-error *ngIf="form.controls.to.hasError('matEndDateInvalid')"
+                >Fecha de fin inválida</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <div fxFlex="20" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Canal de registro</mat-label>
+              <mat-select formControlName="process">
+                <mat-option [value]="''">Seleccionar todo</mat-option>
+                <mat-option
+                  *ngFor="let option of processList"
+                  [value]="option.codigo"
+                >
+                  {{ option.descripcion }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="20" fxFlex.xs="100">
+            <mat-form-field>
+              <mat-label>Ciudad/Localidad</mat-label>
+              <mat-select formControlName="city">
+                <mat-option [value]="''">Seleccionar todo</mat-option>
+                <mat-option
+                  *ngFor="let option of cityList"
+                  [value]="option.codigo"
+                >
+                  {{ option.descripcion }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px">
+            <div fxFlex="10" fxFlex.xs="100" class="mt10">
+              <button mat-flat-button color="accent" type="submit">
+                <mat-icon>search</mat-icon>Buscar
+              </button>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px">
+            <div fxFlex="10" fxFlex.xs="100" class="mt10">
+              <button mat-flat-button color="accent" type="submit">
+                <mat-icon>insert_drive_file</mat-icon>Exportar Excel
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div fxLayout="row wrap">
+        <div fxFlex="100">
+          <mc4-server-paging-table
+            [dataSource]="dataSource"
+            [columns]="columns"
+            [requestPaginatedData]="requestUserListFn"
+            [rowActions]="rowActions"
+            [eventManager]="tableEvents"
+          ></mc4-server-paging-table>
+        </div>
+      </div>
+    </mc4-list>
+  </mc4-page-layout-content>
+</mc4-page-layout>
+<mat-menu #optionMenu="matMenu" yPosition="below" xPosition="after">
+  <button
+    *ngIf="directorActions.createAction"
+    mat-menu-item
+    (click)="createUpdateUser()"
+  >
+    <mat-icon color="primary" class="mr5">add_circle</mat-icon>Crear Directora
+  </button>
+  <button
+    *ngIf="directorActions.toExcelAction"
+    mat-menu-item
+    fxLayoutAlign="center center"
+  >
+    <img
+      src="/assets/icons/excel.png"
+      width="24px"
+      height="24px"
+      alt="xlsx"
+      class="mr5"
+    />Exportar Datos
+  </button>
+</mat-menu>

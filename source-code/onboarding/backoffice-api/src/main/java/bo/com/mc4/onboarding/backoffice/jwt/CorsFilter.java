@@ -38,7 +38,7 @@ public class CorsFilter implements Filter {
         HttpServletRequest request= (HttpServletRequest) servletRequest;
 //        response.setHeader("Access-Control-Allow-Headers", "*");
 
-        if(activeProfile.contains("development")) {
+        if(activeProfile.contains("dev")) {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Headers", "*");
         }else if(activeProfile.contains("certification")) {
@@ -50,7 +50,7 @@ public class CorsFilter implements Filter {
             }catch (Exception e){
 
             }
-        } else if(activeProfile.contains("production")) {
+        } else if(activeProfile.contains("prd")) {
             try {
                 if (request.getHeader("Origin").equals("https://unilink.mc4.com.bo")) {
                     response.setHeader("Access-Control-Allow-Origin", "https://unilink.mc4.com.bo");
