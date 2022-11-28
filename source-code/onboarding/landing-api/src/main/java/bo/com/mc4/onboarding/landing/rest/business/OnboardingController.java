@@ -7,6 +7,7 @@ import bo.com.mc4.onboarding.core.util.exception.ApiResponseException;
 import bo.com.mc4.onboarding.core.util.exception.OperationException;
 import bo.com.mc4.onboarding.model.business.dto.FrmDatosPersonalesDto;
 import bo.com.mc4.onboarding.model.business.dto.FrmDireccionDto;
+import bo.com.mc4.onboarding.model.business.dto.FrmDirectoraConsultoraDto;
 import bo.com.mc4.onboarding.model.business.dto.FrmResponseDto;
 import bo.com.mc4.onboarding.model.commons.dto.api.ResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,6 +75,30 @@ public class OnboardingController {
         try {
             return ok(ApiUtil.buildResponseWithDefaults(
                     onboardingService.saveFrmDireccion(prospectoId, frmDireccionDto)));
+        } catch (OperationException e) {
+            log.error("Error al ejecutar el servicio, Mensaje: {}", e.getMessage());
+            throw ApiResponseException.badRequest(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error al ejecutar el servicio", e);
+            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/directora-consultora", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Guarda informacion de directora, consultora conocida del prospecto",
+            description = "Guarda informacion de directora, consultora conocida del prospecto",
+            responses = {
+                    @ApiResponse(description = "Operación satisfactorio", responseCode = "200", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(description = "Registro creado", responseCode = "201", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Fallo de autentificación", content = @Content(schema = @Schema(hidden = true))),
+                    @ApiResponse(responseCode = "403", description = "Acceso Denegado", content = @Content(schema = @Schema(hidden = true))),
+            }, security = @SecurityRequirement(name = "bearerToken"))
+    public ResponseEntity<ResponseBody<FrmResponseDto>> directoraConsultoraConocida(@RequestParam("prospectoId") Long prospectoId,
+                                                                                    @RequestBody FrmDirectoraConsultoraDto frmDirectoraConsultoraDto) {
+        try {
+            return ok(ApiUtil.buildResponseWithDefaults(
+                    onboardingService.saveFrmDirectoraConsultoraConocida(prospectoId, frmDirectoraConsultoraDto)));
         } catch (OperationException e) {
             log.error("Error al ejecutar el servicio, Mensaje: {}", e.getMessage());
             throw ApiResponseException.badRequest(e.getMessage());

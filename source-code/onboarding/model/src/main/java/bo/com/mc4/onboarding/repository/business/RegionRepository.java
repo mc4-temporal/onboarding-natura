@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface RegionFmRepository extends JpaRepository<Region, Long> {
+public interface RegionRepository extends JpaRepository<Region, Long> {
 
     @Query(" select r " +
             "from Region r " +

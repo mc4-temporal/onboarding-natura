@@ -1,5 +1,6 @@
 package bo.com.mc4.onboarding.integrations.gera;
 
+import bo.com.mc4.onboarding.integrations.gera.dto.GeraResponse;
 import bo.com.mc4.onboarding.integrations.gera.dto.consultoras.response.ConsultaConsultorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.directoras.response.ConsultaDirectorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaConsultorasQpDTO;
@@ -23,7 +24,7 @@ public interface IGeraClient {
 
     List<Map<String,Object>> searchPeople(Map<String, Object> parmas);
 
-    List<ConsultaDirectorasResponseDto> requestConsultaDirectoras(ConsultaDirectorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, GeraClient.Service dataConnection);
+    GeraResponse<List<ConsultaDirectorasResponseDto>> requestConsultaDirectoras(ConsultaDirectorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, GeraClient.Service dataConnection);
 
     List<ConsultaConsultorasResponseDto> requestConsultaConsultoras(ConsultaConsultorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, GeraClient.Service dataConnection);
 

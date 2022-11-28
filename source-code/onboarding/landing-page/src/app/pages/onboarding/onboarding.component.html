@@ -16,6 +16,12 @@
         <mc4-directora-consultora-conocida [form]="directoraForm"
                                            [eventManager]="eventManager"></mc4-directora-consultora-conocida>
       </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Felicidades</ng-template>
+        <mc4-resumen-contado *ngIf="responseInfo"
+                             [resumen]="responseInfo"
+                             [eventManager]="eventManager"></mc4-resumen-contado>
+      </mat-step>
     </mat-stepper>
   </div>
 </div>

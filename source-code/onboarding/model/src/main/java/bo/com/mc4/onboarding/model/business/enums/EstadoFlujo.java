@@ -11,7 +11,9 @@ public enum EstadoFlujo {
     FORM_AL_CONTADO("AL_CONTADO"),
     FORM_TERMINOS_CONDICIONES("TERMINOS_CONDICIONES"),
     FORM_FOTOGRAFIAS("FOTOGRAFIAS"),
-    FORM_AL_CREDITO("AL_CREDITO");
+    FORM_AL_CREDITO("AL_CREDITO"),
+    FINALIZADO_CONTADO("FINALIZADO_CONTADO"),
+    FINALIZADO("FINALIZADO");
     private String estado;
     EstadoFlujo(String estado){
         this.estado = estado;

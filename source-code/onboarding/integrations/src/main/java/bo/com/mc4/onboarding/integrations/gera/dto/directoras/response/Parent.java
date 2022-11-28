@@ -19,6 +19,6 @@ public class Parent {
 
     private String name;
 
-    private Parent__1 parent;
+//    private Parent__1 parent;
 
 }

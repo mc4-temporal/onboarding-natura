@@ -3,7 +3,7 @@ package bo.com.mc4.onboarding.core.util;
 public interface Constants {
 
     String CURRENT_USER_SESSION = "CURRENT_USER_SESSION";
-    String DEFAULT_GROUP = "CLIENT-CAMARA";
+    String DEFAULT_GROUP = "ONBOARDING_SYNC";
     String DEFAULT_CANAL_ONBOARDING = "ONBOARDING";
 
     interface Params {

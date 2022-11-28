@@ -1,50 +1,35 @@
 package bo.com.mc4.onboarding.core.service.business.impl;
 
 import bo.com.mc4.onboarding.core.service.business.OnboardingService;
-import bo.com.mc4.onboarding.core.service.business.VerificacionOnboardingService;
 import bo.com.mc4.onboarding.core.util.Constants;
-import bo.com.mc4.onboarding.core.util.FormatUtil;
+import bo.com.mc4.onboarding.core.util.exception.ExceptionUtil;
 import bo.com.mc4.onboarding.core.util.exception.OperationException;
-import bo.com.mc4.onboarding.model.business.CanalOnboarding;
-import bo.com.mc4.onboarding.model.business.Consultora;
-import bo.com.mc4.onboarding.model.business.Direccion;
-import bo.com.mc4.onboarding.model.business.Municipio;
+import bo.com.mc4.onboarding.model.business.*;
 import bo.com.mc4.onboarding.model.business.dto.FrmDatosPersonalesDto;
 import bo.com.mc4.onboarding.model.business.dto.FrmDireccionDto;
+import bo.com.mc4.onboarding.model.business.dto.FrmDirectoraConsultoraDto;
 import bo.com.mc4.onboarding.model.business.dto.FrmResponseDto;
 import bo.com.mc4.onboarding.model.business.enums.EstadoFlujo;
+import bo.com.mc4.onboarding.model.business.enums.TipoConsultora;
 import bo.com.mc4.onboarding.model.business.enums.TipoDireccion;
-import bo.com.mc4.onboarding.repository.business.CanalOnboardingRepository;
-import bo.com.mc4.onboarding.repository.business.ConsultoraRepository;
-import bo.com.mc4.onboarding.repository.business.DireccionRepository;
-import bo.com.mc4.onboarding.repository.business.MunicipioRepository;
+import bo.com.mc4.onboarding.repository.business.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.Supplier;
+import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service("onboardingService")
 public class OnboardingServiceImpl implements OnboardingService {
     private final ConsultoraRepository consultoraRepository;
     private final CanalOnboardingRepository canalOnboardingRepository;
-    private final VerificacionOnboardingService verificacionOnboardingService;
     private final MunicipioRepository municipioRepository;
     private final DireccionRepository direccionRepository;
-
-    public OnboardingServiceImpl(ConsultoraRepository consultoraRepository,
-                                 CanalOnboardingRepository canalOnboardingRepository,
-                                 VerificacionOnboardingService verificacionOnboardingService,
-                                 MunicipioRepository municipioRepository,
-                                 DireccionRepository direccionRepository) {
-        this.consultoraRepository = consultoraRepository;
-        this.canalOnboardingRepository = canalOnboardingRepository;
-        this.verificacionOnboardingService = verificacionOnboardingService;
-        this.municipioRepository = municipioRepository;
-        this.direccionRepository = direccionRepository;
-    }
+    private final DirectoraRepository directoraRepository;
 
     @Override
     public FrmResponseDto saveFrmDatosPersonales(String codigoCanalOnb, FrmDatosPersonalesDto frmDatosPersonalesDto) {
@@ -68,12 +53,21 @@ public class OnboardingServiceImpl implements OnboardingService {
             canalOnboardingRepository.save(canalOnboarding);
         }
 
-        if (verificacionOnboardingService.existeDocumentoGera(frmDatosPersonalesDto.getNroDocumento())) {
+        Optional<Consultora> consultora = consultoraRepository.findByDocumento(frmDatosPersonalesDto.getNroDocumento());
+        if (consultora.isPresent() && !consultora.get().getTipoConsultora().equals(TipoConsultora.PROSPECTO)) {
             throw new OperationException(String.format("El número de documento '%s' ya se encuentra registrado.", frmDatosPersonalesDto.getNroDocumento()));
         }
+        if (consultora.isPresent() && consultora.get().getTipoConsultora().equals(TipoConsultora.PROSPECTO)) {
+            return FrmResponseDto.builder()
+                    .consultoraId(consultora.get().getId())
+                    .flujoPendiente(true)
+                    .estadoFlujo(consultora.get().getEstadoFlujo())
+                    .build();
+        }
 
-        if (verificacionOnboardingService.existeEmailGera(frmDatosPersonalesDto.getCorreo())) {
-            throw new OperationException(String.format("El correo '%s' ya se encuentra registrado.", frmDatosPersonalesDto.getCorreo()));
+        consultora = consultoraRepository.findByCorreo(frmDatosPersonalesDto.getCorreo());
+        if (consultora.isPresent()) {
+            throw new OperationException(String.format("El correo '%s' ya se encuentra registrado, por favor ingrese otro.", frmDatosPersonalesDto.getCorreo()));
         }
 
         Consultora prospecto = frmDatosPersonalesDto.toConsultoraEntity();
@@ -90,8 +84,8 @@ public class OnboardingServiceImpl implements OnboardingService {
     @Transactional(rollbackFor = {OperationException.class, Exception.class})
     public FrmResponseDto saveFrmDireccion(Long prospectoId, FrmDireccionDto frmDireccionDto) {
         frmDireccionDto.validateFields();
-        Consultora prospecto = consultoraRepository.findById(prospectoId).orElseThrow(throwFindFail(prospectoId.toString(), "Prospecto"));
-        Municipio municipio = municipioRepository.findById(frmDireccionDto.getLocalidadId()).orElseThrow(throwFindFail(frmDireccionDto.getLocalidadId().toString(), "Municipio"));
+        Consultora prospecto = consultoraRepository.findById(prospectoId).orElseThrow(ExceptionUtil.throwFindFail(prospectoId.toString(), "Prospecto"));
+        Municipio municipio = municipioRepository.findById(frmDireccionDto.getLocalidadId()).orElseThrow(ExceptionUtil.throwFindFail(frmDireccionDto.getLocalidadId().toString(), "Municipio"));
 
         direccionRepository.deleteDireccionesExistentes(prospecto);
 
@@ -119,7 +113,60 @@ public class OnboardingServiceImpl implements OnboardingService {
                 .build();
     }
 
-    private Supplier<OperationException> throwFindFail(String entityId, String objeto) {
-        return () -> new OperationException(FormatUtil.noRegistrado(objeto, entityId));
+    @Override
+    public FrmResponseDto saveFrmDirectoraConsultoraConocida(Long prospectoId, FrmDirectoraConsultoraDto frmDirectoraConsultoraDto) {
+        Consultora prospecto = consultoraRepository.findById(prospectoId).orElseThrow(ExceptionUtil.throwFindFail(prospectoId.toString(), "Prospecto"));
+        Optional<Consultora> consultoraEmail = consultoraRepository.findByCorreo(frmDirectoraConsultoraDto.getCorreo());
+        if (consultoraEmail.isPresent() && !consultoraEmail.get().getId().equals(prospecto.getId())) {
+            throw new OperationException(String.format("El correo '%s' ya se encuentra registrado, por favor ingrese otro.", frmDirectoraConsultoraDto.getCorreo()));
+        }
+        if (!codigoVerificacionEmailValido(prospecto, frmDirectoraConsultoraDto.getCorreo(), frmDirectoraConsultoraDto.getCodigoConfirmacion())) {
+            throw new OperationException("Código de confirmación de correo es incorrecto");
+        }
+
+        Directora directora;
+        Consultora consultoraRecomendante;
+        if (frmDirectoraConsultoraDto.getDirectoraId().equals(0L)) {
+            directora = obtenerDirectoraPorAsignacionAutomatica(prospecto);
+        } else {
+            directora = directoraRepository.findById(frmDirectoraConsultoraDto.getDirectoraId()).orElseThrow(ExceptionUtil.throwFindFail(frmDirectoraConsultoraDto.getDirectoraId().toString(), "Directora"));
+        }
+        if (frmDirectoraConsultoraDto.getConsultoraId().equals(0L)) {
+            consultoraRecomendante = obtenerConsultoraRecomendantePorDefecto();
+        } else {
+            consultoraRecomendante = consultoraRepository.findById(frmDirectoraConsultoraDto.getConsultoraId()).orElseThrow(ExceptionUtil.throwFindFail(frmDirectoraConsultoraDto.getConsultoraId().toString(), "Consultora"));
+        }
+        prospecto.setCorreo(frmDirectoraConsultoraDto.getCorreo());
+        prospecto.setIdConsultoraRecomendante(consultoraRecomendante);
+        prospecto.setIdDirectora(directora);
+        prospecto.setEstadoFlujo(EstadoFlujo.FORM_ASIGNACION_DIRECTORA);
+        consultoraRepository.save(prospecto);
+
+        String codigoGeraGenerado = registrarConsultoraContadoGera(prospecto);
+        prospecto.setEstadoFlujo(EstadoFlujo.FINALIZADO_CONTADO);
+        prospecto.setCodigoConsultora(codigoGeraGenerado);
+        prospecto.setTipoConsultora(TipoConsultora.CONTADO);
+        consultoraRepository.save(prospecto);
+
+        return FrmResponseDto.builder()
+                .consultoraId(prospecto.getId())
+                .codigoConsultora(prospecto.getCodigoConsultora())
+                .build();
+    }
+
+    private String registrarConsultoraContadoGera(Consultora prospecto) {
+        return String.valueOf(prospecto.getId() * 1000L);
+    }
+
+    private Consultora obtenerConsultoraRecomendantePorDefecto() {
+        return null;
+    }
+
+    private Directora obtenerDirectoraPorAsignacionAutomatica(Consultora prospecto) {
+        return null;
+    }
+
+    private boolean codigoVerificacionEmailValido(Consultora prospecto, String correo, Integer codigoConfirmacion) {
+        return true;
     }
 }

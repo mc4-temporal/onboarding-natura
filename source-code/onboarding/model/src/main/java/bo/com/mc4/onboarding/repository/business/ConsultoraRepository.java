@@ -19,10 +19,20 @@ public interface ConsultoraRepository extends JpaRepository<Consultora, Long> {
 
     @Query( "select new bo.com.mc4.onboarding.model.business.dto.ConsultoraRecomendanteDto(c.id, concat(c.nombres, ' ', c.apellidos) , c.nroDocumento, c.codigoConsultora) " +
             "from Consultora c " +
-            "inner join Municipio m on m = c.idMunicipio and m = :idMunicipio " +
             "where c.deleted = false " +
             "and c.tipoConsultora <> bo.com.mc4.onboarding.model.business.enums.TipoConsultora.PROSPECTO " +
             "and c.id <> :id ")
-    List<ConsultoraRecomendanteDto> consultoraRecomendanteList(@Param("id") Long id,
-                                                               @Param("idMunicipio") Municipio idMunicipio);
+    List<ConsultoraRecomendanteDto> consultoraRecomendanteList(@Param("id") Long id);
+
+    @Query( "select c " +
+            "from Consultora c " +
+            "where c.deleted = false " +
+            "and c.nroDocumento = :documento ")
+    Optional<Consultora> findByDocumento(@Param("documento") String documento);
+
+    @Query( "select c " +
+            "from Consultora c " +
+            "where c.deleted = false " +
+            "and c.correo like concat('%', :correo, '%') ")
+    Optional<Consultora> findByCorreo(@Param("correo") String correo);
 }

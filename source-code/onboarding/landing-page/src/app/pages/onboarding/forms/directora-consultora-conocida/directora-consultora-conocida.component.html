@@ -32,6 +32,65 @@
         </mat-error>
       </mat-form-field>
     </div>
+    <div fxFlex="100" class="p3">
+      <div fxLayout="row wrap">
+        <div fxFlex="50" class="p3">
+          <mat-form-field floatLabel="always">
+            <mat-label>
+              <mat-icon fontSet="material-icons-outlined"
+                        class="icon-help"
+                        matTooltip="Usaremos este correo para enviarle un código de confirmación.">help</mat-icon>
+              Correo electrónico
+            </mat-label>
+            <mat-icon matSuffix fontSet="material-icons-outlined">alternate_email</mat-icon>
+            <input matInput
+                   required
+                   type="text"
+                   placeholder="usuario@ejemplo.com"
+                   formControlName="correo"
+                   maxlength="50"
+                   autocomplete="off">
+            <mat-error *ngIf="isErrorVisible('correo', 'required')">
+              Por favor ingrese su correo electrónico.
+            </mat-error>
+            <mat-error *ngIf="isErrorVisible('correo', 'email')">
+              Formato de correo incorrecto.
+            </mat-error>
+          </mat-form-field>
+        </div>
+<!--        <div fxFlex="20" class="p3" fxLayoutAlign="end center">-->
+<!--          <button mat-flat-button color="primary">-->
+<!--            <mat-icon fontSet="material-icons-outlined"-->
+<!--                      matTooltip="Actualizar correo.">edit</mat-icon>-->
+<!--          </button>-->
+<!--        </div>-->
+        <div fxFlex="30" class="p3">
+          <button mat-flat-button
+                  type="button"
+                  color="accent">Enviar código</button>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100" class="p3">
+      <mat-form-field floatLabel="always">
+        <mat-label>
+          <mat-icon fontSet="material-icons-outlined"
+                    class="icon-help"
+                    matTooltip="Ingrese el código de confirmación enviado a su correo.">help</mat-icon>
+          Código de confirmación
+        </mat-label>
+        <input matInput
+               required
+               type="text"
+               placeholder="Ejm. 1234"
+               formControlName="codigoConfirmacion"
+               maxlength="5"
+               autocomplete="off">
+        <mat-error *ngIf="isErrorVisible('codigoConfirmacion', 'required')">
+          Por favor ingrese código de confirmación enviado a su correo.
+        </mat-error>
+      </mat-form-field>
+    </div>
   </div>
   <div fxLayout="row wrap" class="mt10">
     <div fxFlex="100" fxLayoutGap="3px">

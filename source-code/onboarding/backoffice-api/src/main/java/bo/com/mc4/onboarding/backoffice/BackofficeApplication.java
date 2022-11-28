@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -29,7 +30,7 @@ import java.util.TimeZone;
 @EnableJpaRepositories(basePackages = {"bo.com.mc4.onboarding.repository"})
 @EntityScan(basePackages = {"bo.com.mc4.onboarding.model"})
 @ComponentScan(basePackages = {"bo.com.mc4.onboarding", "bo.com.mc4.onboarding.backoffice.jwt"})
-@SpringBootApplication(scanBasePackages = {"bo.com.mc4.onboarding", "bo.com.mc4.onboarding.core.service"})
+@SpringBootApplication(scanBasePackages = {"bo.com.mc4", "bo.com.mc4.onboarding", "bo.com.mc4.onboarding.core", "bo.com.mc4.onboarding.core.service"})
 @EnableAsync
 @EnableWebSecurity
 @Slf4j

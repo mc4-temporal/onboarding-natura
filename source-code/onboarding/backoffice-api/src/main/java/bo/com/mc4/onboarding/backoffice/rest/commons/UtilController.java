@@ -126,7 +126,7 @@ public class UtilController {
 
             ConsultaDirectorasQpDTO dto = new ConsultaDirectorasQpDTO();
 
-            return ok(ApiUtil.buildResponseWithDefaults(geraClient.requestConsultaDirectoras(dto, "", null, null, dataConnection)));
+            return ok(ApiUtil.buildResponseWithDefaults(geraClient.requestConsultaDirectoras(dto, "", null, null, dataConnection).getData()));
         } catch (OperationException e) {
             log.error("Error: Se produjo un error controlado al ejecutar el servicio test-directoras, Mensaje: {}", e.getMessage());
             throw ApiResponseException.badRequest(e.getMessage());

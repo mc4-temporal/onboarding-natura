@@ -39,4 +39,11 @@ export class LandingService {
     return this.http.post<ApiResponse<any>>(url, body, {params})
       .pipe(map((resp) => mapResponseApi<any>(url, resp)));
   }
+
+  requestSaveOnboardingDirectora(prospectoId: number, body: any): Observable<any> {
+    const params = new HttpParams().appendAll({prospectoId});
+    const url = environment.api + environment.backend.onboardingApi + '/directora-consultora';
+    return this.http.post<ApiResponse<any>>(url, body, {params})
+      .pipe(map((resp) => mapResponseApi<any>(url, resp)));
+  }
 }

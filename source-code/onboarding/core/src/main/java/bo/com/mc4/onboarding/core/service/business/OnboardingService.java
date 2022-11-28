@@ -2,6 +2,7 @@ package bo.com.mc4.onboarding.core.service.business;
 
 import bo.com.mc4.onboarding.model.business.dto.FrmDatosPersonalesDto;
 import bo.com.mc4.onboarding.model.business.dto.FrmDireccionDto;
+import bo.com.mc4.onboarding.model.business.dto.FrmDirectoraConsultoraDto;
 import bo.com.mc4.onboarding.model.business.dto.FrmResponseDto;
 
 public interface OnboardingService {
@@ -21,4 +22,6 @@ public interface OnboardingService {
      * @return datos de respuesta
      */
     FrmResponseDto saveFrmDireccion(Long prospectoId, FrmDireccionDto frmDireccionDto);
+
+    FrmResponseDto saveFrmDirectoraConsultoraConocida(Long prospectoId, FrmDirectoraConsultoraDto frmDirectoraConsultoraDto);
 }

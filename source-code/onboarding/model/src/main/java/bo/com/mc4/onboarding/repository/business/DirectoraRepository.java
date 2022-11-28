@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface DirectoraFmRepository extends JpaRepository<Directora, Long> {
+public interface DirectoraRepository extends JpaRepository<Directora, Long> {
 
     @Query( "select new bo.com.mc4.onboarding.model.business.dto.DirectoraDto(d.id, d.codigoDirectora, d.nombre) " +
             "from Directora d " +
@@ -20,4 +20,10 @@ public interface DirectoraFmRepository extends JpaRepository<Directora, Long> {
             "and m = :idMunicipio " +
             "order by d.nombre asc ")
     List<DirectoraDto> directorasDisponiblesEnMunicipioList(@Param("idMunicipio") Municipio idMunicipio);
+
+    @Query( "select count(d) > 0 " +
+            "from Directora d " +
+            "where d.deleted = false " +
+            "and d.codigoDirectora = :codigoGera ")
+    boolean existsByCodigoDirectora(@Param("codigoGera") String codigoGera);
 }

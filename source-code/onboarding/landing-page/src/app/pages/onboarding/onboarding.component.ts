@@ -70,6 +70,8 @@ export class OnboardingComponent implements OnInit {
     this.directoraForm = new FormGroup({
       directoraId: new FormControl(null, Validators.compose([Validators.required])),
       consultoraId: new FormControl(null, Validators.compose([Validators.required])),
+      correo: new FormControl('fmontero@mc4.com.bo', Validators.compose([Validators.required, Validators.email])),
+      codigoConfirmacion: new FormControl(123, Validators.compose([Validators.required])),
     });
   }
 
@@ -91,8 +93,16 @@ export class OnboardingComponent implements OnInit {
 
   submitDirectoraForm() {
     if (FormUtil.isValidFormGroup(this.directoraForm)) {
-      console.log(this.directoraForm.value);
+      Notiflix.Loading.pulse();
+      this.landingService.requestSaveOnboardingDirectora(this.responseInfo.consultoraId, this.directoraForm.value)
+        .subscribe({next: this.successSaveDirectora});
     }
+  }
+
+  protected successSaveDirectora = (body: any) => {
+    this.responseInfo = body;
+    Notiflix.Loading.remove();
+    this.stepper.next();
   }
 
   protected successSaveInfo = (body: any) => {

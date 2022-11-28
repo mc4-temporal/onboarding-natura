@@ -1,6 +1,10 @@
 package bo.com.mc4.onboarding.backoffice;
 
-import bo.com.mc4.onboarding.core.service.commons.ParameterService;
+import bo.com.mc4.onboarding.backoffice.job.DirectoraSyncJob;
+import bo.com.mc4.onboarding.core.quartz.service.CronExpressionConstant;
+import bo.com.mc4.onboarding.core.quartz.service.JobDto;
+import bo.com.mc4.onboarding.core.quartz.service.JobService;
+import bo.com.mc4.onboarding.core.util.Constants;
 import bo.com.mc4.onboarding.core.util.ResourceActionUtil;
 import bo.com.mc4.onboarding.core.util.exception.ExceptionUtil;
 import bo.com.mc4.onboarding.model.business.Servicio;
@@ -8,28 +12,31 @@ import bo.com.mc4.onboarding.model.auth.*;
 import bo.com.mc4.onboarding.model.auth.enums.ResourceType;
 import bo.com.mc4.onboarding.model.auth.enums.UserStatus;
 import bo.com.mc4.onboarding.model.business.*;
+import bo.com.mc4.onboarding.model.business.enums.EstadoFlujo;
+import bo.com.mc4.onboarding.model.business.enums.TipoConsultora;
+import bo.com.mc4.onboarding.model.business.enums.TipoDocumento;
 import bo.com.mc4.onboarding.model.commons.enums.EntityState;
 import bo.com.mc4.onboarding.repository.ServicioRepository;
 import bo.com.mc4.onboarding.repository.auth.*;
 import bo.com.mc4.onboarding.repository.business.*;
-import bo.com.mc4.onboarding.repository.commons.ParameterGroupRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class DataInitializer implements CommandLineRunner {
     private final AuthRoleRepository authRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthUserRepository userService;
     private final AuthResourceRepository authResourceRepository;
-    private final ParameterService paramService;
-    private final ParameterGroupRepository parameterGroupRepository;
     private final AuthRoleResourceRepository authRoleResourceRepository;
     private final AuthActionRepository authActionRepository;
     private final AuthPrivilegeRepository authPrivilegeRepository;
@@ -38,47 +45,15 @@ public class DataInitializer implements CommandLineRunner {
     private final DepartamentoRepository departamentoRepository;
     private final ProvinciaRepository provinciaRepository;
     private final MunicipioRepository municipioRepository;
-    private final DirectoraFmRepository directoraFmRepository;
-    private final RegionFmRepository regionFmRepository;
+    private final DirectoraRepository directoraRepository;
+    private final ConsultoraRepository consultoraRepository;
+    private final CanalOnboardingRepository canalOnboardingRepository;
+    private final RegionRepository regionRepository;
     private final RegionMunicipioFmRepository regionMunicipioFmRepository;
+    private final JobService jobService;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
-
-    public DataInitializer(AuthRoleRepository authRoleRepository,
-                           PasswordEncoder passwordEncoder,
-                           AuthUserRepository userService,
-                           AuthResourceRepository authResourceRepository,
-                           ParameterService paramService,
-                           ParameterGroupRepository parameterGroupRepository,
-                           AuthRoleResourceRepository authRoleResourceRepository,
-                           AuthActionRepository authActionRepository,
-                           AuthPrivilegeRepository authPrivilegeRepository,
-                           DepartamentoRepository departamentoRepository,
-                           ProvinciaRepository provinciaRepository,
-                           MunicipioRepository municipioRepository,
-                           DirectoraFmRepository directoraFmRepository,
-                           RegionFmRepository regionFmRepository,
-                           RegionMunicipioFmRepository regionMunicipioFmRepository,
-                           AuthResourceActionRepository authResourceActionRepository, ServicioRepository servicioRepository) {
-        this.authRoleRepository = authRoleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
-        this.authResourceRepository = authResourceRepository;
-        this.paramService = paramService;
-        this.parameterGroupRepository = parameterGroupRepository;
-        this.authRoleResourceRepository = authRoleResourceRepository;
-        this.authActionRepository = authActionRepository;
-        this.authPrivilegeRepository = authPrivilegeRepository;
-        this.authResourceActionRepository = authResourceActionRepository;
-        this.servicioRepository = servicioRepository;
-        this.departamentoRepository = departamentoRepository;
-        this.provinciaRepository = provinciaRepository;
-        this.municipioRepository = municipioRepository;
-        this.directoraFmRepository = directoraFmRepository;
-        this.regionFmRepository = regionFmRepository;
-        this.regionMunicipioFmRepository = regionMunicipioFmRepository;
-    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -91,6 +66,7 @@ public class DataInitializer implements CommandLineRunner {
             buildSeeders();
             addEstructuraGeografica();
             addDirectoraMock();
+            addJobs();
         }
     }
 
@@ -252,6 +228,13 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
             this.userService.save(authUser);
         }
+    }
+
+    private void addJobs() {
+//        JobDto jobDto = DirectoraSyncJob.getJobDto(Constants.DEFAULT_GROUP, DirectoraSyncJob.JOB_NAME);
+//        if(!jobService.existJobName(jobDto.getGroupName(), jobDto.getJobName())){
+//            jobService.scheduleCronJob(jobDto, new Date(), CronExpressionConstant.CRON_X_30_SEG, null, DirectoraSyncJob.JOB_DESCRIPTION);
+//        }
     }
 
     private void addParams() {
@@ -1057,12 +1040,12 @@ public class DataInitializer implements CommandLineRunner {
         Municipio warnesMunicipio = municipioRepository.findById(128).orElseThrow(ExceptionUtil.throwFindFail("128", "Municipio"));
         Municipio buenaVistaMunicipio = municipioRepository.findById(133).orElseThrow(ExceptionUtil.throwFindFail("133", "Municipio"));
 
-        Region region1 = regionFmRepository.findByNombre("Region 1").orElse(Region.builder()
+        Region region1 = regionRepository.findByNombre("Region 1").orElse(Region.builder()
                 .nombre("Region 1")
                 .build());
 
         if (region1.getId() == null) {
-            regionFmRepository.save(region1);
+            regionRepository.save(region1);
 
             regionMunicipioFmRepository.save(RegionMunicipioFm.builder()
                     .idMunicipio(santaCruzMunicipio)
@@ -1085,7 +1068,7 @@ public class DataInitializer implements CommandLineRunner {
                     .tokenInvitacion("1A85637")
                     .correo("acamacho@maturabo.net")
                     .build();
-            directoraFmRepository.save(directora);
+            directoraRepository.save(directora);
 
             Directora directora1 = Directora.builder()
                     .idRegion(region1)
@@ -1095,7 +1078,40 @@ public class DataInitializer implements CommandLineRunner {
                     .tokenInvitacion("1A116696")
                     .correo("jherbas@maturabo.net")
                     .build();
-            directoraFmRepository.save(directora1);
+            directoraRepository.save(directora1);
+            CanalOnboarding canalOnboarding = canalOnboardingRepository.save(canalOnboardingRepository.findByCodigo(Constants.DEFAULT_CANAL_ONBOARDING)
+                    .orElse(CanalOnboarding.builder()
+                            .codigo(Constants.DEFAULT_CANAL_ONBOARDING)
+                            .descripcion("Onboarding")
+                            .build()));
+            consultoraRepository.save(Consultora.builder()
+                    .nombres("Consultora A")
+                    .apellidos("Apellido A")
+                    .nroDocumento("1234567")
+                    .tipoDocumento(TipoDocumento.CI)
+                    .expedicion("SC")
+                    .fechaNacimiento(new Date())
+                    .telefono("77282728")
+                    .correo("consultora@naturabo.net")
+                    .tipoConsultora(TipoConsultora.CONTADO)
+                    .estadoFlujo(EstadoFlujo.FINALIZADO)
+                    .idCanalOnboarding(canalOnboarding)
+                    .idMunicipio(santaCruzMunicipio)
+                    .build());
+            consultoraRepository.save(Consultora.builder()
+                    .nombres("Consultora B")
+                    .apellidos("Apellido B")
+                    .nroDocumento("7841515")
+                    .tipoDocumento(TipoDocumento.CI)
+                    .expedicion("SC")
+                    .fechaNacimiento(new Date())
+                    .telefono("64582155")
+                    .correo("consultorab@naturabo.net")
+                    .tipoConsultora(TipoConsultora.CONTADO)
+                    .estadoFlujo(EstadoFlujo.FINALIZADO)
+                    .idCanalOnboarding(canalOnboarding)
+                    .idMunicipio(warnesMunicipio)
+                    .build());
         }
     }
 }

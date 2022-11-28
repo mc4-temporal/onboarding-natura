@@ -94,4 +94,12 @@ public class Consultora extends AuditableEntity implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_MUNICIPIO", referencedColumnName = "CODIGO_GERA")
     private Municipio idMunicipio;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_CONSULTORA_RECOMENDANTE", referencedColumnName = "ID")
+    private Consultora idConsultoraRecomendante;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_DIRECTORA", referencedColumnName = "ID")
+    private Directora idDirectora;
 }

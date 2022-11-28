@@ -1,5 +1,6 @@
 package bo.com.mc4.onboarding.integrations.gera;
 
+import bo.com.mc4.onboarding.integrations.gera.dto.GeraResponse;
 import bo.com.mc4.onboarding.integrations.gera.dto.consultoras.response.ConsultaConsultorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.directoras.response.ConsultaDirectorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.input.AuthParamApiGeraDto;
@@ -28,8 +29,6 @@ import java.util.stream.Collectors;
 @Service("geraClient")
 public class GeraClient implements IGeraClient {
 
-    // two service methods {auth, searchPerson} -> REST API Endpoint
-    // Parametizer data URL
     private RestTemplate restTemplate = new RestTemplate();
     private static final String ENDPOINT_POST_RETRIEVE_TOKEN_AUTH = "/token";
     private static final String ENDPOINT_GET_SEARCH_PEOPLE = "/people";
@@ -86,7 +85,7 @@ public class GeraClient implements IGeraClient {
     }
 
     @Override
-    public List<ConsultaDirectorasResponseDto> requestConsultaDirectoras(ConsultaDirectorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, Service dataConnection) {
+    public GeraResponse<List<ConsultaDirectorasResponseDto>> requestConsultaDirectoras(ConsultaDirectorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, Service dataConnection) {
 
         String baseUrl = dataConnection.getUrl();
         String finalUrlEndpoint = String.format("%s/%s", baseUrl, ENDPOINT_GET_DIRECTORAS);
@@ -105,7 +104,15 @@ public class GeraClient implements IGeraClient {
         ResponseEntity<List<ConsultaDirectorasResponseDto>> response =
                 restTemplate.exchange(finalUrlEndpoint, HttpMethod.GET, formEntity, new ParameterizedTypeReference<>() {});
 
-        return response.getBody();
+        int total = 1000;
+        String totalStr = response.getHeaders().getFirst("X-Record-Count");
+        if (totalStr != null) {
+            total = Integer.parseInt(totalStr);
+        }
+        return GeraResponse.<List<ConsultaDirectorasResponseDto>>builder()
+                .data(response.getBody())
+                .total(total)
+                .build();
     }
 
     @Override

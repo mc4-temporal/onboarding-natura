@@ -1,1 +1,16 @@
-<p>resumen-contado works!</p>
+<div fxLayout="row wrap">
+  <div fxFlex="100">
+    <h1>Felicidades, ya eres parte del equipo de consultoras Natura</h1>
+  </div>
+  <div fxFlex="100">
+    <h3>Código: {{resumen.codigoConsultora}}</h3>
+  </div>
+  <div fxLayout="row wrap" class="mt10">
+    <div fxFlex="100">
+      <button mat-flat-button
+              type="button"
+              color="primary"
+              (click)="quieroSolicitarCredito()">Quiero solicitar crédito</button>
+    </div>
+  </div>
+</div>
