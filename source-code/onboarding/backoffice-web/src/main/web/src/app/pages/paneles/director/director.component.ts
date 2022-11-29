@@ -254,4 +254,6 @@ export class DirectorComponent implements OnInit {
       return "Choice required";
     } */
   }
+
+  createUpdateUser() {}
 }

@@ -6,7 +6,7 @@
     ></mc4-breadcrumbs>
   </mc4-page-layout-header>
   <mc4-page-layout-content>
-    <mc4-list name="Directoras" (filterChange)="filterData($event)">
+    <mc4-list name="Consultoras" (filterChange)="filterData($event)">
       <div class="actions">
         <button
           class="mc4-column-filter"
@@ -19,13 +19,8 @@
       </div>
       <form [formGroup]="form" (submit)="applyFilter()">
         <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
-          <div fxflex="50" style="width: 700px" fxLayout="row" fxFlex.xs="100">
-            <mat-form-field
-              #field
-              floatLabel="always"
-              appearance="outline"
-              class="full-width radio-container"
-            >
+          <div fxflex="50" style="width: 50%" fxLayout="row" fxFlex.xs="100">
+            <mat-form-field floatLabel="always" appearance="outline">
               <mat-label>Visualizar</mat-label>
               <input matInput style="display: none" required />
               <mat-radio-group #group class="flex-wrap">
@@ -40,24 +35,8 @@
                   </span>
                 </mat-radio-button>
               </mat-radio-group>
-              <mat-hint>Choose something</mat-hint>
               <mat-error>{{ getErrorMessage() }}</mat-error>
             </mat-form-field>
-            <!--  <mat-form-field>
-              <mat-label>Visualizar</mat-label>
-              <mat-radio-group aria-label="Select an option">
-                <mat-radio-button value="1">Option 1</mat-radio-button>
-                <mat-radio-button value="2">Option 2</mat-radio-button>
-              </mat-radio-group>
-            </mat-form-field>
- 
-            <mat-radio-group name="grpName">
-              <mat-radio-button [checked]="true" name="opList1"
-                >Option 1</mat-radio-button
-              >
-              <mat-radio-button value="opList2">Option 2</mat-radio-button>
-              <mat-radio-button value="opList3">Option 3</mat-radio-button>
-            </mat-radio-group>-->
           </div>
         </div>
         <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
@@ -114,15 +93,17 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px">
-            <div fxFlex="10" fxFlex.xs="100" class="mt10">
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
+          <div fxFlex="15" fxFlex.xs="100">
+            <div fxFlex="10" fxFlex.xs="100" class="mt5">
               <button mat-flat-button color="accent" type="submit">
                 <mat-icon>search</mat-icon>Buscar
               </button>
             </div>
           </div>
-          <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px">
-            <div fxFlex="10" fxFlex.xs="100" class="mt10">
+          <div fxFlex="15" fxFlex.xs="100">
+            <div fxFlex="10" fxFlex.xs="100" class="mt5">
               <button mat-flat-button color="accent" type="submit">
                 <mat-icon>insert_drive_file</mat-icon>Exportar Excel
               </button>
