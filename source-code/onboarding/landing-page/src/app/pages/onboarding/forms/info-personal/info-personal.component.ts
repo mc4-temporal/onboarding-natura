@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs';
-import {IOnbEvents} from '../../onboarding.util';
+import {IOnbEvents, OnboardingUtil} from '../../onboarding.util';
 
 @Component({
   selector: 'mc4-info-personal',
@@ -12,17 +12,8 @@ export class InfoPersonalComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() eventManager: BehaviorSubject<IOnbEvents>;
 
-  tipoDocumentoList: any[] = [
-    {codigo: 'CI', descripcion: 'Doc. de identidad'},
-    {codigo: 'CI-EXRANJERO', descripcion: 'Doc. de identidad extranjero'},
-    {codigo: 'PASAPORTE', descripcion: 'Pasaporte'}
-  ];
-  expedicionList: any[] = [
-    {codigo: 'Ninguno', descripcion: 'Ninguno'},
-    {codigo: 'SC', descripcion: 'SC'},
-    {codigo: 'CBBA', descripcion: 'CBBA'},
-    {codigo: 'LPZ', descripcion: 'LPZ'},
-  ];
+  tipoDocumentoList: any[] = OnboardingUtil.tipoDocumentoData;
+  expedicionList: any[] = OnboardingUtil.expedicionData;
   constructor() {
   }
 
@@ -39,5 +30,9 @@ export class InfoPersonalComponent implements OnInit {
 
   isErrorVisible(formControlName: string, validation: string): boolean {
     return this.form.controls[formControlName].hasError(validation) && this.form.controls[formControlName].touched;
+  }
+
+  enableComplemento() {
+    return this.form.controls['tipoDocumento'].value === 'CI';
   }
 }

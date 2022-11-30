@@ -1,4 +1,36 @@
 spring:
+  quartz:
+    job-store-type: jdbc
+#    jdbc:
+#      schema: classpath:quartz/quartz_tables.sql
+#      initialize-schema: always
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: onboardingQuartzScheduler
+            skipUpdateCheck: true
+          dataSource:
+            quartzDataSource:
+              driver: org.postgresql.Driver
+              URL: jdbc:postgresql://localhost:5432/onboarding
+              username: onboarding
+              password: onboarding
+              maxConnections: 30
+              provider: hikaricp
+          jobStore:
+            isClustered: false
+            useProperties: false
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            dataSource: quartzDataSource
+            tablePrefix: qrtz_
+            misfireThreshold: 60000
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 30
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
   profiles:
     active: dev
   application:

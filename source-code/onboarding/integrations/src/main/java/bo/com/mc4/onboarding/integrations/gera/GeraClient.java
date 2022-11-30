@@ -30,16 +30,16 @@ import java.util.stream.Collectors;
 public class GeraClient implements IGeraClient {
 
     private RestTemplate restTemplate = new RestTemplate();
-    private static final String ENDPOINT_POST_RETRIEVE_TOKEN_AUTH = "/token";
-    private static final String ENDPOINT_GET_SEARCH_PEOPLE = "/people";
+    private static final String ENDPOINT_POST_RETRIEVE_TOKEN_AUTH = "api/token";
+    private static final String ENDPOINT_GET_SEARCH_PEOPLE = "/api/people";
 
-    private static final String ENDPOINT_GET_DIRECTORAS = "/commercialStructures";
-    private static final String ENDPOINT_GET_CONSULTORAS = "/sellers";
+    private static final String ENDPOINT_GET_DIRECTORAS = "api/commercialStructures";
+    private static final String ENDPOINT_GET_CONSULTORAS = "api/sellers";
 
     @Override
-    public ResponseAuthApiGeraDto retrieveAuthToken(Map<String, String> params) {
+    public ResponseAuthApiGeraDto retrieveAuthToken(Service service) {
 
-        String baseUrl = params.remove("url");
+        String baseUrl = service.getUrl();
         String finalUrlEndpoint = String.format("%s/%s", baseUrl, ENDPOINT_POST_RETRIEVE_TOKEN_AUTH);
 
         HttpHeaders headers = new HttpHeaders();
@@ -47,13 +47,16 @@ public class GeraClient implements IGeraClient {
         headers.add("Accept", MediaType.APPLICATION_JSON.toString());
 
 
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>(
-                params.entrySet().stream().collect(
-                        Collectors.toMap(Map.Entry::getKey, e -> Arrays.asList(e.getValue()))
-                )
-        );
-        HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("client_id", service.getClientId());
+        requestBody.add("client_secret", service.getClientSecret());
+        requestBody.add("grant_type", service.getGrantType());
+        requestBody.add("username", service.getUsername());
+        requestBody.add("password", service.getPassword());
+        requestBody.add("url", service.getUrl());
 
+        HttpEntity formEntity = new HttpEntity<>(requestBody, headers);
+        restTemplate.setRequestFactory(getClientHttpRequestFactory(service.getConnectTimeout(), service.getReadTimeout()));
         ResponseEntity<ResponseAuthApiGeraDto> response =
                 restTemplate.exchange(finalUrlEndpoint, HttpMethod.POST, formEntity, ResponseAuthApiGeraDto.class);
 
@@ -63,7 +66,7 @@ public class GeraClient implements IGeraClient {
     @Override
     public List<Map<String, Object>> searchPeople(Map<String, Object> params) {
         String baseUrl = (String) params.remove("url");
-        String finalUrlEndpoint = String.format("%s/%s", baseUrl, ENDPOINT_GET_SEARCH_PEOPLE);
+        String finalUrlEndpoint = String.format("%s%s", baseUrl, ENDPOINT_GET_SEARCH_PEOPLE);
 
 
         HttpHeaders headers = new HttpHeaders();
@@ -116,7 +119,7 @@ public class GeraClient implements IGeraClient {
     }
 
     @Override
-    public List<ConsultaConsultorasResponseDto> requestConsultaConsultoras(ConsultaConsultorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, Service dataConnection) {
+    public GeraResponse<List<ConsultaConsultorasResponseDto>> requestConsultaConsultoras(ConsultaConsultorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, Service dataConnection) {
 
         String baseUrl = dataConnection.getUrl();
         String finalUrlEndpoint = String.format("%s/%s", baseUrl, ENDPOINT_GET_CONSULTORAS);
@@ -135,13 +138,21 @@ public class GeraClient implements IGeraClient {
         ResponseEntity<List<ConsultaConsultorasResponseDto>> response =
                 restTemplate.exchange(finalUrlEndpoint, HttpMethod.GET, formEntity, new ParameterizedTypeReference<>() {});
 
-        return response.getBody();
+        int total = 1000;
+        String totalStr = response.getHeaders().getFirst("X-Record-Count");
+        if (totalStr != null) {
+            total = Integer.parseInt(totalStr);
+        }
+        return GeraResponse.<List<ConsultaConsultorasResponseDto>>builder()
+                .data(response.getBody())
+                .total(total)
+                .build();
     }
 
     private SimpleClientHttpRequestFactory getClientHttpRequestFactory(Integer connectTimeout, Integer readTimeout) {
         SimpleClientHttpRequestFactory clientHttpRequestFactory = new SimpleClientHttpRequestFactory();
-        clientHttpRequestFactory.setConnectTimeout(connectTimeout);
-        clientHttpRequestFactory.setReadTimeout(readTimeout);
+        clientHttpRequestFactory.setConnectTimeout(connectTimeout * 1000);
+        clientHttpRequestFactory.setReadTimeout(readTimeout * 1000);
 
         return clientHttpRequestFactory;
     }
@@ -153,5 +164,10 @@ public class GeraClient implements IGeraClient {
         private Integer connectTimeout;
         private Integer readTimeout;
         private String token;
+        private String clientId;
+        private String clientSecret;
+        private String grantType;
+        private String username;
+        private String password;
     }
 }

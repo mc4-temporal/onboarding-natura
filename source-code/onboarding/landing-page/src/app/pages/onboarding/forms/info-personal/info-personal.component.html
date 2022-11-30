@@ -68,7 +68,7 @@
     </div>
     <div fxFlex="50" class="p3">
       <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-        <div fxFlex="69">
+        <div [fxFlex]="enableComplemento() ? 69 : 100">
           <mat-form-field floatLabel="always">
             <mat-label>
               <mat-icon fontSet="material-icons-outlined"
@@ -89,7 +89,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div fxFlex="29">
+        <div fxFlex="29" *ngIf="enableComplemento()">
           <mat-form-field floatLabel="always">
             <mat-label>
               <mat-icon fontSet="material-icons-outlined"

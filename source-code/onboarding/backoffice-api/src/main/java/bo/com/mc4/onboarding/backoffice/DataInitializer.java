@@ -1,9 +1,6 @@
 package bo.com.mc4.onboarding.backoffice;
 
-import bo.com.mc4.onboarding.backoffice.job.DirectoraSyncJob;
-import bo.com.mc4.onboarding.core.quartz.service.CronExpressionConstant;
-import bo.com.mc4.onboarding.core.quartz.service.JobDto;
-import bo.com.mc4.onboarding.core.quartz.service.JobService;
+import bo.com.mc4.onboarding.backoffice.job.GeraSyncJob;
 import bo.com.mc4.onboarding.core.util.Constants;
 import bo.com.mc4.onboarding.core.util.ResourceActionUtil;
 import bo.com.mc4.onboarding.core.util.exception.ExceptionUtil;
@@ -15,12 +12,16 @@ import bo.com.mc4.onboarding.model.business.*;
 import bo.com.mc4.onboarding.model.business.enums.EstadoFlujo;
 import bo.com.mc4.onboarding.model.business.enums.TipoConsultora;
 import bo.com.mc4.onboarding.model.business.enums.TipoDocumento;
+import bo.com.mc4.onboarding.model.business.enums.TipoServicio;
 import bo.com.mc4.onboarding.model.commons.enums.EntityState;
 import bo.com.mc4.onboarding.repository.ServicioRepository;
 import bo.com.mc4.onboarding.repository.auth.*;
 import bo.com.mc4.onboarding.repository.business.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,7 +51,7 @@ public class DataInitializer implements CommandLineRunner {
     private final CanalOnboardingRepository canalOnboardingRepository;
     private final RegionRepository regionRepository;
     private final RegionMunicipioFmRepository regionMunicipioFmRepository;
-    private final JobService jobService;
+    private final Scheduler scheduler;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -71,31 +72,37 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void buildSeeders() {
-        createOrUpdateService("API Gera Authentication",  "/api", "https://hmlapiauthnaturabo.geravd.com.br", "external-api", -1, -1);
-        createOrUpdateService("API Gera",  "/api", "https://hmlapinaturabo.geravd.com.br", "external-api", -1, -1);
+        createOrUpdateService("API Gera Authentication",  "/api", "https://hmlapiauthnaturabo.geravd.com.br", TipoServicio.AUTH_GERA, 30, 30, "EscritorioVirtual", "9244B35CFF3243E5A29C5ADDD7A514E63D3F3D42", "password", "136241", "Cn2022");
+        createOrUpdateService("API Gera",  "/api", "https://hmlapinaturabo.geravd.com.br", TipoServicio.GERA, 30, 30, null, null, null, null, null);
 
     }
 
-    private void createOrUpdateService(String nombreParam, String apiParam, String urlParam, String tipoParam, int connectionTimeoutParam, int requestTimeoutParam) {
-        Servicio servicioFind = this.servicioRepository.findByNombre(nombreParam)
-                .orElse(null);
-        if (servicioFind == null) {
-            servicioFind = Servicio.builder()
-                    .nombre(nombreParam)
-                    .url(urlParam)
-                    .api(apiParam)
-                    .tipo(tipoParam)
-                    .connectionTimeout(connectionTimeoutParam)
-                    .requestTimeout(requestTimeoutParam)
-                    .build();
-        } else {
-            servicioFind.setNombre(nombreParam);
-            servicioFind.setUrl(urlParam);
-            servicioFind.setApi(apiParam);
-            servicioFind.setTipo(tipoParam);
-            servicioFind.setConnectionTimeout(connectionTimeoutParam);
-            servicioFind.setRequestTimeout(requestTimeoutParam);
-        }
+    private void createOrUpdateService(String nombreParam, String apiParam, String urlParam, TipoServicio tipoParam, int connectionTimeoutParam, int requestTimeoutParam, String clientId, String clientSecret, String grantType, String username, String password) {
+        Servicio servicioFind = this.servicioRepository.findByTipo(tipoParam)
+                .orElse(Servicio.builder()
+                        .nombre(nombreParam)
+                        .url(urlParam)
+                        .api(apiParam)
+                        .tipo(tipoParam)
+                        .connectionTimeout(connectionTimeoutParam)
+                        .requestTimeout(requestTimeoutParam)
+                        .clientId(clientId)
+                        .clientSecret(clientSecret)
+                        .grantType(grantType)
+                        .username(username)
+                        .password(password)
+                        .build());
+        servicioFind.setNombre(nombreParam);
+        servicioFind.setUrl(urlParam);
+        servicioFind.setApi(apiParam);
+        servicioFind.setTipo(tipoParam);
+        servicioFind.setConnectionTimeout(connectionTimeoutParam);
+        servicioFind.setRequestTimeout(requestTimeoutParam);
+        servicioFind.setClientId(clientId);
+        servicioFind.setClientSecret(clientSecret);
+        servicioFind.setGrantType(grantType);
+        servicioFind.setUsername(username);
+        servicioFind.setPassword(password);
         servicioRepository.save(servicioFind);
     }
 
@@ -239,11 +246,13 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private void addJobs() {
-//        JobDto jobDto = DirectoraSyncJob.getJobDto(Constants.DEFAULT_GROUP, DirectoraSyncJob.JOB_NAME);
-//        if(!jobService.existJobName(jobDto.getGroupName(), jobDto.getJobName())){
-//            jobService.scheduleCronJob(jobDto, new Date(), CronExpressionConstant.CRON_X_30_SEG, null, DirectoraSyncJob.JOB_DESCRIPTION);
-//        }
+    private void addJobs() throws SchedulerException {
+        JobDetail jobDto = GeraSyncJob.getJobDto(Constants.DEFAULT_QUARTZ_GROUP, GeraSyncJob.JOB_NAME);
+        if(!scheduler.checkExists(jobDto.getKey())) {
+            log.info("No existe: {}", jobDto.getKey().getName());
+            Date date = scheduler.scheduleJob(jobDto, GeraSyncJob.getTrigger(jobDto));
+            log.info("Scheduled in: {}", date);
+        }
     }
 
     private void addParams() {

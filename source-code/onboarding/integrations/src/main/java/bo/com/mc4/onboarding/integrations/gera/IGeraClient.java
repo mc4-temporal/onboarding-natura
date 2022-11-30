@@ -20,12 +20,12 @@ import java.util.Map;
 
 public interface IGeraClient {
 
-    ResponseAuthApiGeraDto retrieveAuthToken(Map<String, String> params);
+    ResponseAuthApiGeraDto retrieveAuthToken(GeraClient.Service service);
 
     List<Map<String,Object>> searchPeople(Map<String, Object> parmas);
 
     GeraResponse<List<ConsultaDirectorasResponseDto>> requestConsultaDirectoras(ConsultaDirectorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, GeraClient.Service dataConnection);
 
-    List<ConsultaConsultorasResponseDto> requestConsultaConsultoras(ConsultaConsultorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, GeraClient.Service dataConnection);
+    GeraResponse<List<ConsultaConsultorasResponseDto>> requestConsultaConsultoras(ConsultaConsultorasQpDTO queryParamsDto, String sortOptions, Integer page, Integer size, GeraClient.Service dataConnection);
 
 }

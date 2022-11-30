@@ -16,7 +16,9 @@ export class DireccionesComponent implements OnInit {
   @Input() eventManager: BehaviorSubject<IOnbEvents>;
 
   departamentoList: any[];
+  departamentoTmpList: any[];
   municipioList: any[];
+  municipioTmpList: any[];
 
   constructor(private estructGeoService: EstructuraGeograficaService) {
   }
@@ -39,10 +41,12 @@ export class DireccionesComponent implements OnInit {
 
   protected successDepartamentoList = (body: any[]) => {
     this.departamentoList = body;
+    this.departamentoTmpList = body;
   }
 
   protected successMunicipioList = (body: any[]) => {
     this.municipioList = body;
+    this.municipioTmpList = body;
   }
 
   submitForm() {
@@ -51,5 +55,17 @@ export class DireccionesComponent implements OnInit {
 
   isErrorVisible(formControlName: string, validation: string): boolean {
     return this.form.controls[formControlName].hasError(validation) && this.form.controls[formControlName].touched;
+  }
+
+  filterDepartamentos(value: string) {
+    if (!value) value = '';
+    value = value.toLowerCase();
+    this.departamentoList = this.departamentoTmpList.filter(it => it.nombre.toLowerCase().indexOf(value) >= 0);
+  }
+
+  filterMunicipios(value: string) {
+    if (!value) value = '';
+    value = value.toLowerCase();
+    this.municipioList = this.municipioTmpList.filter(it => it.nombre.toLowerCase().indexOf(value) >= 0);
   }
 }

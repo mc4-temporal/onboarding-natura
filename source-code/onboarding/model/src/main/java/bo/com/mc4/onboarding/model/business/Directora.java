@@ -35,7 +35,11 @@ public class Directora extends AuditableEntity implements Serializable {
     @Column(name = "TOKEN_INVITACION")
     private String tokenInvitacion;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_REGION", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_REGION")
     private Region idRegion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_GERENCIA")
+    private Gerencia idGerencia;
 }

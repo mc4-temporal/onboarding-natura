@@ -3,6 +3,7 @@ import {FormGroup} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs';
 import {IOnbEvents} from '../../onboarding.util';
 import {EstructuraComercialService} from '../../../../commons/services/estructura-comercial.service';
+import * as Notiflix from 'notiflix';
 
 @Component({
   selector: 'mc4-directora-consultora-conocida',
@@ -44,5 +45,9 @@ export class DirectoraConsultoraConocidaComponent implements OnInit {
 
   isErrorVisible(formControlName: string, validation: string): boolean {
     return this.form.controls[formControlName].hasError(validation) && this.form.controls[formControlName].touched;
+  }
+
+  enviarCodigoVerificacion() {
+    Notiflix.Confirm.show('Confirmar correo', `Te enviamos un código de verificación a tu correo: "${this.form.controls['correo'].value}". Por favor ingresa el código para continuar.`, 'Aceptar');
   }
 }

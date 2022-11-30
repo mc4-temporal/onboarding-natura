@@ -64,10 +64,11 @@
 <!--                      matTooltip="Actualizar correo.">edit</mat-icon>-->
 <!--          </button>-->
 <!--        </div>-->
-        <div fxFlex="30" class="p3">
+        <div fxFlex="30" class="p3" fxLayoutAlign="start center">
           <button mat-flat-button
                   type="button"
-                  color="accent">Enviar código</button>
+                  color="accent"
+                  (click)="enviarCodigoVerificacion()">Enviar código</button>
         </div>
       </div>
     </div>

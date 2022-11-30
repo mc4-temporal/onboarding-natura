@@ -30,6 +30,9 @@ public class Gerencia extends AuditableEntity implements Serializable {
     @Column(name = "ID", nullable = false)
     private Long id;
 
+    @Column(name = "CODIGO_GERA", nullable = false, length = 50)
+    private String codigoGera;
+
     @Column(name = "NOMBRE", nullable = false, length = 50)
     private String nombre;
 

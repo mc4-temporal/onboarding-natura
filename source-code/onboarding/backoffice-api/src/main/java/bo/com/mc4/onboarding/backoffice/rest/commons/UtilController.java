@@ -6,11 +6,8 @@ import bo.com.mc4.onboarding.core.util.exception.ApiResponseException;
 import bo.com.mc4.onboarding.core.util.exception.OperationException;
 import bo.com.mc4.onboarding.integrations.gera.GeraClient;
 import bo.com.mc4.onboarding.integrations.gera.IGeraClient;
-import bo.com.mc4.onboarding.integrations.gera.dto.consultoras.response.ConsultaConsultorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.directoras.response.ConsultaDirectorasResponseDto;
-import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaConsultorasQpDTO;
 import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaDirectorasQpDTO;
-import bo.com.mc4.onboarding.integrations.gera.dto.output.ResponseAuthApiGeraDto;
 import bo.com.mc4.onboarding.model.commons.dto.EnumDto;
 import bo.com.mc4.onboarding.model.commons.dto.api.ResponseBody;
 import bo.com.mc4.onboarding.model.commons.enums.ProcessType;
@@ -23,7 +20,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,25 +39,6 @@ public class UtilController {
 
     private final IGeraClient geraClient;
 
-    @PostMapping("/test-gera-auth")
-    public ResponseEntity<ResponseBody<ResponseAuthApiGeraDto>> testRetrieveAuthPermissionGera(){
-        try {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("client_id","EscritorioVirtual");
-            params.put("client_secret","9244B35CFF3243E5A29C5ADDD7A514E63D3F3D42");
-            params.put("grant_type","password");
-            params.put("username","136241");
-            params.put("password","Cn2022");
-            params.put("url", "https://hmlapiauthnaturabo.geravd.com.br/api");
-            return ok(ApiUtil.buildResponseWithDefaults(geraClient.retrieveAuthToken(params)));
-        } catch (OperationException e) {
-            log.error("Error: Se produjo un error controlado al ejecutar el servicio, Mensaje: {}", e.getMessage());
-            throw ApiResponseException.badRequest(e.getMessage());
-        } catch (Exception e) {
-            log.error("Error: Se produjo un error genérico al ejecutar el servicio: ", e);
-            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @GetMapping("/test-search-people-gera")
     public ResponseEntity<ResponseBody<List<Map<String, Object>>>> testSearchPeopleApiGera(){
@@ -136,25 +117,4 @@ public class UtilController {
         }
     }
 
-    @GetMapping("/test-consultoras")
-    public ResponseEntity<ResponseBody<List<ConsultaConsultorasResponseDto>>> testConsultoras(){
-        try {
-            GeraClient.Service dataConnection = new GeraClient.Service();
-            dataConnection.setUrl("https://hmlapinaturabo.geravd.com.br/api");
-            dataConnection.setToken("pAeZItBzfO8zLSgFRpvEzeZ_2Eect5joZ2I6Yhf9XeHg6AIVduQuA1evYsDdSS7sNlOF5-lXzuigvaye-M0ytawkoPg0Ek4UdpCivxGw8qS_7zTvJ76Thtj4KZMRXxry-EryvK3gZQzrU4FlVVjQrzmGhlZm5UdmMfySZVzbCFqpJ94sYwUxVbLG_wHFzvskOQn8m0MgzskmlkTpoJY2FLwElacBz-gPVFN4u4JPYvTmiy81c8DzwZ95AfEvwPY_qFcj9P1V5PCsXKawH_4ILVghDYzHFG1D8qG28WLFqo8FPNYAwzNABeTTpmAZJ_T0o92WteRPkARRjiHEgXhokljMPJVNmXh69pZUDM8xoXFzkxTmh05juIhPCl6pmw2DKf6CUjlRvKAeOLpvpPPNzV2tYoSijJXs9_mzsKYhXrnVR8Io96W_lEph7a_NH3HQm7ew9c0F719uZD_Qw0DfWbYVeT7d-IOKYy9YTPhMAws5eTUrBrYL8iUY572w5f0nLs5jNA");
-            dataConnection.setConnectTimeout(20000);
-            dataConnection.setReadTimeout(20000);
-
-            ConsultaConsultorasQpDTO dto = new ConsultaConsultorasQpDTO();
-            dto.setFunctionCode(1);
-
-            return ok(ApiUtil.buildResponseWithDefaults(geraClient.requestConsultaConsultoras(dto, "", null, null, dataConnection)));
-        } catch (OperationException e) {
-            log.error("Error: Se produjo un error controlado al ejecutar el servicio test-directoras, Mensaje: {}", e.getMessage());
-            throw ApiResponseException.badRequest(e.getMessage());
-        } catch (Exception e) {
-            log.error("Error: Se produjo un error genérico al ejecutar el servicio test-directoras: ", e);
-            throw ApiResponseException.serverError(ApiConstants.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

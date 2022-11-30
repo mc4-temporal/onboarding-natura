@@ -1,5 +1,6 @@
 package bo.com.mc4.onboarding.model.business;
 
+import bo.com.mc4.onboarding.model.business.enums.TipoServicio;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;
@@ -33,7 +34,8 @@ public class Servicio extends AuditableEntity implements Serializable {
     private String nombre;
 
     @Column(name = "TIPO", nullable = false, length = 50)
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoServicio tipo;
 
     @Column(name = "REQUEST_TIMEOUT", nullable = false)
     private int requestTimeout;
@@ -46,6 +48,22 @@ public class Servicio extends AuditableEntity implements Serializable {
 
     @Column(name = "API", nullable = false, length = 100)
     private String api;
+
+    @Column(name = "CLIENT_ID")
+    private String clientId;
+
+    @Column(name = "CLIENT_SECRET")
+    private String clientSecret;
+
+    @Column(name = "GRANT_TYPE")
+    private String grantType;
+
+    @Column(name = "USERNAME")
+    private String username;
+
+    @Column(name = "PASSWORD")
+    private String password;
+
 
 
 

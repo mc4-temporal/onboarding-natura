@@ -2,5 +2,7 @@ package bo.com.mc4.onboarding.core.service.business;
 
 public interface SincronizacionService {
 
-    void sincronizarDirectorasGera();
+    void sincronizarDirectorasGera(String accessToken);
+
+    void sincronizacionGerencias(String accessToken);
 }

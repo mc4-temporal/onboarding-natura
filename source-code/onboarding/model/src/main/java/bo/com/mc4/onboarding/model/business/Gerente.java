@@ -30,7 +30,10 @@ public class Gerente extends AuditableEntity implements Serializable {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "CI", nullable = false, length = 50)
+    @Column(name = "CODIGO_GERA", length = 50)
+    private String codigoGera;
+
+    @Column(name = "CI", length = 50)
     private String ci;
 
     @Column(name = "NOMBRE", nullable = false, length = 100)
@@ -40,10 +43,10 @@ public class Gerente extends AuditableEntity implements Serializable {
     @Column(name = "TIPO",nullable = false)
     private TipoGerente tipo;
 
-    @Column(name = "RUTA_FOTO", nullable = false)
+    @Column(name = "RUTA_FOTO")
     private String rutaFoto;
 
-    @Column(name = "TELEFONO", nullable = false, length = 40)
+    @Column(name = "TELEFONO", length = 40)
     private String telefono;
 
     @OneToOne(optional = false, fetch = FetchType.EAGER)

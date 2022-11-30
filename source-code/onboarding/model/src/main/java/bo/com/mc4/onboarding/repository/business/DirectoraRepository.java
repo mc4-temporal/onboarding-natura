@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DirectoraRepository extends JpaRepository<Directora, Long> {
 
@@ -26,4 +27,10 @@ public interface DirectoraRepository extends JpaRepository<Directora, Long> {
             "where d.deleted = false " +
             "and d.codigoDirectora = :codigoGera ")
     boolean existsByCodigoDirectora(@Param("codigoGera") String codigoGera);
+
+    @Query( "select d " +
+            "from Directora d " +
+            "where d.deleted = false " +
+            "and d.codigoDirectora = :codigoGera ")
+    Optional<Directora> findByCodigoGera(@Param("codigoGera") String codigoGera);
 }

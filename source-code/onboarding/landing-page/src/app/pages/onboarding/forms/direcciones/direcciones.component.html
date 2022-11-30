@@ -12,6 +12,13 @@
                     formControlName="departamentoId"
                     placeholder="Seleccione una opción"
                     (selectionChange)="departamentoChange($event)">
+          <mat-form-field>
+            <input matInput
+                   type="text"
+                   placeholder="Buscar..."
+                   (keyup)="filterDepartamentos($event.target.value)">
+            <mat-icon matPrefix fontSet="material-icons-outlined">search</mat-icon>
+          </mat-form-field>
           <mat-option *ngFor="let item of departamentoList"
                       [value]="item.codigoGera">{{item.nombre}}</mat-option>
         </mat-select>
@@ -28,6 +35,13 @@
         <mat-select required
                     formControlName="localidadId"
                     placeholder="Seleccione una opción">
+          <mat-form-field>
+            <input matInput
+                   type="text"
+                   placeholder="Buscar..."
+                   (keyup)="filterMunicipios($event.target.value)">
+            <mat-icon matPrefix fontSet="material-icons-outlined">search</mat-icon>
+          </mat-form-field>
           <mat-option *ngFor="let item of municipioList"
                       [value]="item.codigoGera">{{item.nombre}}</mat-option>
         </mat-select>
