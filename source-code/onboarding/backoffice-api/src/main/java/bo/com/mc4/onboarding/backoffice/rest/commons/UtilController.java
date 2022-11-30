@@ -8,6 +8,7 @@ import bo.com.mc4.onboarding.integrations.gera.GeraClient;
 import bo.com.mc4.onboarding.integrations.gera.IGeraClient;
 import bo.com.mc4.onboarding.integrations.gera.dto.directoras.response.ConsultaDirectorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaDirectorasQpDTO;
+import bo.com.mc4.onboarding.model.auth.enums.EstadoCredito;
 import bo.com.mc4.onboarding.model.commons.dto.EnumDto;
 import bo.com.mc4.onboarding.model.commons.dto.api.ResponseBody;
 import bo.com.mc4.onboarding.model.commons.enums.ProcessType;
@@ -82,6 +83,13 @@ public class UtilController {
                                     .descripcion(value.name())
                                     .build()
                             ).collect(Collectors.toList()));
+                    break;
+                case "estadoCredito":
+                    responseList.addAll(Arrays.stream(EstadoCredito.values())
+                            .map(value -> EnumDto.builder()
+                                    .codigo(value.name())
+                                    .descripcion(value.name())
+                                    .build()).collect(Collectors.toList()));
                     break;
                     // agregar case para el parametro estadoCredito
                 default:
