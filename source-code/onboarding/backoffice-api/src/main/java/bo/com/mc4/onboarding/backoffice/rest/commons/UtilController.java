@@ -83,6 +83,7 @@ public class UtilController {
                                     .build()
                             ).collect(Collectors.toList()));
                     break;
+                    // agregar case para el parametro estadoCredito
                 default:
                     throw new OperationException("No se encuentra el enum: " + enumName);
             }
