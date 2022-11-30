@@ -7,6 +7,8 @@ package bo.com.mc4.onboarding.model.auth.enums;
  * Package       : bo.com.mc4.onboarding.model.auth.enums
  **/
 public enum EstadoCredito {
-    A,
-    B
+    EN_CURSO,
+    PENDIENTE_APROBACION,
+    OBSERVADO,
+    APROBADO
 }
