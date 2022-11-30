@@ -9,7 +9,7 @@
                     formControlName="directoraId"
                     placeholder="Seleccione una opción">
           <mat-option *ngFor="let item of directoraList"
-                      [value]="item.id">{{item.codigoDirectora}} - {{item.nombre}}</mat-option>
+                      [value]="item.id">{{item.codigoDirectora ? item.codigoDirectora + ' - ' : ''}}{{item.nombre}}</mat-option>
         </mat-select>
         <mat-error *ngIf="isErrorVisible('directoraId', 'required')">
           Por favor seleccione una opción.
@@ -25,7 +25,7 @@
                     formControlName="consultoraId"
                     placeholder="Seleccione una opción">
           <mat-option *ngFor="let item of consultoraList"
-                      [value]="item.id">{{item.codigoConsultora}} - {{item.nombre}}</mat-option>
+                      [value]="item.id">{{item.codigoConsultora ? item.codigoConsultora + ' - ' : ''}}{{item.nombre}}</mat-option>
         </mat-select>
         <mat-error *ngIf="isErrorVisible('consultoraId', 'required')">
           Por favor seleccione una opción.
