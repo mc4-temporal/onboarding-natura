@@ -1,5 +1,6 @@
 package bo.com.mc4.onboarding.model.business;
 
+import bo.com.mc4.onboarding.model.auth.AuthUser;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 
@@ -38,4 +39,8 @@ public class Directora extends AuditableEntity implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_REGION", nullable = false)
     private Region idRegion;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_USUARIO")
+    private AuthUser idUser;
 }

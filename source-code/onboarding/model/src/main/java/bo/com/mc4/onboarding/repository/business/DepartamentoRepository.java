@@ -16,6 +16,7 @@ public interface DepartamentoRepository extends JpaRepository<Departamento, Inte
             "and c.codigoGera = :codigoGera ")
     Optional<Departamento> findById(@Param("codigoGera") Integer codigoGera);
 
+
     @Query( "select new bo.com.mc4.onboarding.model.business.dto.DepartamentoDto(c.codigoGera, c.nombre, c.latitud, c.longitud) " +
             "from Departamento c " +
             "where c.deleted = false ")

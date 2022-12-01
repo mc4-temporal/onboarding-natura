@@ -23,15 +23,19 @@
             <mat-form-field floatLabel="always" appearance="outline">
               <mat-label>Visualizar</mat-label>
               <input matInput style="display: none" required />
-              <mat-radio-group #group class="flex-wrap">
+              <mat-radio-group
+                formControlName="consultantType"
+                #group
+                class="flex-wrap"
+              >
                 <mat-radio-button
                   #buttons
                   class="radio-button"
-                  *ngFor="let choice of choices"
-                  [value]="choice.code"
+                  *ngFor="let consultant of consultantTypeList"
+                  [value]="consultant.code"
                 >
                   <span class="wrap-label-text">
-                    {{ choice.tag }}
+                    {{ consultant.tag }}
                   </span>
                 </mat-radio-button>
               </mat-radio-group>
@@ -46,10 +50,14 @@
               <mat-date-range-input [rangePicker]="picker">
                 <input
                   matStartDate
-                  formControlName="from"
+                  formControlName="fechaRegistroDesde"
                   placeholder="Inicio"
                 />
-                <input matEndDate formControlName="to" placeholder="Fin" />
+                <input
+                  matEndDate
+                  formControlName="fechaRegistroHasta"
+                  placeholder="Fin"
+                />
               </mat-date-range-input>
               <mat-datepicker-toggle
                 matSuffix
@@ -57,10 +65,17 @@
               ></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
               <mat-error
-                *ngIf="form.controls.from.hasError('matStartDateInvalid')"
+                *ngIf="
+                  form.controls.fechaRegistroDesde.hasError(
+                    'matStartDateInvalid'
+                  )
+                "
                 >Fecha de inicio inválida</mat-error
               >
-              <mat-error *ngIf="form.controls.to.hasError('matEndDateInvalid')"
+              <mat-error
+                *ngIf="
+                  form.controls.fechaRegistroHasta.hasError('matEndDateInvalid')
+                "
                 >Fecha de fin inválida</mat-error
               >
             </mat-form-field>
@@ -68,11 +83,11 @@
           <div fxFlex="20" fxFlex.xs="100">
             <mat-form-field>
               <mat-label>Canal de registro</mat-label>
-              <mat-select formControlName="process">
+              <mat-select formControlName="onboardingChannel">
                 <mat-option [value]="''">Seleccionar todo</mat-option>
                 <mat-option
-                  *ngFor="let option of processList"
-                  [value]="option.codigo"
+                  *ngFor="let option of onboardingChannelList"
+                  [value]="option.id"
                 >
                   {{ option.descripcion }}
                 </mat-option>
@@ -86,9 +101,9 @@
                 <mat-option [value]="''">Seleccionar todo</mat-option>
                 <mat-option
                   *ngFor="let option of cityList"
-                  [value]="option.codigo"
+                  [value]="option.codigoGera"
                 >
-                  {{ option.descripcion }}
+                  {{ option.nombre }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -116,7 +131,8 @@
           <mc4-server-paging-table
             [dataSource]="dataSource"
             [columns]="columns"
-            [requestPaginatedData]="requestUserListFn"
+            [requestPaginatedData]="requestConsultorasByDirectoraListFn"
+            [itemFormatterFn]="itemLogFormatterFn"
             [rowActions]="rowActions"
             [eventManager]="tableEvents"
           ></mc4-server-paging-table>

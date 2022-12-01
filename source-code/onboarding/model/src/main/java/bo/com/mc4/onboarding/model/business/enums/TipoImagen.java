@@ -1,4 +1,4 @@
-package bo.com.mc4.onboarding.model.auth.enums;
+package bo.com.mc4.onboarding.model.business.enums;
 
 /**
  * Created by    : msaavedra
@@ -6,7 +6,8 @@ package bo.com.mc4.onboarding.model.auth.enums;
  * Project       : onboarding
  * Package       : bo.com.mc4.onboarding.model.auth.enums
  **/
-public enum EstadoRespaldo {
-    A,
-    B
+public enum TipoImagen {
+    CI_ANVERSO,
+    CI_REVERSO,
+    SELFI
 }
