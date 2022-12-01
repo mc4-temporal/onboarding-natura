@@ -7,6 +7,13 @@ const routes: Routes = [
     loadChildren: () =>
       import("./director/director.module").then((m) => m.DirectorModule),
   },
+  {
+    path: "colaborador",
+    loadChildren: () =>
+      import("./colaborador/colaborador.module").then(
+        (m) => m.ColaboradorModule
+      ),
+  },
 ];
 
 @NgModule({

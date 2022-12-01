@@ -8,7 +8,7 @@ import bo.com.mc4.onboarding.integrations.gera.GeraClient;
 import bo.com.mc4.onboarding.integrations.gera.IGeraClient;
 import bo.com.mc4.onboarding.integrations.gera.dto.directoras.response.ConsultaDirectorasResponseDto;
 import bo.com.mc4.onboarding.integrations.gera.dto.input.ConsultaDirectorasQpDTO;
-import bo.com.mc4.onboarding.model.auth.enums.EstadoCredito;
+import bo.com.mc4.onboarding.model.business.enums.EstadoCredito;
 import bo.com.mc4.onboarding.model.commons.dto.EnumDto;
 import bo.com.mc4.onboarding.model.commons.dto.api.ResponseBody;
 import bo.com.mc4.onboarding.model.commons.enums.ProcessType;
@@ -39,6 +39,8 @@ import static org.springframework.http.ResponseEntity.ok;
 public class UtilController {
 
     private final IGeraClient geraClient;
+
+
 
 
     @GetMapping("/test-search-people-gera")

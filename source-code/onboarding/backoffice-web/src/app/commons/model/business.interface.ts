@@ -68,3 +68,23 @@ export interface ConsultoraRequest {
   fechaRegistroHasta: Date;
   idDirectora: number;
 }
+
+export interface GerenciaDto {
+  id: number;
+  codigoGera: string;
+  nombre: string;
+  oficina: string;
+}
+
+export interface SolicitudCreditoDto {
+  id: number;
+  fechaSolicitud: string;
+  codigoConsultora: String;
+  nombreCompleto: String;
+  nroDocumento: String;
+  telefono: String;
+  correo: String;
+  gerencia: String;
+  directoraAsignada: String;
+  estado: String;
+}

@@ -2,11 +2,11 @@
   <mc4-page-layout-header>
     <mc4-breadcrumbs
       [crumbs]="['Paneles']"
-      current="Directoras"
+      current="Colaboradores"
     ></mc4-breadcrumbs>
   </mc4-page-layout-header>
   <mc4-page-layout-content>
-    <mc4-list name="Consultoras" (filterChange)="filterData($event)">
+    <mc4-list name="Solicitudes de Credito" (filterChange)="filterData($event)">
       <div class="actions">
         <button
           class="mc4-column-filter"
@@ -18,31 +18,6 @@
         </button>
       </div>
       <form [formGroup]="form" (submit)="applyFilter()">
-        <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
-          <div fxflex="50" style="width: 50%" fxLayout="row" fxFlex.xs="100">
-            <mat-form-field floatLabel="always" appearance="outline">
-              <mat-label>Visualizar</mat-label>
-              <input matInput style="display: none" required />
-              <mat-radio-group
-                formControlName="consultantType"
-                #group
-                class="flex-wrap"
-              >
-                <mat-radio-button
-                  #buttons
-                  class="radio-button"
-                  *ngFor="let consultant of consultantTypeList"
-                  [value]="consultant.code"
-                >
-                  <span class="wrap-label-text">
-                    {{ consultant.tag }}
-                  </span>
-                </mat-radio-button>
-              </mat-radio-group>
-              <mat-error>{{ getErrorMessage() }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
         <div fxLayout="row wrap" fxLayoutGap.gt-xs="5px" class="filter-panel">
           <div fxFlex="25" fxFlex.xs="100">
             <mat-form-field>
@@ -82,28 +57,28 @@
           </div>
           <div fxFlex="20" fxFlex.xs="100">
             <mat-form-field>
-              <mat-label>Canal de registro</mat-label>
-              <mat-select formControlName="onboardingChannel">
-                <mat-option [value]="0">Seleccionar todo</mat-option>
+              <mat-label>Gerencia</mat-label>
+              <mat-select formControlName="gerency">
+                <mat-option [value]="''">Seleccionar todo</mat-option>
                 <mat-option
-                  *ngFor="let option of onboardingChannelList"
+                  *ngFor="let option of gerencyList"
                   [value]="option.id"
                 >
-                  {{ option.descripcion }}
+                  {{ option.nombre }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
           <div fxFlex="20" fxFlex.xs="100">
             <mat-form-field>
-              <mat-label>Ciudad/Localidad</mat-label>
-              <mat-select formControlName="city">
-                <mat-option [value]="0">Seleccionar todo</mat-option>
+              <mat-label>Estado Credito</mat-label>
+              <mat-select formControlName="creditState">
+                <mat-option [value]="''">Seleccionar todo</mat-option>
                 <mat-option
-                  *ngFor="let option of cityList"
-                  [value]="option.codigoGera"
+                  *ngFor="let option of creditStateList"
+                  [value]="option.codigo"
                 >
-                  {{ option.nombre }}
+                  {{ option.descripcion }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -131,7 +106,7 @@
           <mc4-server-paging-table
             [dataSource]="dataSource"
             [columns]="columns"
-            [requestPaginatedData]="requestConsultorasByDirectoraListFn"
+            [requestPaginatedData]="requestSolicitudesCreditoListFn"
             [itemFormatterFn]="itemLogFormatterFn"
             [rowActions]="rowActions"
             [eventManager]="tableEvents"
@@ -143,14 +118,14 @@
 </mc4-page-layout>
 <mat-menu #optionMenu="matMenu" yPosition="below" xPosition="after">
   <button
-    *ngIf="directorActions.createAction"
+    *ngIf="solicitudCreditoActions.createAction"
     mat-menu-item
     (click)="createUpdateUser()"
   >
     <mat-icon color="primary" class="mr5">add_circle</mat-icon>Crear Directora
   </button>
   <button
-    *ngIf="directorActions.toExcelAction"
+    *ngIf="solicitudCreditoActions.toExcelAction"
     mat-menu-item
     fxLayoutAlign="center center"
   >

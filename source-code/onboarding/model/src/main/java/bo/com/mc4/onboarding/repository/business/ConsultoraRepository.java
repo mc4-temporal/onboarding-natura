@@ -55,8 +55,8 @@ public interface ConsultoraRepository extends JpaRepository<Consultora, Long> {
             //"and cast(d.id as string) like :idDirectora " +
             "and cast(au.id as string) like :idUser " +
             "and c.tipoConsultora = :tipoConsultora " +
-            "and cast(co.id as string) like :idCanalOnboarding " +
-            "and cast(m.codigoGera as string) like :idMunicipio " +
+            "and cast(co.id as string) like concat('%', :idCanalOnboarding, '%')" +
+            "and cast(m.codigoGera as string) like concat('%',:idMunicipio,'%') " +
             "and c.createdDate between :fechaRegistroDesde and :fechaRegistroHasta " +
             "and (upper(c.nombres) like upper(:filtroTexto) or" +
             "     upper(c.nroDocumento) like upper(:filtroTexto)) "

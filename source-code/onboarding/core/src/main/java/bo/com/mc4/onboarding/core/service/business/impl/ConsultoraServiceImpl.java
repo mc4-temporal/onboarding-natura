@@ -34,8 +34,8 @@ public class ConsultoraServiceImpl implements ConsultoraService {
         boolean idMunicipioValido = filtro.getIdMunicipio() != 0;
 
         String filtroTexto = !filtroTextoValido ? "%%" : "%" + filtro.getFiltroTexto() + "%";
-        String filtroIdCanalOnboarding = !idCanalOnboardingValido ? "%%" : "%" + filtro.getIdCanalOnboarding() + "%";
-        String filtroIdMunicipio = !idMunicipioValido ? "%%" : "%" + filtro.getIdMunicipio() + "%";
+        String filtroIdCanalOnboarding = !idCanalOnboardingValido ? "" : String.valueOf(filtro.getIdCanalOnboarding());
+        String filtroIdMunicipio = !idMunicipioValido ? "" : String.valueOf(filtro.getIdMunicipio());
 
         return consultoraRepository.getConsultorasListByFilters(
                 String.valueOf(filtro.getIdUser()),

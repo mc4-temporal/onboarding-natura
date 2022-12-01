@@ -1,0 +1,36 @@
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.filter-panel {
+    padding: 8px !important;
+}
+
+
+.full-width {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    margin: 5px;
+}
+
+.radio-container {
+    position: relative;
+}
+
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -3px -4px -5px -4px;
+    flex-direction: row;
+}
+
+.radio-button {
+    padding: 3px 4px 3px 4px;
+}
+
+.wrap-label-text {
+    white-space: normal;
+}
+
+@import "var";

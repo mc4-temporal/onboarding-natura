@@ -36,5 +36,7 @@ export const environment = {
     canalOnboardingApi: "/api/v1/canal-onboarding",
     municipioApi: "/api/v1/municipio",
     consultoraApi: "/api/v1/consultora",
+    gerenciaApi: "/api/v1/catastro",
+    solicitudCreditoApi: "/api/v1/credito", // pendiente
   },
 };

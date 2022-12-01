@@ -51,7 +51,7 @@ public class ConsultoraController {
                     @ApiResponse(responseCode = "401", description = "Fallo de autentificación", content = @Content(schema = @Schema(hidden = true))),
                     @ApiResponse(responseCode = "403", description = "Acceso Denegado", content = @Content(schema = @Schema(hidden = true))),
             }, security = @SecurityRequirement(name = "bearerToken"))
-    public ResponseEntity<ResponseBody<ResponsePage<ConsultoraDto>>> getUserList(@RequestParam("page") int page,
+    public ResponseEntity<ResponseBody<ResponsePage<ConsultoraDto>>> getConsultorasList(@RequestParam("page") int page,
                                                                                  @RequestParam("size") int size,
                                                                                  @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
                                                                                  @RequestParam(value = "sortDir", defaultValue = "DESC") Sort.Direction sortDir,
