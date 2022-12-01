@@ -28,4 +28,13 @@ public interface MunicipioRepository extends JpaRepository<Municipio, Integer> {
             "where c.deleted = false " +
             "and p.deleted = false ")
     List<MunicipioDto> findByDepartamentoDtoList(@Param("departamentoId") Departamento departamento);
+
+
+    @Query("select new bo.com.mc4.onboarding.model.business.dto.MunicipioDto(c.codigoGera, c.nombre, c.latitud, c.longitud, c.idProvincia.codigoGera)" +
+            "from Municipio c " +
+            " inner join RegionMunicipioFm rm on rm.idMunicipio = c" +
+            " inner join Region r on rm.idRegion = r" +
+            " where r.id = :idRegion " +
+            "and c.deleted = false ")
+    List<MunicipioDto> findAllMunicipiosByIdRegion(@Param("idRegion") long idRegion);
 }

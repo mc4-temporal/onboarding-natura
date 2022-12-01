@@ -1,4 +1,4 @@
-package bo.com.mc4.onboarding.model.auth.enums;
+package bo.com.mc4.onboarding.model.business.enums;
 
 /**
  * Created by    : msaavedra
@@ -6,8 +6,7 @@ package bo.com.mc4.onboarding.model.auth.enums;
  * Project       : onboarding
  * Package       : bo.com.mc4.onboarding.model.auth.enums
  **/
-public enum TipoGerente {
+public enum TipoRespaldo {
     A,
-    B,
-    C
+    B
 }

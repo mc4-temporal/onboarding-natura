@@ -1,6 +1,7 @@
 package bo.com.mc4.onboarding.model.business;
 
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,10 +21,12 @@ public class RegionMunicipioFm extends AuditableEntity implements Serializable {
     @Column(name = "ID")
     private Long id;
 
+    @JsonBackReference
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_REGION", nullable = false)
     private Region idRegion;
 
+    @JsonBackReference
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_MUNICIPIO", nullable = false, referencedColumnName = "CODIGO_GERA")
     private Municipio idMunicipio;

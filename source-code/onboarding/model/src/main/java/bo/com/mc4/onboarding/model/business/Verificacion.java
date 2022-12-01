@@ -1,7 +1,7 @@
 package bo.com.mc4.onboarding.model.business;
 
-import bo.com.mc4.onboarding.model.auth.enums.ResultadoObservacion;
-import bo.com.mc4.onboarding.model.auth.enums.TipoVerificacion;
+import bo.com.mc4.onboarding.model.business.enums.ResultadoObservacion;
+import bo.com.mc4.onboarding.model.business.enums.TipoVerificacion;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;

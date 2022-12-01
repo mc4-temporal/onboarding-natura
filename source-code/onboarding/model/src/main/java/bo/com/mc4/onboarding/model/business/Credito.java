@@ -1,8 +1,7 @@
 package bo.com.mc4.onboarding.model.business;
 
-import bo.com.mc4.onboarding.model.auth.enums.EstadoCredito;
+import bo.com.mc4.onboarding.model.business.enums.EstadoCredito;
 import bo.com.mc4.onboarding.model.auth.enums.EstadoFlujo;
-import bo.com.mc4.onboarding.model.auth.enums.TipoGerente;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;

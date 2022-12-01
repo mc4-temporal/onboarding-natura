@@ -1,6 +1,6 @@
 package bo.com.mc4.onboarding.model.business;
 
-import bo.com.mc4.onboarding.model.auth.enums.EstadoObservacion;
+import bo.com.mc4.onboarding.model.business.enums.EstadoObservacion;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;

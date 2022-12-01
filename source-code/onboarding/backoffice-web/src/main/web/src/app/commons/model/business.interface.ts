@@ -17,9 +17,8 @@ export interface TransferReq {
   destinoFondos: string;
   canal: string;
 
-  tipoRegistro: 'SYNC' | 'ASYNC';
+  tipoRegistro: "SYNC" | "ASYNC";
 }
-
 
 export interface GenerarOrdenQrReq {
   codOriginante: string;
@@ -32,4 +31,40 @@ export interface GenerarOrdenQrReq {
   unicoUso: boolean;
   fechaVencimiento: string;
   codServicio: string;
+}
+
+export interface ConsultoraDto {
+  id: number;
+  fechaRegistro: string;
+  canal: String;
+  nombreCompleto: String;
+  nroDocumento: String;
+  ciudadLocalidad: String;
+  tiempoEspera: String;
+  telefono: String;
+  contactado: string | boolean;
+}
+
+export interface CanalOnboardingDto {
+  id: number;
+  codigo: String;
+  descripcion: String;
+}
+
+export interface MunicipioDto {
+  codigoGera: number;
+  nombre: String;
+  latitud: String;
+  longitud: String;
+  idProvincia: number;
+}
+
+export interface ConsultoraRequest {
+  filtroTexto: String;
+  tipoConsultora: String;
+  idCanalOnboarding: number;
+  idMunicipio: number;
+  fechaRegistroDesde: Date;
+  fechaRegistroHasta: Date;
+  idDirectora: number;
 }

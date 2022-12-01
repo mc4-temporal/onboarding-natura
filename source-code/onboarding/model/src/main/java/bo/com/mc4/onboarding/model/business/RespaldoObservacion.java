@@ -1,7 +1,7 @@
 package bo.com.mc4.onboarding.model.business;
 
-import bo.com.mc4.onboarding.model.auth.enums.EstadoRespaldo;
-import bo.com.mc4.onboarding.model.auth.enums.TipoRespaldo;
+import bo.com.mc4.onboarding.model.business.enums.EstadoRespaldo;
+import bo.com.mc4.onboarding.model.business.enums.TipoRespaldo;
 import bo.com.mc4.onboarding.model.commons.AuditableEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;

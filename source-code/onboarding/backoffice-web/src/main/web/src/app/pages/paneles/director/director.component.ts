@@ -28,6 +28,13 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { UtilService } from "src/app/commons/services/util.service";
 import * as moment from "moment";
 import { DateUtil } from "src/app/commons/utils/date.util";
+import { CanalOnboardingService } from "../../../commons/services/business/canal-onboarding.service";
+import { MunicipioService } from "../../../commons/services/business/municipio.service";
+import { ConsultoraService } from "../../../commons/services/business/consultora.service";
+import { ChartOptions } from "chart.js";
+import { ConsultoraDto } from "../../../commons/model/business.interface";
+import { DatePipe } from "@angular/common";
+import { fileUtil } from "../../../commons/utils/file.util";
 
 @Component({
   selector: "mc4-director",
@@ -40,26 +47,29 @@ export class DirectorComponent implements OnInit {
   commonTableActions: any;
   form: FormGroup;
   showDataTable = false;
-  dataSource: MatTableDataSource<IUser>;
+  dataSource: MatTableDataSource<ConsultoraDto>;
   tableEvents = new BehaviorSubject<ITableEvents>(noopTableEvent());
   directorActions: { [key: string]: boolean } = {};
 
-  processList: any[];
+  onboardingChannelList: any[];
   cityList: any[];
-  choices: any[] = [];
+  consultantTypeList: any[] = [];
 
   constructor(
-    private utilService: UtilService,
-    private userService: UserService,
-    private roleService: RoleService,
+    private consultoraService: ConsultoraService,
+    private canalOnboardingService: CanalOnboardingService,
+    private municipioService: MunicipioService,
     private resourceService: ResourceService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private datePipe: DatePipe
   ) {
     this.form = new FormGroup({
-      from: new FormControl(moment().subtract(30, "days").toDate()),
-      to: new FormControl(moment().toDate()),
-      process: new FormControl(""),
-      select: new FormControl(""),
+      fechaRegistroDesde: new FormControl(
+        moment().subtract(30, "days").toDate()
+      ),
+      fechaRegistroHasta: new FormControl(moment().toDate()),
+      onboardingChannel: new FormControl(""),
+      consultantType: new FormControl(""),
       city: new FormControl(""),
       q: new FormControl(""),
     });
@@ -71,47 +81,72 @@ export class DirectorComponent implements OnInit {
       disbleCode: "103",
     };
     this.columns = this.buildTableColumns();
-    this.dataSource = new MatTableDataSource<IUser>();
+    this.dataSource = new MatTableDataSource<ConsultoraDto>();
   }
 
   ngOnInit(): void {
-    this.choices = [
+    this.consultantTypeList = [
       {
-        code: "1",
+        code: "PROSPECTO",
         tag: "Prospectos",
       },
       {
-        code: "2",
+        code: "CONTADO",
         tag: "Consultoras/res al contado",
       },
       {
-        code: "3",
+        code: "CREDITO",
         tag: "Consultoras/res al credito",
       },
     ];
-    this.processList = [
-      {
-        codigo: "000",
-        descripcion: "Test 1",
-      },
-    ];
-    this.cityList = [
-      {
-        codigo: "000",
-        descripcion: "Santa Cruz",
-      },
-    ];
+
+    this.canalOnboardingService
+      .requestCanalOnboardingSimpleList()
+      .subscribe({ next: this.successCanalOnboardingList });
+
+    this.municipioService
+      .requestMunicipioListByRegion(97)
+      .subscribe({ next: this.sucessMunicipioList });
+
     this.tableEvents.subscribe(this.tableActionManager);
     this.resourceService
       .requestActionList(resourceCode.userResourceCode)
       .subscribe({ next: this.successActionList });
+
+    this.applyFilter();
   }
 
-  requestUserListFn: PaginatedFn = (queryParams) =>
-    this.userService.requestUserList(queryParams);
+  protected successCanalOnboardingList = (data: any) => {
+    this.onboardingChannelList = data;
+  };
+  protected sucessMunicipioList = (data: any) => {
+    this.cityList = data;
+  };
 
+  requestConsultorasByDirectoraListFn: PaginatedFn = (queryParams: any) =>
+    this.consultoraService.requestConsultorasList(queryParams);
+
+  public globalFilterText: String = "";
   filterData(filter: string) {
-    const aditionalParams = { filter };
+    this.globalFilterText = filter;
+    const aditionalParams = { ...this.form.value };
+    aditionalParams.fechaRegistroDesde = moment(
+      aditionalParams.fechaRegistroDesde
+    ).format(DateUtil.buildFullDateMomentFormat("-"));
+    aditionalParams.fechaRegistroHasta = moment(
+      aditionalParams.fechaRegistroHasta
+    ).format(DateUtil.buildFullDateMomentFormat("-"));
+    aditionalParams.idCanalOnboarding = aditionalParams.onboardingChannel;
+    aditionalParams.idMunicipio = aditionalParams.city;
+    aditionalParams.tipoConsultora = aditionalParams.consultantType;
+    aditionalParams.idUser = JSON.parse(localStorage.getItem("infoKey")).id;
+    aditionalParams.filtroTexto = filter;
+
+    delete aditionalParams.onboardingChannel;
+    delete aditionalParams.city;
+    delete aditionalParams.consultantType;
+
+    console.log(aditionalParams);
     this.tableEvents.next({ event: "RESET", data: { aditionalParams } });
   }
 
@@ -151,63 +186,85 @@ export class DirectorComponent implements OnInit {
     this.tableEvents.next({ event: "RELOAD_PAGE" });
   };
 
+  itemLogFormatterFn = (content: ConsultoraDto[]): ConsultoraDto[] => {
+    return content.map((item) => {
+      console.log(item);
+      if (item.fechaRegistro) {
+        item.fechaRegistro = this.datePipe.transform(
+          item.fechaRegistro,
+          DateUtil.buildFullDatePipeFormat()
+        );
+      }
+
+      item.contactado = item.contactado ? "SI" : "NO";
+      return item;
+    });
+  };
   protected buildTableColumns = (): ITableColumn[] => [
     {
       name: "Fecha Registro",
-      property: "registerDate",
+      property: "fechaRegistro",
       //sortProperty: "registerDate",
       visible: true,
       isModelProperty: true,
       isSort: true,
+      width: "150px",
     },
     {
       name: "Canal",
-      property: "channel",
+      property: "canal",
       //sortProperty: "channel",
       visible: true,
       isModelProperty: true,
       isSort: true,
+      width: "90px",
     },
     {
       name: "Nombre Completo",
-      property: "fullname",
+      property: "nombreCompleto",
       visible: true,
       isModelProperty: true,
       isSort: true,
+      width: "150px",
     },
     {
       name: "Nro. Documento",
-      property: "documentNumber",
+      property: "nroDocumento",
       visible: true,
       isModelProperty: true,
       isSort: true,
+      width: "75px",
     },
     {
       name: "Ciudad/Localidad",
-      property: "city",
+      property: "ciudadLocalidad",
       visible: true,
       isModelProperty: true,
       isSort: true,
+      width: "150px",
     },
     {
       name: "Tiempo espera",
-      property: "waitTime",
+      property: "tiempoEspera",
       visible: true,
       isModelProperty: true,
       isSort: true,
+      width: "75px",
     },
     {
       name: "Teléf.",
-      property: "phone",
+      property: "telefono",
       visible: true,
       isModelProperty: true,
       isSort: true,
+      width: "70px",
     },
     {
       name: "Contactado/a",
-      property: "contacted",
+      property: "contactado",
       visible: true,
       isModelProperty: true,
+      width: "50px",
     },
   ];
 
@@ -236,12 +293,23 @@ export class DirectorComponent implements OnInit {
 
   applyFilter() {
     const aditionalParams = { ...this.form.value };
-    aditionalParams.from = moment(aditionalParams.fechaInicio).format(
-      DateUtil.buildFullDateMomentFormat("-")
-    );
-    aditionalParams.to = moment(aditionalParams.fechaFin).format(
-      DateUtil.buildFullDateMomentFormat("-")
-    );
+    aditionalParams.fechaRegistroDesde = moment(
+      aditionalParams.fechaRegistroDesde
+    ).format(DateUtil.buildFullDateMomentFormat("-"));
+    aditionalParams.fechaRegistroHasta = moment(
+      aditionalParams.fechaRegistroHasta
+    ).format(DateUtil.buildFullDateMomentFormat("-"));
+    aditionalParams.idCanalOnboarding = aditionalParams.onboardingChannel;
+    aditionalParams.idMunicipio = aditionalParams.city;
+    aditionalParams.tipoConsultora = aditionalParams.consultantType;
+    aditionalParams.idUser = JSON.parse(localStorage.getItem("infoKey")).id;
+    aditionalParams.filtroTexto = this.globalFilterText;
+
+    delete aditionalParams.onboardingChannel;
+    delete aditionalParams.city;
+    delete aditionalParams.consultantType;
+
+    console.log(aditionalParams);
     this.showDataTable = true;
     this.tableEvents.next({ event: "RESET", data: { aditionalParams } });
   }

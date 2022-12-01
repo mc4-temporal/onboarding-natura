@@ -1,4 +1,4 @@
-package bo.com.mc4.onboarding.model.auth.enums;
+package bo.com.mc4.onboarding.model.business.enums;
 
 /**
  * Created by    : msaavedra
@@ -6,9 +6,9 @@ package bo.com.mc4.onboarding.model.auth.enums;
  * Project       : onboarding
  * Package       : bo.com.mc4.onboarding.model.auth.enums
  **/
-public enum TipoAusencia {
-    SALUD,
-    FAMILIAR,
-    VACACION,
-    OTRO
+public enum EstadoCredito {
+    EN_CURSO,
+    PENDIENTE_APROBACION,
+    OBSERVADO,
+    APROBADO
 }

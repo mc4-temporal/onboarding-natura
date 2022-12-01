@@ -36,7 +36,7 @@ import java.util.Optional;
 public class DataInitializer implements CommandLineRunner {
     private final AuthRoleRepository authRoleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthUserRepository userService;
+    private final AuthUserRepository authUserRepository;
     private final AuthResourceRepository authResourceRepository;
     private final AuthRoleResourceRepository authRoleResourceRepository;
     private final AuthActionRepository authActionRepository;
@@ -232,7 +232,7 @@ public class DataInitializer implements CommandLineRunner {
             root = authRoleOptional.get();
         }
 
-        if (this.userService.findByUsername("admin").isEmpty()) {
+        if (this.authUserRepository.findByUsername("admin").isEmpty()) {
             AuthUser authUser = AuthUser.builder()
                     .name("admin")
                     .lastname("admin")
@@ -242,8 +242,39 @@ public class DataInitializer implements CommandLineRunner {
                     .idAuthRole(root)
                     .userStatus(UserStatus.ACTIVO)
                     .build();
-            this.userService.save(authUser);
+            this.authUserRepository.save(authUser);
         }
+    }
+
+    private AuthUser addOrGetAdminUser() {
+        AuthUser authUser = null;
+        AuthRole root;
+        Optional<AuthRole> authRoleOptional = authRoleRepository.findByName("ROLE_ROOT");
+        if (authRoleOptional.isEmpty()) {
+            root = AuthRole.builder()
+                    .name("ROLE_ROOT")
+                    .description("Rol para usuarios de mantenimiento")
+                    .roleStatus(EntityState.ACTIVO)
+                    .baseRole(true)
+                    .build();
+            this.authRoleRepository.save(root);
+        } else {
+            root = authRoleOptional.get();
+        }
+        authUser = this.authUserRepository.findByUsername("admin").orElse(null);
+        if (authUser == null) {
+            authUser = this.authUserRepository.save(AuthUser.builder()
+                    .name("admin")
+                    .lastname("admin")
+                    .username("admin")
+                    .email("soporte@mc4.com.bo")
+                    .password(passwordEncoder.encode("admin"))
+                    .idAuthRole(root)
+                    .userStatus(UserStatus.ACTIVO)
+                    .build()
+            );
+        }
+        return authUser;
     }
 
     private void addJobs() throws SchedulerException {
@@ -274,9 +305,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [Santa Cruz]
         Departamento dpto2 = departamentoRepository.findById(2)
                 .orElse(Departamento.builder()
-                .codigoGera(2)
-                .nombre("SANTA CRUZ")
-                .build());
+                        .codigoGera(2)
+                        .nombre("SANTA CRUZ")
+                        .build());
         departamentoRepository.save(dpto2);
 
         Provincia prov11 = provinciaRepository.findById(11).orElse(Provincia.builder().codigoGera(11).nombre("Andrés Ibáñez").idDepartamento(dpto2).build());
@@ -399,9 +430,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [Cochabamba]
         Departamento dpto3 = departamentoRepository.findById(3)
                 .orElse(Departamento.builder()
-                .codigoGera(3)
-                .nombre("COCHABAMBA")
-                .build());
+                        .codigoGera(3)
+                        .nombre("COCHABAMBA")
+                        .build());
         departamentoRepository.save(dpto3);
 
         Provincia prov26 = provinciaRepository.findById(26).orElse(Provincia.builder().codigoGera(26).nombre("Cercado").idDepartamento(dpto3).build());
@@ -519,9 +550,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [La Paz]
         Departamento dpto4 = departamentoRepository.findById(4)
                 .orElse(Departamento.builder()
-                .codigoGera(4)
-                .nombre("LA PAZ")
-                .build());
+                        .codigoGera(4)
+                        .nombre("LA PAZ")
+                        .build());
         departamentoRepository.save(dpto4);
 
         Provincia prov42 = provinciaRepository.findById(42).orElse(Provincia.builder().codigoGera(42).nombre("Murillo").idDepartamento(dpto4).build());
@@ -688,9 +719,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [Chuquisaca]
         Departamento dpto5 = departamentoRepository.findById(5)
                 .orElse(Departamento.builder()
-                .codigoGera(5)
-                .nombre("CHUQUISACA")
-                .build());
+                        .codigoGera(5)
+                        .nombre("CHUQUISACA")
+                        .build());
         departamentoRepository.save(dpto5);
 
 
@@ -766,9 +797,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [Tarija]
         Departamento dpto6 = departamentoRepository.findById(6)
                 .orElse(Departamento.builder()
-                .codigoGera(6)
-                .nombre("TARIJA")
-                .build());
+                        .codigoGera(6)
+                        .nombre("TARIJA")
+                        .build());
         departamentoRepository.save(dpto6);
 
         Provincia prov72 = provinciaRepository.findById(72).orElse(Provincia.builder().codigoGera(72).nombre("Cercado").idDepartamento(dpto6).build());
@@ -811,9 +842,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [Potosi]
         Departamento dpto7 = departamentoRepository.findById(7)
                 .orElse(Departamento.builder()
-                .codigoGera(7)
-                .nombre("POTOSI")
-                .build());
+                        .codigoGera(7)
+                        .nombre("POTOSI")
+                        .build());
         departamentoRepository.save(dpto7);
 
         Provincia prov78 = provinciaRepository.findById(78).orElse(Provincia.builder().codigoGera(78).nombre("Tomas Frías").idDepartamento(dpto7).build());
@@ -923,9 +954,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [Oruro]
         Departamento dpto8 = departamentoRepository.findById(8)
                 .orElse(Departamento.builder()
-                .codigoGera(8)
-                .nombre("ORURO")
-                .build());
+                        .codigoGera(8)
+                        .nombre("ORURO")
+                        .build());
         departamentoRepository.save(dpto8);
 
         Provincia prov94 = provinciaRepository.findById(94).orElse(Provincia.builder().codigoGera(94).nombre("Cercado").idDepartamento(dpto8).build());
@@ -1030,9 +1061,9 @@ public class DataInitializer implements CommandLineRunner {
         // region [Beni]
         Departamento dpto9 = departamentoRepository.findById(9)
                 .orElse(Departamento.builder()
-                .codigoGera(9)
-                .nombre("BENI")
-                .build());
+                        .codigoGera(9)
+                        .nombre("BENI")
+                        .build());
         departamentoRepository.save(dpto9);
 
         Provincia prov110 = provinciaRepository.findById(110).orElse(Provincia.builder().codigoGera(110).nombre("Cercado").idDepartamento(dpto9).build());
@@ -1045,15 +1076,17 @@ public class DataInitializer implements CommandLineRunner {
         // region [Pando]
         Departamento dpto10 = departamentoRepository.findById(10)
                 .orElse(Departamento.builder()
-                .codigoGera(10)
-                .nombre("PANDO")
-                .build());
+                        .codigoGera(10)
+                        .nombre("PANDO")
+                        .build());
         departamentoRepository.save(dpto10);
 
         // endregion [Pando]
     }
 
     private void addDirectoraMock() {
+        AuthUser defaultUserAdmin = addOrGetAdminUser();
+
         Municipio santaCruzMunicipio = municipioRepository.findById(123).orElseThrow(ExceptionUtil.throwFindFail("123", "Municipio"));
         Municipio warnesMunicipio = municipioRepository.findById(128).orElseThrow(ExceptionUtil.throwFindFail("128", "Municipio"));
         Municipio buenaVistaMunicipio = municipioRepository.findById(133).orElseThrow(ExceptionUtil.throwFindFail("133", "Municipio"));
@@ -1085,6 +1118,7 @@ public class DataInitializer implements CommandLineRunner {
                     .telefono("60529697")
                     .tokenInvitacion("1A85637")
                     .correo("acamacho@maturabo.net")
+                    .idUser(defaultUserAdmin)
                     .build();
             directoraRepository.save(directora);
 
@@ -1095,8 +1129,10 @@ public class DataInitializer implements CommandLineRunner {
                     .telefono("70660090")
                     .tokenInvitacion("1A116696")
                     .correo("jherbas@maturabo.net")
+                    .idUser(null)
                     .build();
             directoraRepository.save(directora1);
+
             CanalOnboarding canalOnboarding = canalOnboardingRepository.save(canalOnboardingRepository.findByCodigo(Constants.DEFAULT_CANAL_ONBOARDING)
                     .orElse(CanalOnboarding.builder()
                             .codigo(Constants.DEFAULT_CANAL_ONBOARDING)
