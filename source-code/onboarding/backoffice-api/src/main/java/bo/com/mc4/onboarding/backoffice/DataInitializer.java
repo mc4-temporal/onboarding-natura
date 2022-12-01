@@ -123,9 +123,9 @@ public class DataInitializer implements CommandLineRunner {
 
 
         // UI: Directora View
-        createOrUpdateResource("Directora", "Interfaz para administracion de directoras", recPadrePanel.getUrl().concat("/director"), 1, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_DIRECTORA", recPadrePanel, ResourceActionUtil.directorPanelActionsCode, root);
+        createOrUpdateResource("Directora", "Interfaz para administracion de directoras", recPadrePanel.getUrl().concat("/directora"), 1, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_DIRECTORA", recPadrePanel, ResourceActionUtil.directorPanelActionsCode, root);
         createOrUpdateResource("Callcenter", "Interfaz para administración de callcenter", recPadrePanel.getUrl().concat("/callcenter"), 2, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_CALLCENTER", recPadrePanel, ResourceActionUtil.callCenterPanelActionsCode, root);
-        createOrUpdateResource("Colaborador", "Interfaz para administración de colaboradores", recPadrePanel.getUrl().concat("/collaborator"), 3, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_COLABORADOR", recPadrePanel, ResourceActionUtil.collaboratorPanelActionsCode, root);
+        createOrUpdateResource("Colaborador", "Interfaz para administración de colaboradores", recPadrePanel.getUrl().concat("/colaborador"), 3, "insert_link", ResourceType.item, null, null, null, "PAGE_PANEL_COLABORADOR", recPadrePanel, ResourceActionUtil.collaboratorPanelActionsCode, root);
 
 
     }

@@ -52,7 +52,7 @@ const routes: Routes = [
         canActivate: [AuthGuardService],
       },
       {
-        path: "paneles",
+        path: "panel",
         loadChildren: () =>
           import("./pages/paneles/paneles.module").then((m) => m.PanelesModule),
         canActivate: [AuthGuardService],
