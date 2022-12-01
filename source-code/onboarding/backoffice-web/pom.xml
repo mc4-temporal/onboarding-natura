@@ -21,9 +21,6 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.3.2</version>
-                        <configuration>
-                            <workingDirectory>src/main/web/</workingDirectory>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>Compilacion de desarrollo</id>
@@ -53,9 +50,6 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.3.2</version>
-                        <configuration>
-                            <workingDirectory>src/main/web/</workingDirectory>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>Compilacion certificacion</id>
@@ -85,9 +79,6 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.3.2</version>
-                        <configuration>
-                            <workingDirectory>src/main/web/</workingDirectory>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>Compilacion produccion</id>
@@ -117,9 +108,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.3.2</version>
-                <configuration>
-                    <workingDirectory>src/main/web/</workingDirectory>
-                </configuration>
                 <executions>
                     <execution>
                         <id>Instalacion de dependencias</id>
